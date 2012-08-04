@@ -1,0 +1,61 @@
+<div id="users">
+  <h2>Users</h2>
+  <table>
+    <thead>
+    <tr>
+      <td>Name</td>
+      <td>Bought</td>
+      <td>Saldo</td>
+    </tr>
+    </thead>
+    <tbody>
+    <tr data-foreach-user="App.User.all">
+      <td data-bind="user.name"></td>
+      <td data-bind="user.buy_count"></td>
+      <td data-bind="user.saldo" data-addclass-negative="user.inDebt"></td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+<div id="products">
+  <h2>Products</h2>
+  <table>
+    <thead>
+    <tr>
+      <th>Name</th>
+      <th>Stock</th>
+      <th>Price</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr data-foreach-product="App.Product.all">
+      <td data-bind="product.name"></td>
+      <td data-bind="product.stock"></td>
+      <td data-bind="product.price"></td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+<div id="basket" data-showif="basket.entries.length">
+  <h2>Basket</h2>
+  <table>
+    <thead>
+    <tr>
+      <th>Name</th>
+      <th>Amount</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr data-foreach-entry="basket.entries">
+      <td>
+        <span data-bind="entry.product.name"></span>
+      </td>
+      <td>
+        <input type="text" data-bind="entry.amount" />
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>

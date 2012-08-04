@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Kassa</title>
+  <%= stylesheet_link_tag    "application", :media => "all" %>
+  <%= javascript_include_tag "application" %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+<% if signed_in? %>
+  <nav>
+    <%= link_to t('navigation.home'), home_index %>
+
+    <% if current_user.admin? or current_user.staff? %>
+      <%= link_to t('navigation.accounts'), admin_accounts_index %>
+      <%= link_to t('navigation.items'), admin_items_index %>
+    <% end %>
+  </nav>
+<% end %>
+<%= yield %>
+
+</body>
+</html>
