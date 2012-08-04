@@ -2,7 +2,8 @@ class HomesController < ApplicationController
   # GET /homes
   # GET /homes.json
   def index
-    @homes = Home.all
+    @users = User.all
+    @products = Product.all
 
     respond_to do |format|
       format.html # index.html.erb

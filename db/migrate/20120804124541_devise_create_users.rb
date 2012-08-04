@@ -26,13 +26,18 @@ class DeviseCreateUsers < ActiveRecord::Migration
       # t.string   :unconfirmed_email # Only if using reconfirmable
 
       ## Lockable
-      # t.integer  :failed_attempts, :default => 0 # Only if lock strategy is :failed_attempts
-      # t.string   :unlock_token # Only if unlock strategy is :email or :both
-      # t.datetime :locked_at
+      t.integer  :failed_attempts, :default => 0 # Only if lock strategy is :failed_attempts
+      t.string   :unlock_token # Only if unlock strategy is :email or :both
+      t.datetime :locked_at
 
       ## Token authenticatable
       # t.string :authentication_token
 
+      t.float :saldo
+      t.integer :buy_count
+      t.boolean :admin, :default => false
+      t.boolean :staff, :default => false
+      t.datetime :time_of_last_buy
 
       t.timestamps
     end
@@ -40,7 +45,7 @@ class DeviseCreateUsers < ActiveRecord::Migration
     add_index :users, :email,                :unique => true
     add_index :users, :reset_password_token, :unique => true
     # add_index :users, :confirmation_token,   :unique => true
-    # add_index :users, :unlock_token,         :unique => true
+    add_index :users, :unlock_token,         :unique => true
     # add_index :users, :authentication_token, :unique => true
   end
 end
