@@ -33,8 +33,9 @@ class DeviseCreateUsers < ActiveRecord::Migration
       ## Token authenticatable
       # t.string :authentication_token
 
-      t.float :saldo
-      t.integer :buy_count
+      t.string :username
+      t.float :balance, :default => 0
+      t.integer :buy_count, :default => 0
       t.boolean :admin, :default => false
       t.boolean :staff, :default => false
       t.datetime :time_of_last_buy

@@ -11,6 +11,7 @@
 
 # Ignore the default SQLite database.
 /db/*.sqlite3
+/db/schema.rb
 
 # Ignore all logfiles and tempfiles.
 /log/*.log
@@ -21,3 +22,5 @@ Gemfile.lock
 
 #ignore the private configuration file
 /config/config.yml
+
+

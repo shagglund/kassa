@@ -3,16 +3,18 @@
   <table>
     <thead>
       <tr>
-        <td>Name</td>
-        <td>Bought</td>
-        <td>Saldo</td>
+        <th style="display:none;"></th>
+        <th>Name</th>
+        <th>Bought</th>
+        <th>Balance</th>
       </tr>
     </thead>
     <tbody>
-      <tr data-foreach-user="App.User.all">
-        <td data-bind="user.name"></td>
-        <td data-bind="user.buy_count"></td>
-        <td data-bind="user.saldo" data-addclass-negative="user.inDebt"></td>
+      <tr data-foreach-user="users" data-event-click="selectBuyer">
+        <td style="display:none;" data-source="user.id"></td>
+        <td data-source="user.username"></td>
+        <td data-source="user.buy_count"></td>
+        <td data-source="user.balance" data-addclass-negative="user.inDebt"></td>
       </tr>
     </tbody>
   </table>
@@ -23,23 +25,26 @@
   <table>
     <thead>
       <tr>
+        <th style="display:none;"></th>
         <th>Name</th>
         <th>Stock</th>
         <th>Price</th>
       </tr>
     </thead>
     <tbody>
-      <tr data-foreach-product="App.Product.all">
-        <td data-bind="product.name"></td>
-        <td data-bind="product.stock"></td>
-        <td data-bind="product.price"></td>
+      <tr data-foreach-product="products" data-event-click="controller.addToBasket">
+        <td style="display:none;" data-source="product.id"></td>
+        <td data-source="product.name"></td>
+        <td data-source="product.stock"></td>
+        <td data-source="product.price"></td>
       </tr>
     </tbody>
   </table>
 </div>
 
-<div id="basket" data-showif="basket.entries.length">
+<div id="basket">
   <h2>Basket</h2>
+  <div>Current buyer: <span data-source="basket.buyer.username" data-event-click="clearBuyer"></span></div>
   <table>
     <thead>
     <tr>
@@ -50,7 +55,7 @@
     <tbody>
       <tr data-foreach-entry="basket.entries">
         <td>
-          <span data-bind="entry.product.name"></span>
+          <span data-source="entry.product.name"></span>
         </td>
         <td>
           <input type="text" data-bind="entry.amount" />

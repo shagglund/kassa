@@ -1,15 +1,22 @@
 Kassa::Application.routes.draw do
-  get "accounts/index"
 
-  get "accounts/show"
+  get "sessions/current"
 
-  get "accounts/edit"
+  namespace :admin do
+    resources :accounts, :defaults => {:format => :json}
+  end
 
-  get "accounts/update"
+  devise_for :user, :controllers => {:sessions => 'sessions'}
 
-  get "accounts/create"
+  devise_scope :user do
+    resource :sessions do
+      get :current
+    end
+  end
 
-  get "accounts/delete"
+  resources :homes, :only=> :index, :defaults => {:format => :json}
+  resources :users, :defaults => {:format => :json}
+  resources :products, :defaults => {:format => :json}
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

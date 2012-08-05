@@ -1,4 +1,4 @@
-class Kaljakassa.Product extends Batman.Model
+class Kassa.Product extends Batman.Model
   @resourceName: 'product'
   @persist Batman.RestStorage
 
