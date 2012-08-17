@@ -2,7 +2,43 @@
 # See https://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
 
 en:
-  hello: "Hello world"
   navigation:
     home: "Home"
-    accounts: "Accounts"
+    product_admin: "Products"
+    member_admin: "Members"
+  user:
+    username: "Username"
+    buy_count: "Bought"
+    balance: "Balance"
+    other: "Users"
+    select_as_buyer: "Select %{name} as buyer"
+  product:
+    other: "Products"
+    name: "Name"
+    stock: "Stock"
+    price: "Price"
+    fields_title: "Product fields"
+    product_entry:
+      amount: "Amount"
+      fields_title: "Materials and amounts"
+    add_product_entry: "Add an entry"
+    create: "Create the product"
+    update: "Update the product"
+  buys:
+    basket: "Basket"
+    buyer: "Current buyer: %{username}"
+  buy:
+    amount: "Amount"
+  unit:
+    ml: "Millilitre"
+    cl: "Centilitre"
+    dl: "Desilitre"
+    l: "Litre"
+    piece: "Piece"
+    errors:
+      invalid: "Invalid unit"
+  material:
+    name: "Name"
+    one: "Material"
+    new: "New material"
+    unit: "Unit"

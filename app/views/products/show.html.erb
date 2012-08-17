@@ -1,0 +1,38 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @product.name %>
+</p>
+
+<p>
+  <b>Description:</b>
+  <%= @product.description %>
+</p>
+
+<p>
+  <b>Unit:</b>
+  <%= @product.unit %>
+</p>
+
+<% if @product.product_entries.present? %>
+  <table>
+      <tr>
+        <th><%= t('material.one') %></th>
+        <th><%= t('product.product_entry.amount') %></th>
+        <th><%= t('material.unit') %></th>
+      </tr>
+    <% @product.product_entries.each do |entry| %>
+      <tr>
+        <td><%= entry.material.name %></td>
+        <td><%= entry.amount %></td>
+        <td><%= entry.material.unit %></td>
+      </tr>
+    <% end %>
+  </table>
+<% end %>
+<%= link_to t('product.add_product_entry'), new_product_entry_path(@product) %>
+
+
+<%= link_to 'Edit', edit_product_path(@product) %> |
+<%= link_to 'Back', products_path %>

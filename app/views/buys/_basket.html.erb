@@ -1,0 +1,36 @@
+<% if @buy.buyer.present? or @buy.buy_entries.present? %>
+
+<div id="basket">
+  <h2><%=t('buys.basket') %></h2>
+  <%= form_for @buy do |buy_form| %>
+    <div>
+      <%= buy_form.hidden_field :buyer_id %>
+      <%== t('buys.buyer', :username => "<span id=\"buyer_name\">#{@buy.buyer_username}</span>") %>
+    </div>
+    <table>
+      <thead>
+      <tr>
+        <th><%= t('product.name') %></th>
+        <th><%= t('buy.amount') %></th>
+      </tr>
+      </thead>
+      <tbody>
+        <% @buy.buy_entries.each do |buy_entry| %>
+          <%= buy_form.fields_for "buy_entries[]", buy_entry do |entry_form| %>
+          <tr>
+            <td>
+              <%= entry_form.hidden_field :product_id %>
+              <span><%= entry_form.instance %></span>
+            </td>
+            <td>
+              <input type="text" data-bind="entry.amount" />
+            </td>
+          </tr>
+          <% end %>
+        <% end %>
+      </tbody>
+    </table>
+  <%end %>
+</div>
+
+<% end %>

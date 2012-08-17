@@ -2,7 +2,7 @@
 <html>
 <head>
   <title>Kassa</title>
-  <%= stylesheet_link_tag    "application", :media => "all" %>
+  <%= stylesheet_link_tag "application", :media => "all" %>
   <% if user_signed_in? %>
     <%= javascript_include_tag "application" %>
   <% end %>
@@ -11,7 +11,9 @@
 <body>
 <% if user_signed_in? %>
   <nav>
-    <a data-route=""><%= t 'navigation.home' %></a>
+    <%= link_to t('navigation.home'), homes_path %>
+    <%= link_to t('navigation.product_admin'), products_path %>
+    <%= link_to t('navigation.member_admin'), users_path %>
   </nav>
 <% end %>
 <%= yield %>

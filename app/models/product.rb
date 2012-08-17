@@ -1,18 +1,24 @@
 class Product < ActiveRecord::Base
-  attr_accessible :description, :name, :unit
+  default_scope eager_load{product_entries.material}
+
+  attr_accessible :description, :name, :unit, :product_entries_attributes
 
   has_many :product_entries
-
+  accepts_nested_attributes_for :product_entries
   validates_associated :product_entries
+
   validates :name, presence: true, uniqueness: true
-  validates :unit, presence: true
+  validates :unit, presence: true, unit: true
+
+  scope :sale_listable,
+            where{product_entries.materials.stock * product_entries.amount > 0}.
+            select([:id, :name, :product_entries => [:amount, :material => [:stock, :price]]])
 
   def stock
-    tmp = -1
-    product_entries.each do |entry|
-      val = entry.material.stock / entry.amount
-      tmp = val if tmp > val or tmp == -1
-    end
-    tmp
+    product_entries.min_by {|entry| entry.stock} .stock
+  end
+
+  def price
+    product_entries.sum {|entry| entry.material.price * entry.amount }
   end
 end

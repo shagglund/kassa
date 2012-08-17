@@ -1,22 +1,19 @@
 Kassa::Application.routes.draw do
 
-  get "sessions/current"
+  resources :homes, :only=> :index
 
-  namespace :admin do
-    resources :accounts, :defaults => {:format => :json}
+  resources :buys do
+    resources :buy_entries, :as => :entries
   end
 
-  devise_for :user, :controllers => {:sessions => 'sessions'}
-
-  devise_scope :user do
-    resource :sessions do
-      get :current
-    end
+  resources :products do
+    resources :product_entries, :as => :entries, :exclude => [:index, :show]
   end
+  resources :materials
 
-  resources :homes, :only=> :index, :defaults => {:format => :json}
-  resources :users, :defaults => {:format => :json}
-  resources :products, :defaults => {:format => :json}
+  resources :users
+
+  devise_for :user
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
@@ -66,7 +63,7 @@ Kassa::Application.routes.draw do
   #   end
 
   # You can have the root of your site routed with "root"
-  # just remember to delete public/index.html.
+  # just remember to delete public/index.html.erb.
   root :to => 'homes#index'
 
   # See how all your routes lay out with "rake routes"

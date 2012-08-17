@@ -45,19 +45,6 @@ describe Material do
       material.should have(2).errors_on(:stock)
     end
   end
-  context "#alcohol_per_cent" do
-    it "can't be null" do
-      material = FactoryGirl.build(:material, :alcohol_per_cent=>nil)
-      material.should_not be_valid
-      material.should have(2).errors_on(:alcohol_per_cent)
-    end
-    it "should be greater than or equal to 0" do
-      material = FactoryGirl.build(:material, :alcohol_per_cent=>-1)
-      material.should_not be_valid
-      material.should have(1).errors_on(:alcohol_per_cent)
-    end
-
-  end
   context "#unit" do
 
     it "should require a unit" do

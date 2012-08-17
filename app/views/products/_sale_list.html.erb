@@ -1,0 +1,24 @@
+<% if @products.present? %>
+  <div id="products">
+    <h2><%= t('product.other') %></h2>
+    <table>
+      <thead>
+      <tr>
+        <th><%= t('product.name')%></th>
+        <th><%= t('product.stock')%></th>
+        <th><%= t('product.price')%></th>
+      </tr>
+      </thead>
+      <tbody>
+      <% @products.each do |product| %>
+        <tr id="product_<%= product.id %>">
+          <td><%=product.name%></td>
+          <td><%=product.stock%></td>
+          <td><%=product.price%></td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+
+<% end %>

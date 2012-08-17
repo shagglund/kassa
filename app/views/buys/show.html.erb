@@ -1,0 +1,15 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Buyer:</b>
+  <%= @buy.buyer %>
+</p>
+
+<p>
+  <b>Created at:</b>
+  <%= @buy.created_at %>
+</p>
+
+
+<%= link_to 'Edit', edit_buy_path(@buy) %> |
+<%= link_to 'Back', buys_path %>

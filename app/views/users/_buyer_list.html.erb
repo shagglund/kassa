@@ -1,0 +1,23 @@
+<% if @users.present? %>
+<div id="buyers">
+  <h2><%= t('user.other') %></h2>
+  <table>
+    <thead>
+    <tr>
+      <th><%= t('user.username') %></th>
+      <th><%= t('user.buy_count') %></th>
+      <th><%= t('user.balance') %></th>
+    </tr>
+    </thead>
+    <tbody>
+    <% @users.each do |user| %>
+      <tr id="buyer_<%= user.id %>" title="<%= t('user.select_as_buyer', :name => user.username)%>">
+        <td><%= user.username %></td>
+        <td><%= user.buy_count %></td>
+        <td><%= user.balance %></td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+</div>
+<% end %>

@@ -8,7 +8,7 @@ class BuyEntry < ActiveRecord::Base
   validate :can_be_bought?
 
   def can_be_bought?
-    return false if product.blank? or amount.blank?
-    product.stock > amount
+    product.stock > amount if product.present?
+    false
   end
 end

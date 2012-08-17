@@ -1,0 +1,25 @@
+<%= form_for(@buy) do |f| %>
+  <% if @buy.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@buy.errors.count, "error") %> prohibited this buy from being saved:</h2>
+
+      <ul>
+      <% @buy.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :buyer %><br />
+    <%= f.select :buyer_id, options_from_collection_for_select(User.all, :id, :username) %>
+  </div>
+  <div class="field">
+    <%= f.label :created_at %><br />
+    <%= f.datetime_select :created_at %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

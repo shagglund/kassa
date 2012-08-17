@@ -7,4 +7,5 @@ class User < ActiveRecord::Base
   validates :username, presence: true, length: {in: 3..16}, uniqueness: {case_sensitive: false}
 
   has_many :buys
+  scope :buyer_listable, select([:id, :username, :buy_count, :balance])
 end
