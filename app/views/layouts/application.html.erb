@@ -11,7 +11,7 @@
 <body>
 <% if user_signed_in? %>
   <nav>
-    <%= link_to t('navigation.home'), homes_path %>
+    <%= link_to t('navigation.home'), new_buy_path %>
     <%= link_to t('navigation.product_admin'), products_path %>
     <%= link_to t('navigation.member_admin'), users_path %>
   </nav>

@@ -1,4 +1,3 @@
-<% if @users.present? %>
 <div id="buyers">
   <h2><%= t('user.other') %></h2>
   <table>
@@ -11,13 +10,13 @@
     </thead>
     <tbody>
     <% @users.each do |user| %>
-      <tr id="buyer_<%= user.id %>" title="<%= t('user.select_as_buyer', :name => user.username)%>">
+      <tr data-id="<%= user.id %>">
         <td><%= user.username %></td>
         <td><%= user.buy_count %></td>
         <td><%= user.balance %></td>
+        <td><%= link_to t('user.select_as_buyer', :name => user.username), new_buy_path(:buyer => user.id)%></td>
       </tr>
     <% end %>
     </tbody>
   </table>
 </div>
-<% end %>

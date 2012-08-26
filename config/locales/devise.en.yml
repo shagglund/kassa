@@ -56,3 +56,8 @@ en:
         subject: 'Reset password instructions'
       unlock_instructions:
         subject: 'Unlock Instructions'
+  buys:
+    success: "Bought successfully!"
+    latest: "Latest buys"
+    buy_notice: "%{buyer} bought %{entries} at %{time}"
+    bought_entry: "%{amount} %{product}"

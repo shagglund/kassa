@@ -1,7 +1,5 @@
 Kassa::Application.routes.draw do
 
-  resources :homes, :only=> :index
-
   resources :buys do
     resources :buy_entries, :as => :entries
   end
@@ -64,7 +62,7 @@ Kassa::Application.routes.draw do
 
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.erb.
-  root :to => 'homes#index'
+  root :to => 'buys#new'
 
   # See how all your routes lay out with "rake routes"
 
