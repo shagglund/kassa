@@ -1,33 +1,41 @@
 <div ng-controller="BuysCtrl">
   <div id="tabs">
-  <h3>Piikit</h3>
-  <table>
-    <tr>
-      <th>Omistaja</th>
-      <th>Ostettuja tuotteita</th>
-      <th>Saldo</th>
-    </tr>
-    <tr ng-repeat="user in users" ng-click="selectBuyer(user)">
-      <td>{{user.username}}</td>
-      <td>{{user.buy_count | number}}</td>
-      <td>{{user.balance | currency}}</td>
-    </tr>
-  </table>
+    <h3>Piikit</h3>
+    <div>
+      <span>Etsi:</span>
+      <input type="text" ng-model="currentUserText" ng-change="filterUsers(currentUserText)" value="{{currentUserText}}"/>
+    </div>
+    <table>
+      <tr>
+        <th>Omistaja</th>
+        <th>Ostettuja tuotteita</th>
+        <th>Saldo</th>
+      </tr>
+      <tr ng-repeat="user in users" ng-click="selectBuyer(user)" ng-hide="user.hidden">
+        <td>{{user.username}}</td>
+        <td>{{user.buy_count | number}}</td>
+        <td>{{user.balance | currency}}</td>
+      </tr>
+    </table>
   </div>
   <div id="products">
-  <h3>Tuotteet</h3>
-  <table>
-    <tr>
-      <th>Nimi</th>
-      <th>Ostettavissa</th>
-      <th>Hinta</th>
-    </tr>
-    <tr ng-repeat="product in products" ng-click="addProductToBasket(product)">
-      <td>{{product.name}}</td>
-      <td>{{product.stock | number}}</td>
-      <td>{{product.price | currency}}</td>
-    </tr>
-  </table>
+    <h3>Tuotteet</h3>
+    <div>
+      <span>Etsi:</span>
+      <input type="text" ng-model="currentProductText" ng-change="filterProducts(currentProductText)" value="{{currentProductText}}"/>
+    </div>
+    <table>
+      <tr>
+        <th>Nimi</th>
+        <th>Ostettavissa</th>
+        <th>Hinta</th>
+      </tr>
+      <tr ng-repeat="product in products" ng-click="addProductToBasket(product)" ng-hide="product.hidden">
+        <td>{{product.name}}</td>
+        <td>{{product.stock | number}}</td>
+        <td>{{product.price | currency}}</td>
+      </tr>
+    </table>
   </div>
   <div id="basket">
     <h3>Ostoskori</h3>
@@ -40,19 +48,18 @@
     </div>
     <table ng-show="basket.products.length">
       <tr>
-        <th></th>
         <th>Tuote</th>
         <th>Määrä</th>
       </tr>
       <tr ng-repeat="entry in basket.products">
-        <td>
-          <button class="remove" ng-click="removeFromBasket($index)">X</button>
-        </td>
         <td>{{entry.product.name}}</td>
         <td>
-          <button class="decrement-button" ng-click="decrementAmount(entry)">-</button>
+          <button class="decrement" ng-click="decrementAmount(entry)">-</button>
           <input class="number-box" type="text" ng-model="entry.amount" ng-pattern="/^\d+$/"/>
-          <button class="increment-button" ng-click="incrementAmount(entry)">+</button>
+          <button class="increment" ng-click="incrementAmount(entry)">+</button>
+        </td>
+        <td>
+          <button class="remove" ng-click="removeFromBasket($index)">X</button>
         </td>
       </tr>
     </table>

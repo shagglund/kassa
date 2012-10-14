@@ -3,26 +3,21 @@
 kassaModule = angular.module 'Kassa.controllers', ['Kassa.services']
 class NavigationCtrl
   constructor: (@scope, @location)->
-    @scope.goToHome = @goToHome
-    @scope.goToProductManagement = @goToProductManagement
-    @scope.goToUserManagement = @goToUserManagement
-    @scope.canManageProducts = @canManageProducts
-    @scope.canManageUsers = @canManageUsers
 
-  goToHome: ()=>
-    @location.path '/'
+    @scope.goToHome= ()=>
+      @location.path '/'
 
-  goToProductManagement: ()=>
-    @location.path '<%= url_helper.products_path %>'
+    @scope.goToProductManagement= ()=>
+      @location.path '<%= url_helper.products_path %>'
 
-  goToUserManagement: ()=>
-    @location.path '<%= url_helper.users_path %>'
+    @scope.goToUserManagement= ()=>
+      @location.path '<%= url_helper.users_path %>'
 
-  canManageProducts: ()=>
-    true   #TODO handle based on logged in user
+    @scope.canManageProducts= ()=>
+      true   #TODO handle based on logged in user
 
-  canManageUsers: ()=>
-    true   #TODO handle based on logged in user
+    @scope.canManageUsers= ()=>
+      true   #TODO handle based on logged in user
 
 NavigationCtrl.$inject = ['$scope', '$location']
 kassaModule.controller 'NavigationCtrl', NavigationCtrl
@@ -35,63 +30,59 @@ class BuysCtrl
     @scope.basket.products = []
     @scope.latest_buys = @Buys.index()
 
-    #bind functions to scope manually as they for some reason don't work without it
-    @scope.selectBuyer = @selectBuyer
-    @scope.addProductToBasket = @addProductToBasket
-    @scope.removeFromBasket = @removeFromBasket
-    @scope.buy = @buy
-    @scope.canBuy = @canBuy
-    @scope.resetBuyer = @resetBuyer
-    @scope.incrementAmount = @incrementAmount
-    @scope.decrementAmount = @decrementAmount
+    @scope.filterProducts= (filterStr)=>
+      for product in @scope.products
+          product.hidden = !@_containsString(product.name, filterStr)
 
-  selectBuyer: (buyer) =>
-    @scope.basket.buyer = buyer
+    @scope.filterUsers= (filterStr) =>
+      for user in @scope.users
+        user.hidden = !@_containsString(user.username, filterStr)
 
-  addProductToBasket: (product) =>
-    unless @incrementIfAlreadyInBasket(product)
-      entry =
-        product: product,
-        amount: 1
-      @scope.basket.products.push entry
+    @scope.selectBuyer= (buyer) =>
+      @scope.basket.buyer = buyer
 
-  removeFromBasket: (index) =>
-    @scope.basket.products.splice(index, 1)
+    @scope.addProductToBasket= (product) =>
+      unless @_incrementIfAlreadyInBasket(product)
+        entry =
+          product: product,
+          amount: 1
+        @scope.basket.products.push entry
 
-  buy: =>
-    buy = @Buys.create basketToJSON(@scope.basket), (response)=>
-      if response.status == 'created'
-        @_performClientSideBuy()
-        @scope.latest_buys = @Buys.index()
-        alert('Osto onnistui!')
-      else
-        alert("Osto epäonnistui: #{response}")
+    @scope.removeFromBasket= (index) =>
+      @scope.basket.products.splice(index, 1)
 
-  canBuy: =>
-    @scope.basket.buyer and @scope.basket.products.length
+    @scope.buy= =>
+      buy = @Buys.create @_basketToJSON(@scope.basket), (response)=>
+        if response.status == 'created'
+          @_performClientSideBuy()
+          @scope.latest_buys = @Buys.index()
+          alert('Osto onnistui!')
+        else
+          alert("Osto epäonnistui: #{response}")
 
-  resetBuyer: =>
-    @scope.basket.buyer = undefined
+    @scope.canBuy= =>
+      @scope.basket.buyer and @scope.basket.products.length
 
-  incrementAmount: (entry) ->
-    entry.amount += 1
+    @scope.resetBuyer= =>
+      @scope.basket.buyer = undefined
 
-  decrementAmount: (entry) ->
-    entry.amount -= 1 unless entry.amount is 1
+    @scope.incrementAmount= @_incrementAmount
 
-  incrementIfAlreadyInBasket: (product) =>
+    @scope.decrementAmount= @_decrementAmount
+
+  _incrementIfAlreadyInBasket: (product) =>
     for entry in @scope.basket.products
       if entry.product.name == product.name
-        @incrementAmount(entry)
+        @_incrementAmount(entry)
         return true
     return false
 
-  basketToJSON= (basket)->
+  _basketToJSON: (basket)->
     buy:
       buyer_id: basket.buyer.id
-      buy_entries_attributes: productsHash(basket.products)
+      buy_entries_attributes: @_productsHash(basket.products)
 
-  productsHash= (products) ->
+  _productsHash: (products) ->
     ret = []
     for entry in products
       ret.push {product_id: entry.product.id, amount: entry.amount}
@@ -106,6 +97,15 @@ class BuysCtrl
     @scope.basket.buyer = undefined
     @scope.basket.products.length = 0
 
+  _containsString: (haystack, needle)=>
+    haystack.toLowerCase().indexOf(needle.toLowerCase()) > -1
+
+  _incrementAmount: (entry) ->
+    entry.amount += 1
+
+  _decrementAmount: (entry) ->
+    entry.amount -= 1 unless entry.amount is 1
+
 BuysCtrl.$inject = ['$scope','Users', 'Products','Buys']
 kassaModule.controller 'BuysCtrl', BuysCtrl
 
@@ -113,9 +113,9 @@ class ProductsCtrl
   constructor: (@scope, Products)->
     @scope.materials = []
 
-  create: ()->
+    @scope.create= ()->
 
-  addMaterial: (product) =>
+    @scope.addMaterial= (product) =>
 
 ProductsCtrl.$inject = ['$scope','Products']
 kassaModule.controller 'ProductsCtrl', ProductsCtrl
