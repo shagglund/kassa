@@ -31,10 +31,10 @@ class DeviseCreateUsers < ActiveRecord::Migration
       t.datetime :locked_at
 
       ## Token authenticatable
-      # t.string :authentication_token
+      t.string :authentication_token
 
       t.string :username
-      t.float :balance, :default => 0
+      t.decimal :balance, :null => false, :default => 0, :precision => 6, :scale => 2
       t.integer :buy_count, :default => 0
       t.boolean :admin, :default => false
       t.boolean :staff, :default => false
@@ -47,6 +47,6 @@ class DeviseCreateUsers < ActiveRecord::Migration
     add_index :users, :reset_password_token, :unique => true
     # add_index :users, :confirmation_token,   :unique => true
     add_index :users, :unlock_token,         :unique => true
-    # add_index :users, :authentication_token, :unique => true
+    add_index :users, :authentication_token, :unique => true
   end
 end

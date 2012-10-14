@@ -1,0 +1,49 @@
+<% url_helper = Kassa::Application.routes.url_helpers %>
+kassaModule = angular.module 'Kassa.services', ['ngResource']
+kassaModule.factory 'Buys', ($resource)->
+  actions =
+    index:
+      method: 'GET',
+      isArray: true
+    create:
+      method: 'POST'
+  $resource '<%= url_helper.buys_path %>', {}, actions
+
+kassaModule.factory 'Products', ($resource)->
+  actions =
+    index:
+      method: 'GET',
+      isArray: true
+    create:
+      method: 'POST'
+    update:
+      method: 'PUT'
+    destroy:
+      method: 'DELETE'
+  $resource '<%= url_helper.product_path(':id') %>', {id: '@id'}, actions
+
+kassaModule.factory 'Materials', ($resource)->
+  actions =
+    index:
+      method: 'GET',
+      isArray: true
+    create:
+      method: 'POST'
+    update:
+      method: 'PUT'
+    destroy:
+      method: 'DELETE'
+  $resource '<%= url_helper.material_path(':id') %>', {id: '@id'}, actions
+
+kassaModule.factory 'Users', ($resource)->
+  actions =
+    index:
+      method: 'GET',
+      isArray: true
+    create:
+      method: 'POST'
+    update:
+      method: 'PUT'
+    destroy:
+      method: 'DELETE'
+  $resource '<%= url_helper.user_path(':id') %>', {id: '@id'}, actions

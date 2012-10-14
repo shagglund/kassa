@@ -1,0 +1,121 @@
+<% url_helper = Kassa::Application.routes.url_helpers %>
+
+kassaModule = angular.module 'Kassa.controllers', ['Kassa.services']
+class NavigationCtrl
+  constructor: (@scope, @location)->
+    @scope.goToHome = @goToHome
+    @scope.goToProductManagement = @goToProductManagement
+    @scope.goToUserManagement = @goToUserManagement
+    @scope.canManageProducts = @canManageProducts
+    @scope.canManageUsers = @canManageUsers
+
+  goToHome: ()=>
+    @location.path '/'
+
+  goToProductManagement: ()=>
+    @location.path '<%= url_helper.products_path %>'
+
+  goToUserManagement: ()=>
+    @location.path '<%= url_helper.users_path %>'
+
+  canManageProducts: ()=>
+    true   #TODO handle based on logged in user
+
+  canManageUsers: ()=>
+    true   #TODO handle based on logged in user
+
+NavigationCtrl.$inject = ['$scope', '$location']
+kassaModule.controller 'NavigationCtrl', NavigationCtrl
+
+class BuysCtrl
+  constructor: (@scope, @Users, @Products, @Buys) ->
+    @scope.users = @Users.index()
+    @scope.products = @Products.index()
+    @scope.basket = {}
+    @scope.basket.products = []
+    @scope.latest_buys = @Buys.index()
+
+    #bind functions to scope manually as they for some reason don't work without it
+    @scope.selectBuyer = @selectBuyer
+    @scope.addProductToBasket = @addProductToBasket
+    @scope.removeFromBasket = @removeFromBasket
+    @scope.buy = @buy
+    @scope.canBuy = @canBuy
+    @scope.resetBuyer = @resetBuyer
+    @scope.incrementAmount = @incrementAmount
+    @scope.decrementAmount = @decrementAmount
+
+  selectBuyer: (buyer) =>
+    @scope.basket.buyer = buyer
+
+  addProductToBasket: (product) =>
+    unless @incrementIfAlreadyInBasket(product)
+      entry =
+        product: product,
+        amount: 1
+      @scope.basket.products.push entry
+
+  removeFromBasket: (index) =>
+    @scope.basket.products.splice(index, 1)
+
+  buy: =>
+    buy = @Buys.create basketToJSON(@scope.basket), (response)=>
+      if response.status == 'created'
+        @_performClientSideBuy()
+        @scope.latest_buys = @Buys.index()
+        alert('Osto onnistui!')
+      else
+        alert("Osto epäonnistui: #{response}")
+
+  canBuy: =>
+    @scope.basket.buyer and @scope.basket.products.length
+
+  resetBuyer: =>
+    @scope.basket.buyer = undefined
+
+  incrementAmount: (entry) ->
+    entry.amount += 1
+
+  decrementAmount: (entry) ->
+    entry.amount -= 1 unless entry.amount is 1
+
+  incrementIfAlreadyInBasket: (product) =>
+    for entry in @scope.basket.products
+      if entry.product.name == product.name
+        @incrementAmount(entry)
+        return true
+    return false
+
+  basketToJSON= (basket)->
+    buy:
+      buyer_id: basket.buyer.id
+      buy_entries_attributes: productsHash(basket.products)
+
+  productsHash= (products) ->
+    ret = []
+    for entry in products
+      ret.push {product_id: entry.product.id, amount: entry.amount}
+    ret
+
+  _performClientSideBuy: =>
+    price = 0.0
+    for entry in @scope.basket.products
+      entry.product.stock -= entry.amount
+      price += entry.product.price * entry.amount
+    @scope.basket.buyer.balance -= price
+    @scope.basket.buyer = undefined
+    @scope.basket.products.length = 0
+
+BuysCtrl.$inject = ['$scope','Users', 'Products','Buys']
+kassaModule.controller 'BuysCtrl', BuysCtrl
+
+class ProductsCtrl
+  constructor: (@scope, Products)->
+    @scope.materials = []
+
+  create: ()->
+
+  addMaterial: (product) =>
+
+ProductsCtrl.$inject = ['$scope','Products']
+kassaModule.controller 'ProductsCtrl', ProductsCtrl

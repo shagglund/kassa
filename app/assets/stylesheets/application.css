@@ -11,3 +11,27 @@
  *= require_self
  *= require_tree .
  */
+
+.increment-button, .decrement-button, .delete{
+    border-radius: 5px;
+    width: 2em;
+    height: 2em;
+    text-align: center;
+}
+.increment-button{
+    background-color: #32cd32;
+}
+.decrement-button{
+    background-color: #ff0000;
+}
+.number-box{
+    width:3em;
+}
+
+.hidden{
+    display:none;
+}
+
+button.delete{
+    background-color: #ff0000;
+}

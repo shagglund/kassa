@@ -1,24 +1,32 @@
 class Product < ActiveRecord::Base
-  default_scope eager_load{product_entries.material}
+  audited
 
-  attr_accessible :description, :name, :unit, :product_entries_attributes
+  attr_accessible :description, :name, :unit, :materials_attributes
 
-  has_many :product_entries
-  accepts_nested_attributes_for :product_entries
-  validates_associated :product_entries
+  has_many :materials, :class_name => 'ProductEntry'
+  accepts_nested_attributes_for :materials
+  validates_associated :materials
 
   validates :name, presence: true, uniqueness: true
   validates :unit, presence: true, unit: true
 
-  scope :sale_listable,
-            where{product_entries.materials.stock * product_entries.amount > 0}.
-            select([:id, :name, :product_entries => [:amount, :material => [:stock, :price]]])
+  scope :sale_list,
+            where{materials.materials.stock * materials.amount > 0}.
+            select([:id, :name, :materials => [:amount, :material => [:stock, :price]]])
 
   def stock
-    product_entries.min_by {|entry| entry.stock} .stock
+    materials.min_by {|entry| entry.stock} .stock
   end
 
   def price
-    product_entries.sum {|entry| entry.material.price * entry.amount }
+    price = 0
+    materials.each do |entry|
+      price += entry.material.price * entry.amount
+    end
+    price
+  end
+
+  def as_json(options)
+    super(options.merge(:methods => [:stock, :price]))
   end
 end

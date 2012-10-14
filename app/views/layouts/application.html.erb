@@ -3,20 +3,9 @@
 <head>
   <title>Kassa</title>
   <%= stylesheet_link_tag "application", :media => "all" %>
-  <% if user_signed_in? %>
-    <%= javascript_include_tag "application" %>
-  <% end %>
   <%= csrf_meta_tags %>
 </head>
 <body>
-<% if user_signed_in? %>
-  <nav>
-    <%= link_to t('navigation.home'), new_buy_path %>
-    <%= link_to t('navigation.product_admin'), products_path %>
-    <%= link_to t('navigation.member_admin'), users_path %>
-  </nav>
-<% end %>
 <%= yield %>
-
 </body>
 </html>
