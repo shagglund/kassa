@@ -1,5 +1,57 @@
 <% url_helper = Kassa::Application.routes.url_helpers %>
 kassaModule = angular.module 'Kassa.services', ['ngResource']
+class Basket
+  constructor: ()->
+    @products = []
+    @buyer = {}
+
+  addProduct: (product)=>
+    unless @_incrementIfAlreadyInBasket(product)
+      @products.push {product: product, amount: 1, error: ''}
+
+  removeProduct: (index) =>
+    @products.splice(index, 1)
+
+  incrementAmount: (index) =>
+    @products[index].amount += 1
+
+  decrementAmount: (index) =>
+    unless @products[index].amount == 1
+      @products[index].amount -= 1
+
+  clearProducts: =>
+    @products.length = 0
+
+  clearBuyer: =>
+    @buyer = undefined
+
+  clear: =>
+    @clearBuyer() and @clearProducts()
+
+  canBuy: =>
+    @buyer and @products.length
+
+  indexOfProduct: (product)=>
+    return -1 unless @products.length
+    for index in [0..@products.length-1]
+      if @products[index].product.name == product.name
+        return index
+    return -1
+
+  toJSON: ()=>
+    obj = {buyer_id: @buyer.id, products_attributes: []}
+    for entry in @products
+      obj.products_attributes.push {product_id: entry.product.id, amount: entry.amount}
+    obj
+
+  _incrementIfAlreadyInBasket: (product) =>
+    index = @indexOfProduct(product)
+    @incrementAmount(index) if index != -1
+    index != -1
+
+kassaModule.factory 'Basket', ()->
+  new Basket
+
 kassaModule.factory 'Buys', ($resource)->
   actions =
     index:

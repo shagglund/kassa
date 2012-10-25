@@ -2,28 +2,28 @@
 
 kassaModule = angular.module 'Kassa.controllers', ['Kassa.services']
 class NavigationCtrl
-  constructor: (@scope, @location)->
+  constructor: (@$scope, @location)->
 
-    @scope.goToHome= ()=>
+    @$scope.goToHome= ()=>
       @location.path '/'
 
-    @scope.goToProductManagement= ()=>
+    @$scope.goToProductManagement= ()=>
       @location.path '<%= url_helper.products_path %>'
 
-    @scope.goToUserManagement= ()=>
+    @$scope.goToUserManagement= ()=>
       @location.path '<%= url_helper.users_path %>'
 
-    @scope.canManageProducts= ()=>
+    @$scope.canManageProducts= ()=>
       true   #TODO handle based on logged in user
 
-    @scope.canManageUsers= ()=>
+    @$scope.canManageUsers= ()=>
       true   #TODO handle based on logged in user
 
 NavigationCtrl.$inject = ['$scope', '$location']
 kassaModule.controller 'NavigationCtrl', NavigationCtrl
 class AbstractKassaController
-  constructor: (@scope)->
-    @scope.filter= (items, field, filterList)=>
+  constructor: (@$scope)->
+    @$scope.filter= (items, field, filterList)=>
       for item in items
         item.hidden = !@_containsStringInList(item[field], filterList)
 
@@ -39,120 +39,70 @@ class AbstractKassaController
     I18n.t response_data.i18n_key, {defaultValue: response_data.message}
 
 class BuysCtrl extends AbstractKassaController
-  constructor: (@scope, @Users, @Products, @Buys) ->
-    super @scope
-    @buy = {products_attributes: [] }
-    @scope.basket = {products: [] }
-    @scope.users = @Users.index()
-    @scope.products = @Products.index()
-    @scope.latest_buys = @Buys.index()
-    @scope.messages = {buy: {class: 'success', message:''}}
+  constructor: (@$scope, @Buys, @Basket) ->
+    super @$scope
+    @$scope.basket = @Basket
+    @$scope.latest_buys = @Buys.index()
+    @$scope.messageType = 'success'
+    @$scope.message = ''
 
-    @scope.clearBasket= @_clearBasket
-    @scope.resetBuyer= @_clearBuyer
-    @scope.incrementAmount= @_incrementAmount
-    @scope.decrementAmount= @_decrementAmount
-
-    @scope.selectBuyer= (buyer) =>
-      @scope.basket.buyer = buyer
-      @buy.buyer_id = buyer.id
-      @_checkIfCanBuy()
-
-    @scope.addProductToBasket= (product) =>
-      unless @_incrementIfAlreadyInBasket(product)
-        @scope.basket.products.push {product: product, amount: 1, error: ''}
-        @buy.products_attributes.push {product_id: product.id, amount: 1}
-      @_checkIfCanBuy()
-
-    @scope.removeFromBasket= (index) =>
-      @scope.basket.products.splice(index, 1)
-      @buy.products.splice(index, 1)
-      @_checkIfCanBuy()
-
-    @scope.buy= =>
-      @Buys.create @buy, @_handleBuySuccess, @_handleBuyError
-
-    @scope.products_str= (products)->
+    @$scope.productsStr= (products)->
       str_arr = []
       for product in products
         str_arr.push "#{product.amount} #{product.name}"
       str_arr.join(', ')
 
-  _incrementIfAlreadyInBasket: (product) =>
-    return false unless @scope.basket.products.length
-    for index in [0..@scope.basket.products.length]
-      if @scope.basket.products[index].product.name == product.name
-        @_incrementAmount(index)
-        return true
-    return false
+    @$scope.buy= =>
+      @Buys.create @$scope.basket.toJSON(), @_handleBuySuccess, @_handleBuyError
 
   _performClientSideBuy: =>
     price = 0.0
     product_count = 0
-    for entry in @scope.basket.products
+    for entry in @$scope.basket.products
       entry.product.stock -= entry.amount
       price += entry.product.price * entry.amount
       product_count += entry.amount
-    @scope.basket.buyer.balance -= price
-    @scope.basket.buyer.buy_count += product_count
-    @_clearBasket()
-    @_clearBuyer()
+    @$scope.basket.buyer.balance -= price
+    @$scope.basket.buyer.buy_count += product_count
+    @$scope.basket.clearProducts()
+    @$scope.basket.clearBuyer()
     return
-
-  _clearBasket: =>
-    @scope.basket.products.length = 0
-    @buy.products_attributes.length = 0
-    @_checkIfCanBuy()
-    return
-
-  _clearBuyer: =>
-    @scope.basket.buyer = undefined
-    @buy.buyer = undefined
-    @_checkIfCanBuy()
-    return
-
-  _checkIfCanBuy: =>
-    @scope.basket.canBuy = @scope.basket.products.length and @scope.basket.buyer
-
-  _incrementAmount: (index) =>
-    @scope.basket.products[index].amount += 1
-    @buy.products_attributes[index].amount += 1
-    return
-
-  _decrementAmount: (index) =>
-    unless @scope.basket.products[index].amount is 1
-      @scope.basket.products[index].amount -= 1
-      @buy.products_attributes[index].amount -= 1
-      return
 
   _handleBuySuccess: (response, headers) =>
     @_performClientSideBuy()
-    @scope.latest_buys = @Buys.index()
-    @scope.messages.buy.class = 'success-message'
-    @scope.messages.buy.message = @_i18nMessage response
+    @$scope.latest_buys = @Buys.index()
+    @$scope.messageType = 'success'
+    @$scope.message = @_i18nMessage response
 
   _handleBuyError: (response, headers) =>
     if response.status == 422
-      @scope.messages.buy.class = 'failure-message'
-      @scope.messages.buy.message = @_i18nMessage response.data
-      for entry in @scope.basket.products
+      @$scope.messageType = 'failure'
+      @$scope.message = @_i18nMessage response.data
+      for entry in @$scope.basket.products
         errors = response.data.errors[entry.product.name]
         if angular.isArray(errors)
           entry.error = errors.join(', ')
         else
           entry.error = errors
 
-BuysCtrl.$inject = ['$scope','Users', 'Products','Buys']
+BuysCtrl.$inject = ['$scope','Buys', 'Basket']
 kassaModule.controller 'BuysCtrl', BuysCtrl
 
-class ProductsCtrl
-  constructor: (@scope, @Products, @Materials)->
-    @scope.products = @Products.index()
-    @scope.materials = @Materials.index()
-    @scope.editing_product = {}
+class ProductsCtrl extends AbstractKassaController
+  constructor: (@$scope, @Products, @Materials, @Basket)->
+    super @$scope
+    @$scope.basket = @Basket
+    @$scope.products = @Products.index()
+    @$scope.materials = @Materials.index()
 
-    @scope.edit = (product)=>
-      @scope.editing_product = product
-
-ProductsCtrl.$inject = ['$scope','Products', 'Materials']
+ProductsCtrl.$inject = ['$scope','Products', 'Materials', 'Basket']
 kassaModule.controller 'ProductsCtrl', ProductsCtrl
+
+class UsersCtrl extends AbstractKassaController
+  constructor: (@$scope, @Users, @Basket)->
+    super @$scope
+    @$scope.basket = @Basket
+    @$scope.users = @Users.index()
+
+UsersCtrl.$inject = ['$scope','Users', 'Basket']
+kassaModule.controller 'UsersCtrl', UsersCtrl

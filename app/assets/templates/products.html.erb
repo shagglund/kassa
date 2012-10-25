@@ -6,10 +6,12 @@
      <th>{{I18n.t('products.description')}}</th>
    </tr>
    <tr ng-repeat="product in products">
-     <td>{{product.name}}</td>
+     <td>
+       <a ng-click="details(product)">{{product.name}}</a>
+     </td>
      <td>{{product.description}}</td>
      <td>
-       <button ng-click="edit(product)">{{I18n.t('generic.edit')}}</button>
+       <a ng-click="edit(product)">{{I18n.t('generic.edit')}}</a>
      </td>
    </tr>
  </table>

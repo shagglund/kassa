@@ -34,6 +34,9 @@
 .clickable{
     cursor:pointer;
 }
+.highlighted{
+    background-color: #d3d3d3;
+}
 
 .error-message, .negative{
     color:#ff0000;
