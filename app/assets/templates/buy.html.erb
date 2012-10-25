@@ -1,82 +1,87 @@
 <div ng-controller="BuysCtrl">
   <div id="tabs">
-    <h3>Piikit</h3>
+    <h3>{{I18n.t('tabs.header')}}</h3>
     <div>
-      <span>Etsi:</span>
-      <input type="text" ng-model="currentUserText" ng-change="filterUsers(currentUserText)" value="{{currentUserText}}"/>
+      <span>{{I18n.t('generic.search_by_name')}}</span>
+      <input type="text" ng-model="currentUserText" ng-change="filter(users, 'username', currentUserText)" ng-list value="{{currentUserText}}"/>
     </div>
     <table>
       <tr>
-        <th>Omistaja</th>
-        <th>Ostettuja tuotteita</th>
-        <th>Saldo</th>
+        <th class="clickable" title="{{I18n.t('tabs.sort_by_name')}}" ng-click="sort(users, 'username')">{{I18n.t('tabs.owner')}}</th>
+        <th class="clickable" title="{{I18n.t('tabs.sort_by_buy_count')}}" ng-click="sort(users, 'buy_count')">{{I18n.t('tabs.buy_count')}}</th>
+        <th class="clickable" title="{{I18n.t('tabs.sort_by_balance')}}" ng-click="sort(users, 'balance')">{{I18n.t('tabs.balance')}}</th>
       </tr>
-      <tr ng-repeat="user in users" ng-click="selectBuyer(user)" ng-hide="user.hidden">
-        <td>{{user.username}}</td>
+      <tr ng-repeat="user in users" ng-hide="user.hidden">
+        <td class="clickable" ng-click="selectBuyer(user)">{{user.username}}</td>
         <td>{{user.buy_count | number}}</td>
-        <td>{{user.balance | currency}}</td>
+        <td class="{{user.balance < 0 && 'negative' || 'positive'}}">{{user.balance | currency}}</td>
       </tr>
     </table>
   </div>
-  <div id="products">
-    <h3>Tuotteet</h3>
-    <div>
-      <span>Etsi:</span>
-      <input type="text" ng-model="currentProductText" ng-change="filterProducts(currentProductText)" value="{{currentProductText}}"/>
+  <div id="products_and_basket">
+    <div id="products_for_buy">
+      <h3>{{I18n.t('products.header')}}</h3>
+      <div>
+        <span>{{I18n.t('generic.search_by_name')}}</span>
+        <input type="text" ng-model="currentProductText" ng-change="filter(products, 'name', currentProductText)" ng-list value="{{currentProductText}}"/>
+      </div>
+      <table>
+        <tr>
+          <th class="clickable" title="{{I18n.t('products.sort_by_name')}}" ng-click="sort(products, 'name')">{{I18n.t('products.name')}}</th>
+          <th class="clickable" title="{{I18n.t('products.sort_by_stock')}}" ng-click="sort(products, 'stock')">{{I18n.t('products.buyable')}}</th>
+          <th class="clickable" title="{{I18n.t('products.sort_by_price')}}" ng-click="sort(products, 'price')">{{I18n.t('products.price')}}</th>
+        </tr>
+        <tr ng-repeat="product in products" ng-hide="product.hidden">
+          <td class="clickable" ng-click="addProductToBasket(product)">{{product.name}}</td>
+          <td>{{product.stock | number}}</td>
+          <td>{{product.price | currency}}</td>
+        </tr>
+      </table>
     </div>
-    <table>
-      <tr>
-        <th>Nimi</th>
-        <th>Ostettavissa</th>
-        <th>Hinta</th>
-      </tr>
-      <tr ng-repeat="product in products" ng-click="addProductToBasket(product)" ng-hide="product.hidden">
-        <td>{{product.name}}</td>
-        <td>{{product.stock | number}}</td>
-        <td>{{product.price | currency}}</td>
-      </tr>
-    </table>
-  </div>
-  <div id="basket">
-    <h3>Ostoskori</h3>
-    <div>
-      <span>Ostaja:</span>
-      <span ng-click="resetBuyer()">{{basket.buyer.username || 'Ostajaa ei ole valittu'}}</span>
+    <div id="basket" ng-init="clearBasket">
+      <h3>{{I18n.t('buys.header')}}</h3>
+      <p class="{{message.buy.class}}" ng-show="messages.buy.message.length > 0">{{messages.buy.message}}</p>
+      <div>
+        <span>{{I18n.t('buys.buyer.buyer')}}:</span>
+        <span title="{{I18n.t('buys.buyer.remove_selection')}}"ng-click="resetBuyer()">{{basket.buyer.username || I18n.t('buys.buyer.none')}}</span>
+      </div>
+      <div ng-hide="basket.products.length">
+        <span>{{I18n.t('buys.products.none')}}</span>
+      </div>
+      <table ng-show="basket.products.length">
+        <tr>
+          <th class="clickable" title="{{I18n.t('buys.products.sort_by_name')}}" ng-click="sort(basket.products, 'product.name')">{{I18n.t('buys.products.name')}}</th>
+          <th class="clickable" title="{{I18n.t('buys.products.sort_by_amount')}}" ng-click="sort(basket.products, 'product.amount')">{{I18n.t('buys.products.amount')}}</th>
+        </tr>
+        <tr ng-repeat="entry in basket.products">
+          <td>{{entry.product.name}}</td>
+          <td>
+            <button class="decrement" ng-click="decrementAmount($index)">-</button>
+            <input class="number-box" type="text" ng-model="entry.amount" ng-pattern="/^\d+$/"/>
+            <button class="increment" ng-click="incrementAmount($index)">+</button>
+          </td>
+          <td>
+            <button class="remove" ng-click="removeFromBasket($index)">X</button>
+          </td>
+          <td><p class="error-message" ng-show="entry.error.length > 0">{{entry.error}}</p></td>
+        </tr>
+      </table>
+      <button ng-disabled="!basket.canBuy" ng-show="basket.products.length" ng-click="buy()">{{I18n.t('buys.buy')}}</button>
+      <button ng-show="basket.products.length" ng-click="clearBasket()">{{I18n.t('buys.clear')}}</button>
     </div>
-    <div ng-hide="basket.products.length">
-      <span>Ostoskorissa ei ole tuotteita</span>
-    </div>
-    <table ng-show="basket.products.length">
-      <tr>
-        <th>Tuote</th>
-        <th>Määrä</th>
-      </tr>
-      <tr ng-repeat="entry in basket.products">
-        <td>{{entry.product.name}}</td>
-        <td>
-          <button class="decrement" ng-click="decrementAmount(entry)">-</button>
-          <input class="number-box" type="text" ng-model="entry.amount" ng-pattern="/^\d+$/"/>
-          <button class="increment" ng-click="incrementAmount(entry)">+</button>
-        </td>
-        <td>
-          <button class="remove" ng-click="removeFromBasket($index)">X</button>
-        </td>
-      </tr>
-    </table>
-    <button ng-show="canBuy()" ng-click="buy()">Osta</button>
   </div>
   <div id="latest_buys">
-    <h3>Viimeisimmät ostot</h3>
+    <h3>{{I18n.t('buys.latest')}}</h3>
     <table>
       <tr>
-        <th>Ostaja</th>
-        <th>Tuotteet</th>
-        <th>Ajankohta</th>
+        <th>{{I18n.t('buys.buy_time')}}</th>
+        <th>{{I18n.t('buys.buyer.buyer')}}</th>
+        <th>{{I18n.t('buys.products.all')}}</th>
       </tr>
       <tr ng-repeat="buy in latest_buys">
-        <td>{{buy.buyer.username}}</td>
-        <td>{{buy.products_str}}</td>
         <td>{{buy.created_at | date:'medium'}}</td>
+        <td>{{buy.buyer.username}}</td>
+        <td>{{products_str(buy.products)}}</td>
       </tr>
     </table>
   </div>

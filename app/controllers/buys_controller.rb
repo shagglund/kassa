@@ -1,8 +1,9 @@
 class BuysController < ApplicationController
   respond_to :json
   def index
-    @buys = Buy.eager_load{buyer}.order('buys.created_at DESC').limit(20).all
-    render json: @buys
+    limit = params[:limit] || 20
+    offset = params[:offset] || 0
+    @buys = Buy.latest(offset,limit)
   end
 
   # GET /buys/1
@@ -17,9 +18,9 @@ class BuysController < ApplicationController
   def create
     @buy = Buy.new(params[:buy])
     if @buy.save
-      render json: {status: 'created', object: @buy}, status: :created, location: @buy
+      render json: {status: :created, object: @buy, i18n_key: 'buys.success', message: I18n.t('buys.success')}, status: :created, location: @buy
     else
-      render json: @buy.errors, status: :unprocessable_entity
+      render json: {status: :error, errors: @buy.errors, i18n_key: 'buys.failure', message: 'ARARAR'}, status: :unprocessable_entity
     end
   end
 end

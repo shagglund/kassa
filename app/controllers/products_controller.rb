@@ -1,6 +1,7 @@
 class ProductsController < ApplicationController
   respond_to :json
-  before_filter :find_product, :only => [:show, :edit, :update, :destroy]
+  before_filter :authenticate_user!, :only => [:create, :update, :destroy]
+  before_filter :find_product, :only => [:show, :update, :destroy]
 
   def index
     @products = Product.eager_load{materials.material}

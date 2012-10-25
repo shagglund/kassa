@@ -1,5 +1,6 @@
 class MaterialsController < ApplicationController
   respond_to :json
+  before_filter :authenticate_user!, :only => [:create, :update, :destroy]
   def index
     @materials = Material.all
     render json: @materials

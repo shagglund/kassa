@@ -1,0 +1,44 @@
+# Sample localization file for English. Add more files in this directory for other locales.
+# See https://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
+
+fi:
+  generic:
+    search_by_name: 'Etsi nimellä:'
+    edit: 'Muokkaa'
+  tabs:
+    header: 'Piikit'
+    balance: 'Saldo'
+    buy_count: 'Ostettuja tuotteita'
+    owner: 'Omistaja'
+    sort_by_name: 'Järjestä ostajan mukaan'
+    sort_by_buy_count: 'Järjestä ostojen määrän mukaan'
+    sort_by_balance: 'Järjestä saldon mukaan'
+  products:
+    header: 'Tuotteet'
+    name: 'Nimi'
+    description: 'Tuotteen kuvaus'
+    buyable: 'Ostettavissa'
+    price: 'Hinta'
+    sort_by_name: 'Järjestä nimen mukaan'
+    sort_by_stock: 'Järjestä tehtävissä olevan määrän mukaan'
+    sort_by_price: 'Järjestä hinnan mukaan'
+  buys:
+    success: 'Osto onnistui!'
+    failure: 'Osto epäonnistui!'
+    header: 'Ostoskori'
+    buy_time: 'Oston ajankohta'
+    latest: 'Viimeisimmät ostot'
+    buy: 'Osta'
+    clear: 'Tyhjennä ostoskori'
+    buyer:
+      buyer: 'Ostaja'
+      none: 'Ostajaa ei ole valittu'
+      remove_selection: 'Klikkaa poistaaksesi ostajan valinnan'
+    products:
+      all: 'Tuotteet'
+      none: 'Ostoskorissa ei ole tuotteita'
+      amount: 'Määrä'
+      name: 'Tuote'
+      sort_by_name: 'Järjestä aakkosjärjestykseen'
+      sort_by_amount: 'Järjestä määrän mukaan'
+      out_of_stock: 'Ei riittävästi varastossa'

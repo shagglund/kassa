@@ -2,7 +2,7 @@ class BuyObserver < ActiveRecord::Observer
   observe :buy
 
   def before_create(record)
-    record.buy_entries.each do |entry|
+    record.products.each do |entry|
       record.price += entry.amount * entry.product.price
     end
   end
@@ -21,7 +21,7 @@ class BuyObserver < ActiveRecord::Observer
     end
 
     def update_products(record)
-      record.buy_entries.each do |entry|
+      record.products.each do |entry|
         entry.product.materials.each do |product_entry|
           product_entry.material.stock -= entry.amount * product_entry.amount
           product_entry.material.save_without_auditing

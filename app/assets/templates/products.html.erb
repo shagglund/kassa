@@ -1,3 +1,16 @@
 <div>
-
+ <h3>{{I18n.t('products.header')}}</h3>
+ <table>
+   <tr>
+     <th>{{I18n.t('products.name')}}</th>
+     <th>{{I18n.t('products.description')}}</th>
+   </tr>
+   <tr ng-repeat="product in products">
+     <td>{{product.name}}</td>
+     <td>{{product.description}}</td>
+     <td>
+       <button ng-click="edit(product)">{{I18n.t('generic.edit')}}</button>
+     </td>
+   </tr>
+ </table>
 </div>

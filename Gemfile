@@ -8,6 +8,8 @@ gem 'audited-activerecord'
 gem 'sqlite3'
 gem 'devise'
 gem 'squeel'
+gem 'i18n-js'
+gem 'rabl'
 
 # Gems used only for assets and not required
 # in production environments by default.
@@ -32,8 +34,6 @@ group :assets do
 end
 
 gem 'jquery-rails'
-gem 'eco'
-gem 'spine-rails'
 
 # To use ActiveModel has_secure_password
 gem 'bcrypt-ruby', '~> 3.0.0'

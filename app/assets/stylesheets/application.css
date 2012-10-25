@@ -30,3 +30,16 @@
 .hidden{
     display:none;
 }
+
+.clickable{
+    cursor:pointer;
+}
+
+.error-message, .negative{
+    color:#ff0000;
+}
+
+#tabs, #products_and_basket, #latest_buys{
+    float:left;
+    margin-right:15px;
+}
