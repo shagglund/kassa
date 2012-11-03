@@ -16,7 +16,7 @@ class MaterialsController < ApplicationController
   # POST /materials
   # POST /materials.json
   def create
-    @material = Material.new(params[:material].merge(:action_by => current_user))
+    @material = Material.new(params[:material])
     if @material.save
       render json: @material, status: :created, location: @material
     else
@@ -28,7 +28,7 @@ class MaterialsController < ApplicationController
   # PUT /materials/1.json
   def update
     @material = Material.find(params[:id])
-    if @material.update_attributes(params[:material].merge(:action_by => current_user))
+    if @material.update_attributes(params[:material])
       head :no_content
     else
       render json: @material.errors, status: :unprocessable_entity

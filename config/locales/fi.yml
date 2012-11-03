@@ -2,9 +2,22 @@
 # See https://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
 
 fi:
+  units:
+    piece: 'kappale'
+    litre: 'litra'
+    dl: 'desilitra'
+    cl: 'senttilitra'
+    ml: 'millilitra'
   generic:
     search_by_name: 'Etsi nimellä:'
     edit: 'Muokkaa'
+    details: 'Tiedot'
+    change: 'Muutos'
+    cancel: 'Peruuta'
+    remove: 'Poista'
+    add: 'Lisää'
+    save: 'Tallenna'
+    ready: 'Valmis'
   tabs:
     header: 'Piikit'
     balance: 'Saldo'
@@ -14,14 +27,55 @@ fi:
     sort_by_buy_count: 'Järjestä ostojen määrän mukaan'
     sort_by_balance: 'Järjestä saldon mukaan'
   products:
+    create: 'Luo uusi tuote'
     header: 'Tuotteet'
     name: 'Nimi'
     description: 'Tuotteen kuvaus'
     buyable: 'Ostettavissa'
+    stock: 'Varastossa'
     price: 'Hinta'
+    unit: 'Yksikkö'
+    group: 'Tuoteryhmä'
+    groups:
+      can: 'Tölkki/pullo'
+      drink: 'Drinkki'
+      shot: 'Shotti'
+      non_alcoholic: 'Alkoholiton'
+      food: 'Ruoka'
+    units:
+      piece: 'kappale'
+      litre: 'litra'
+      dl: 'desilitra'
+      cl: 'senttilitra'
+      ml: 'millilitra'
     sort_by_name: 'Järjestä nimen mukaan'
     sort_by_stock: 'Järjestä tehtävissä olevan määrän mukaan'
     sort_by_price: 'Järjestä hinnan mukaan'
+    latest_actions: 'Viimeisimmät muutokset'
+    change_by: 'Tekijä'
+    details: 'Tuotteen %{product} tiedot'
+    materials:
+      amount: 'Määrä'
+    no_description: 'Ei kuvausta'
+  materials:
+    other: 'Raaka-aineet'
+    one: 'Raaka-aine'
+    name: 'Nimi'
+    stock: 'Varastossa'
+    price: 'Hinta'
+    unit: 'Yksikkö'
+    group: 'Tuoteryhmä'
+    groups:
+      can: 'Tölkki/pullo'
+      shot: 'Shotti'
+      non_alcoholic: 'Alkoholiton'
+      food: 'Ruoka'
+    units:
+      piece: 'kappale'
+      litre: 'litra'
+      dl: 'desilitra'
+      cl: 'senttilitra'
+      ml: 'millilitra'
   buys:
     success: 'Osto onnistui!'
     failure: 'Osto epäonnistui!'

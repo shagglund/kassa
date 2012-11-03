@@ -1,6 +1,8 @@
 <% url_helper = Kassa::Application.routes.url_helpers %>
+<% environment.context_class.instance_eval { include ActionView::Helpers::JavaScriptHelper } %>
 
 kassaModule = angular.module 'Kassa.controllers', ['Kassa.services']
+
 class NavigationCtrl
   constructor: (@$scope, @location)->
 
@@ -21,11 +23,27 @@ class NavigationCtrl
 
 NavigationCtrl.$inject = ['$scope', '$location']
 kassaModule.controller 'NavigationCtrl', NavigationCtrl
+
 class AbstractKassaController
   constructor: (@$scope)->
+    #filtering using inner arrays with dot notation is not enabled,
+    #only single entities inside the dot notated string will work
     @$scope.filter= (items, field, filterList)=>
-      for item in items
-        item.hidden = !@_containsStringInList(item[field], filterList)
+      fieldNames = field.split('.') #allow for dot notated inner properties ie. 'material.name'
+      if angular.isArray items
+        for item in items
+          value = @_findInnermostValue(item,fieldNames,filterList)
+          item.hidden = !@_containsStringInList(value, filterList) if value
+      else
+        value = @_findInnermostValue(items,fieldNames,filterList)
+        items.hidden = !@_containsStringInList(value, filterList) if value
+
+  #Does not allow for arrays as item
+  _findInnermostValue: (item, fieldNames, filterList) ->
+    if fieldNames.length > 1
+      @_findInnermostValue(item[fieldNames.shift()], fieldNames, filterList)
+    else
+      return item[fieldNames]
 
   _containsStringInList: (haystack, needleList) ->
     for needle in needleList
@@ -53,37 +71,17 @@ class BuysCtrl extends AbstractKassaController
       str_arr.join(', ')
 
     @$scope.buy= =>
-      @Buys.create @$scope.basket.toJSON(), @_handleBuySuccess, @_handleBuyError
+      @Basket.buy @_handleBuySuccess, @_handleBuyFailure
 
-  _performClientSideBuy: =>
-    price = 0.0
-    product_count = 0
-    for entry in @$scope.basket.products
-      entry.product.stock -= entry.amount
-      price += entry.product.price * entry.amount
-      product_count += entry.amount
-    @$scope.basket.buyer.balance -= price
-    @$scope.basket.buyer.buy_count += product_count
-    @$scope.basket.clearProducts()
-    @$scope.basket.clearBuyer()
-    return
-
-  _handleBuySuccess: (response, headers) =>
-    @_performClientSideBuy()
+  _handleBuySuccess: (response, headers)=>
     @$scope.latest_buys = @Buys.index()
-    @$scope.messageType = 'success'
+    @$scope.messageType = response.data.status
     @$scope.message = @_i18nMessage response
 
-  _handleBuyError: (response, headers) =>
+  _handleBuyFailure: (response,headers)=>
     if response.status == 422
-      @$scope.messageType = 'failure'
+      @$scope.messageType = response.data.status
       @$scope.message = @_i18nMessage response.data
-      for entry in @$scope.basket.products
-        errors = response.data.errors[entry.product.name]
-        if angular.isArray(errors)
-          entry.error = errors.join(', ')
-        else
-          entry.error = errors
 
 BuysCtrl.$inject = ['$scope','Buys', 'Basket']
 kassaModule.controller 'BuysCtrl', BuysCtrl
@@ -91,9 +89,10 @@ kassaModule.controller 'BuysCtrl', BuysCtrl
 class ProductsCtrl extends AbstractKassaController
   constructor: (@$scope, @Products, @Materials, @Basket)->
     super @$scope
+    @$scope.hidden = true
     @$scope.basket = @Basket
-    @$scope.products = @Products.index()
-    @$scope.materials = @Materials.index()
+    @$scope.products = @Products
+    @$scope.materials = @Materials
 
 ProductsCtrl.$inject = ['$scope','Products', 'Materials', 'Basket']
 kassaModule.controller 'ProductsCtrl', ProductsCtrl

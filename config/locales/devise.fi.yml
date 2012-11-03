@@ -40,6 +40,8 @@ fi:
     sessions:
       signed_in: Sisäänkirjautuminen onnistui.
       signed_out: Uloskirjautuminen onnistui.
+      sign_out: Kirjaudu ulos/vaihda käyttäjää
+      sign_in: Kirjaudu sisään
     unlocks:
       send_instructions: Saat hetken kuluttua sähköpostiisi ohjeet tunnuksesi lukituksen poistoon.
       send_paranoid_instructions: Jos tilisi on olemassa, muutaman minuutin kuluttua sähköpostiisi on lähetetty ohjeet kuinka poistaa lukitus.

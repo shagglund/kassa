@@ -4,6 +4,7 @@
       <a ng-click="goToHome()">Ostosivu</a>
       <a ng-show="canManageProducts()" ng-click="goToProductManagement()">Tuotehallinta</a>
       <a ng-show="canManageUsers()" ng-click="goToUserManagement()">Käyttäjähallinta</a>
+      <%= link_to I18n.t('devise.sessions.sign_out'), destroy_user_session_path, {:method => :delete}  %>
     </nav>
     <div ng-view></div>
   </div>

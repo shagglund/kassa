@@ -1,9 +1,10 @@
 <div>
   <div id="tabs" ng-controller="UsersCtrl">
     <h3>{{I18n.t('tabs.header')}}</h3>
-    <div>
+    <div class="search">
       <span>{{I18n.t('generic.search_by_name')}}</span>
-      <input type="text" ng-model="currentUserText" ng-change="filter(users, 'username', currentUserText)" ng-list value="{{currentUserText}}"/>
+      <input type="text" ng-model="currentUserText" ng-change="filter(users, 'username', currentUserText)" ng-list
+             value="{{currentUserText}}" ng-init="filter(users, 'username', '')"/>
     </div>
     <table>
       <tr>
@@ -21,24 +22,25 @@
   <div id="products_and_basket">
     <div id="products_for_buy" ng-controller="ProductsCtrl">
       <h3>{{I18n.t('products.header')}}</h3>
-      <div>
+      <div class="search">
         <span>{{I18n.t('generic.search_by_name')}}</span>
-        <input type="text" ng-model="currentProductText" ng-change="filter(products, 'name', currentProductText)" ng-list value="{{currentProductText}}"/>
+        <input type="text" ng-model="currentProductText" ng-change="filter(products.collection, 'name', currentProductText)"
+               ng-list value="{{currentProductText}}" ng-init="filter(products.collection, 'name', '')"/>
       </div>
       <table>
         <tr>
-          <th class="clickable" title="{{I18n.t('products.sort_by_name')}}" ng-click="sort(products, 'name')">{{I18n.t('products.name')}}</th>
-          <th class="clickable" title="{{I18n.t('products.sort_by_stock')}}" ng-click="sort(products, 'stock')">{{I18n.t('products.buyable')}}</th>
-          <th class="clickable" title="{{I18n.t('products.sort_by_price')}}" ng-click="sort(products, 'price')">{{I18n.t('products.price')}}</th>
+          <th class="clickable" title="{{I18n.t('products.sort_by_name')}}" ng-click="sort(products.collection, 'name')">{{I18n.t('products.name')}}</th>
+          <th class="clickable" title="{{I18n.t('products.sort_by_stock')}}" ng-click="sort(products.collection, 'stock')">{{I18n.t('products.buyable')}}</th>
+          <th class="clickable" title="{{I18n.t('products.sort_by_price')}}" ng-click="sort(products.collection, 'price')">{{I18n.t('products.price')}}</th>
         </tr>
-        <tr ng-class="{highlighted: basket.indexOfProduct(product) != -1}" ng-repeat="product in products" ng-hide="product.hidden">
+        <tr ng-class="{highlighted: basket.indexOfProduct(product) != -1}" ng-repeat="product in products.collection" ng-hide="product.hidden">
           <td class="clickable" ng-click="basket.addProduct(product)">{{product.name}}</td>
           <td>{{product.stock | number}}</td>
           <td>{{product.price | currency}}</td>
         </tr>
       </table>
     </div>
-    <div id="basket" ng-controller="BuysCtrl">
+    <div id="basket">
       <h3>{{I18n.t('buys.header')}}</h3>
       <p class="{{messageType}}" ng-show="message.length > 0">{{message}}</p>
       <div>
@@ -56,12 +58,12 @@
         <tr ng-repeat="entry in basket.products">
           <td>{{entry.product.name}}</td>
           <td>
-            <button class="decrement" ng-click="basket.decrementAmount($index)">-</button>
-            <input class="number-box" type="text" ng-model="entry.amount" ng-pattern="/^\d+$/"/>
-            <button class="increment" ng-click="basket.incrementAmount($index)">+</button>
+            <button class="small decrement" ng-click="decrementByOne(entry, 'amount')">-</button>
+            <input class="number-box" type="text" ng-model="entry.amount" ng-pattern="/^[1-9]+$/"/>
+            <button class="small increment" ng-click="incrementByOne(entry, 'amount')">+</button>
           </td>
           <td>
-            <button class="remove" ng-click="basket.removeProduct($index)">X</button>
+            <button ng-click="basket.removeProduct($index)">{{I18n.t('generic.remove')}}</button>
           </td>
           <td><p class="error-message" ng-show="entry.error.length > 0">{{entry.error}}</p></td>
         </tr>
@@ -70,7 +72,7 @@
       <button ng-show="basket.products.length" ng-click="basket.clear()">{{I18n.t('buys.clear')}}</button>
     </div>
   </div>
-  <div id="latest_buys" ng-controller="BuysCtrl">
+  <div id="latest_buys">
     <h3>{{I18n.t('buys.latest')}}</h3>
     <table>
       <tr>
@@ -81,7 +83,7 @@
       <tr ng-repeat="buy in latest_buys">
         <td>{{buy.created_at | date:'medium'}}</td>
         <td>{{buy.buyer.username}}</td>
-        <td>{{productStr(buy.products)}}</td>
+        <td>{{productsStr(buy.products)}}</td>
       </tr>
     </table>
   </div>

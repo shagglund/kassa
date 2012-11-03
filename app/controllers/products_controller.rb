@@ -4,8 +4,8 @@ class ProductsController < ApplicationController
   before_filter :find_product, :only => [:show, :update, :destroy]
 
   def index
-    @products = Product.eager_load{materials.material}
-    render json: @products
+    @products = Product.eager_load{materials.material}.all
+    @products.delete_if {|product| product.stock == 0} if params[:in_stock]
   end
 
   def show
@@ -15,7 +15,7 @@ class ProductsController < ApplicationController
 
   def create
     entries_hash = params[:product].extract! :materials
-    @product = Product.new(params[:product].merge(:action_by => current_user))
+    @product = Product.new(params[:product])
     materials = Material.where{id.in(entries_hash.keys)}.all
     materials.each do |material|
       @product.materials.build({:material => material, :amount => entries_hash[material.id.to_s]})
@@ -29,8 +29,8 @@ class ProductsController < ApplicationController
   end
 
   def update
-    if @product.update_attributes(params[:product].merge(:action_by => current_user))
-      head :no_content
+    if @product.update_attributes(params[:product])
+      render 'show'
     else
       render json: @product.errors, status: :unprocessable_entity
     end

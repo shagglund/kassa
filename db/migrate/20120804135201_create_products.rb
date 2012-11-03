@@ -4,6 +4,7 @@ class CreateProducts < ActiveRecord::Migration
       t.string :name, :unique => true, :null => false
       t.text :description
       t.string :unit, :null => false
+      t.string :group, :null => false
 
       t.timestamps
     end
