@@ -53,7 +53,7 @@
       <th>{{I18n.t('materials.price')}}</th>
       <th>{{I18n.t('materials.stock')}}</th>
     </tr>
-    <tr class="clickable" ng-repeat="material in materials.collection" ng-click="materials.edit(product)" >
+    <tr class="clickable" ng-repeat="material in materials.collection" ng-click="materials.select(material)" >
       <td>{{material.name}}</td>
       <td>{{I18n.t('materials.units.'+material.unit)}}</td>
       <td>{{I18n.t('materials.groups.'+material.group)}}</td>
@@ -68,63 +68,110 @@
     <button ng-click="products.unselect()">X</button>
     <h3>{{I18n.t('products.details', {product: products.selected.name})}}</h3>
   </div>
-  <ul>
-    <li>
-      <h4>{{I18n.t('products.name')}}</h4>
-      <span  class="content" ng-hide="products.editing">{{products.selected.name}}</span>
-      <input ng-show="products.editing" ng-model="products.selected.name" />
-    </li>
-    <li>
-      <h4>{{I18n.t('products.unit')}}</h4>
-      <span  class="content" ng-hide="products.editing">{{I18n.t('products.units.'+products.selected.unit)}}</span>
-      <select ng-show="products.editing" ng-model="products.selected.unit"
-              ng-options="unit as lunit for (unit, lunit) in products.localized_units" ng-change="update()"></select>
+  <form>
+    <ul>
+      <li>
+        <h4>{{I18n.t('products.name')}}</h4>
+        <span  class="content" ng-hide="products.editing">{{products.selected.name}}</span>
+        <input ng-show="products.editing" ng-model="products.selected.name" />
+      </li>
+      <li>
+        <h4>{{I18n.t('products.unit')}}</h4>
+        <span  class="content" ng-hide="products.editing">{{I18n.t('products.units.'+products.selected.unit)}}</span>
+        <select ng-show="products.editing" ng-model="products.selected.unit"
+                ng-options="unit as lunit for (unit, lunit) in products.localized_units"></select>
 
-    </li>
-    <li>
-      <h4>{{I18n.t('products.group')}}</h4>
-      <span  class="content" ng-hide="products.editing">{{I18n.t('products.groups.'+products.selected.group)}}</span>
-      <select ng-show="products.editing" ng-model="products.selected.group"
-              ng-options="group as lgroup for (group, lgroup) in products.localized_groups" ng-change="update()"></select>
-    </li>
-    <li>
-      <h4>{{I18n.t('products.stock')}}</h4>
-      <span  class="content">{{products.selected.stock}}</span>
-    </li>
-    <li>
-      <h4>{{I18n.t('products.description')}}</h4>
-      <p ng-hide="products.editing" ng-show="products.description">{{products.selected.description}}</p>
-      <p ng-hide="products.editing" ng-hide="products.selected.description">{{I18n.t('products.no_description')}}</p>
-      <textarea ng-show="products.editing" ng-model="products.selected.description"  ng-change="products.update()"></textarea>
-    </li>
-    <li>
-      <h4>{{I18n.t('materials.other')}}</h4>
-      <div ng-repeat="entry in products.selected.materials" ng-hide="products.editing">
-        <p>{{entry.amount}} {{entry.material.name}}</p>
-      </div>
-      <div ng-repeat="entry in products.selected.materials" ng-hide="entry.hidden" ng-show="products.editing">
-        <div>
-          <button class="small decrement" ng-click="decrementByOne(entry, 'amount'); update()">-</button>
-          <input  id="entry_{{entry.id}}" class="number-box" type="text"
-                  ng-model="entry.amount" ng-pattern="/^[1-9]+$/" ng-change="update()"/>
-          <button class="small increment" ng-click="incrementByOne(entry, 'amount'); update()">+</button>
-        <label for="entry_{{entry.id}}">{{entry.material.name}}</label>
-        <button ng-click="removeEntry($index)">{{I18n.t('generic.remove')}}</button>
+      </li>
+      <li>
+        <h4>{{I18n.t('products.group')}}</h4>
+        <span  class="content" ng-hide="products.editing">{{I18n.t('products.groups.'+products.selected.group)}}</span>
+        <select ng-show="products.editing" ng-model="products.selected.group"
+                ng-options="group as lgroup for (group, lgroup) in products.localized_groups"></select>
+      </li>
+      <li>
+        <h4>{{I18n.t('products.stock')}}</h4>
+        <span  class="content">{{products.selected.stock}}</span>
+      </li>
+      <li>
+        <h4>{{I18n.t('products.description')}}</h4>
+        <p ng-hide="products.editing" ng-show="products.description">{{products.selected.description}}</p>
+        <p ng-hide="products.editing" ng-hide="products.selected.description">{{I18n.t('products.no_description')}}</p>
+        <textarea ng-show="products.editing" ng-model="products.selected.description"></textarea>
+      </li>
+      <li>
+        <h4>{{I18n.t('materials.other')}}</h4>
+        <div ng-repeat="entry in products.selected.materials" ng-hide="products.editing">
+          <p>{{entry.amount}} <a ng-click="materials.selectById(entry.material.id)">{{entry.material.name}}</a></p>
         </div>
-        <div>
-          <button class="small decrement" ng-click="decrementByOne(new_entry, 'amount')">-</button>
-          <input class="number-box" type="text" ng-model="new_entry.amount"
-                 ng-init="new_entry={amount:1}" ng-pattern="/^[1-9]+$/" ng-change="update()"/>
-          <button class="small increment" ng-click="incrementByOne(new_entry, 'amount')">+</button>
-          <select ng-model="new_entry.material" ng-options="m.name for m in materials">
-            </select>
-          <button ng-click="addEntry(new_entry)">{{I18n.t('generic.add')}}</button>
+        <div ng-repeat="entry in products.selected.materials" ng-hide="entry.hidden" ng-show="products.editing">
+          <div>
+            <input  id="entry_{{entry.id}}" min="1" step="1" class="number-box" type="number"
+                    ng-model="entry.amount" ng-pattern="/^[1-9]+$/"/>
+          <a ng-click="materials.selectById(entry.material.id)">{{entry.material.name}}</a>
+          <button ng-click="removeEntry($index)">{{I18n.t('generic.remove')}}</button>
+          </div>
+          <div>
+            <input class="number-box" type="number" min="1" step="1" ng-model="new_entry.amount"
+                   ng-init="new_entry={amount:1}" ng-pattern="/^[1-9]+$/"/>
+            <select ng-model="new_entry.material" ng-options="m.name for m in materials">
+              </select>
+            <button ng-click="addEntry(new_entry)">{{I18n.t('generic.add')}}</button>
+          </div>
         </div>
-      </div>
-    </li>
-  </ul>
-  <div class="buttons">
-    <button ng-click="products.editing=true" ng-hide="products.editing">{{I18n.t('generic.edit')}}</button>
-    <button ng-click="products.editing=false" ng-show="products.editing">{{I18n.t('generic.cancel')}}</button>
+      </li>
+    </ul>
+    <div class="buttons">
+      <button ng-click="products.editing=true" ng-hide="products.editing">{{I18n.t('generic.edit')}}</button>
+      <button ng-click="products.update()" ng-show="products.editing">{{I18n.t('generic.save')}}</button>
+      <button ng-click="products.editing=false" ng-show="products.editing">{{I18n.t('generic.cancel')}}</button>
+    </div>
+  </form>
+</div>
+
+<div class="selection_window" ng-show="materials.isSelected()">
+  <div class="header">
+    <button ng-click="materials.unselect()">X</button>
+    <h3>{{I18n.t('materials.details', {product: materials.selected.name})}}</h3>
   </div>
+  <form>
+    <ul>
+      <li>
+        <h4>{{I18n.t('materials.name')}}</h4>
+        <span  class="content" ng-hide="materials.editing">{{materials.selected.name}}</span>
+        <input ng-show="materials.editing" ng-model="materials.selected.name" />
+      </li>
+      <li>
+        <h4>{{I18n.t('materials.unit')}}</h4>
+        <span  class="content" ng-hide="materials.editing">{{I18n.t('materials.units.'+materials.selected.unit)}}</span>
+        <select ng-show="materials.editing" ng-model="materials.selected.unit"
+                ng-options="unit as lunit for (unit, lunit) in materials.localized_units" ></select>
+
+      </li>
+      <li>
+        <h4>{{I18n.t('materials.group')}}</h4>
+        <span  class="content" ng-hide="materials.editing">{{I18n.t('materials.groups.'+materials.selected.group)}}</span>
+        <select ng-show="materials.editing" ng-model="materials.selected.group"
+                ng-options="group as lgroup for (group, lgroup) in materials.localized_groups" ></select>
+      </li>
+      <li>
+        <h4>{{I18n.t('materials.stock')}}</h4>
+        <span  class="content" ng-hide="materials.editing">{{materials.selected.stock}}</span>
+        <span ng-show="materials.editing">
+          <input class="number-box" type="number" ng-model="materials.selected.stock" ng-pattern="/^\d+$/"
+                  ng-show="materials.editing"/>
+        </span>
+      </li>
+      <li>
+        <h4>{{I18n.t('materials.price')}}</h4>
+        <span  class="content" ng-hide="materials.editing">{{materials.selected.price}}</span>
+          <input class="number-box" type="number" min="0" step="0.1" ng-model="materials.selected.price"
+                 ng-pattern="/^\d+(\.\d{1,2})?$/"  ng-show="materials.editing"/>
+      </li>
+    </ul>
+    <div class="buttons">
+      <button ng-click="materials.editing=true" ng-hide="materials.editing">{{I18n.t('generic.edit')}}</button>
+      <button ng-click="materials.update()" ng-show="materials.editing">{{I18n.t('generic.save')}}</button>
+      <button ng-click="materials.editing=false" ng-show="materials.editing">{{I18n.t('generic.cancel')}}</button>
+    </div>
+  </form>
 </div>

@@ -21,11 +21,11 @@ module.run(['$rootScope', ($rootScope)->
         else
           if first[field] < second[field] then -1 else 1
 
-  $rootScope.incrementByOne = (object, field) ->
-    object[field] += 1
+  $rootScope.incrementByOne = (object, field, amount=1) ->
+    object[field] += amount
 
-  $rootScope.decrementByOne = (object, field, positive=true)->
-    object[field] -= 1 unless object[field] <= 1 and positive
+  $rootScope.decrementByOne = (object, field, amount=1, positive=true)->
+    object[field] -= amount unless object[field] <= amount and positive
 ])
 module.run(['$http', ($http)->
   if token = $("meta[name='csrf-token']").attr("content")

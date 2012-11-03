@@ -58,9 +58,7 @@
         <tr ng-repeat="entry in basket.products">
           <td>{{entry.product.name}}</td>
           <td>
-            <button class="small decrement" ng-click="decrementByOne(entry, 'amount')">-</button>
-            <input class="number-box" type="text" ng-model="entry.amount" ng-pattern="/^[1-9]+$/"/>
-            <button class="small increment" ng-click="incrementByOne(entry, 'amount')">+</button>
+            <input class="number-box" type="text" ng-model="entry.amount" min="1" step="1" ng-pattern="/^[1-9]+$/"/>
           </td>
           <td>
             <button ng-click="basket.removeProduct($index)">{{I18n.t('generic.remove')}}</button>

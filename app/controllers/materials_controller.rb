@@ -3,14 +3,12 @@ class MaterialsController < ApplicationController
   before_filter :authenticate_user!, :only => [:create, :update, :destroy]
   def index
     @materials = Material.all
-    render json: @materials
   end
 
   # GET /materials/1
   # GET /materials/1.json
   def show
     @material = Material.find(params[:id])
-    render json: @material
   end
 
   # POST /materials
