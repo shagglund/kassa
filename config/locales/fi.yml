@@ -2,6 +2,11 @@
 # See https://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
 
 fi:
+  action:
+    saving: 'Tallennetaan...'
+    saved: 'Tallennus onnistui!'
+    save_failed: 'Tallennus ei onnistunut'
+
   units:
     piece: 'kappale'
     litre: 'litra'
@@ -18,6 +23,7 @@ fi:
     add: 'Lisää'
     save: 'Tallenna'
     ready: 'Valmis'
+    unsaved_changes: 'Tallentamattomia muutoksia'
   tabs:
     header: 'Piikit'
     balance: 'Saldo'
@@ -27,7 +33,7 @@ fi:
     sort_by_buy_count: 'Järjestä ostojen määrän mukaan'
     sort_by_balance: 'Järjestä saldon mukaan'
   products:
-    create: 'Luo uusi tuote'
+    create: 'Uusi tuote'
     header: 'Tuotteet'
     name: 'Nimi'
     description: 'Tuotteen kuvaus'
@@ -60,6 +66,8 @@ fi:
   materials:
     other: 'Raaka-aineet'
     one: 'Raaka-aine'
+    details: 'Raaka-aineen %{material} tiedot'
+    create: 'Uusi raaka-aine'
     name: 'Nimi'
     stock: 'Varastossa'
     price: 'Hinta'
@@ -76,6 +84,9 @@ fi:
       dl: 'desilitra'
       cl: 'senttilitra'
       ml: 'millilitra'
+    add:
+      case: '+24'
+      nullify: 'Nollaa'
   buys:
     success: 'Osto onnistui!'
     failure: 'Osto epäonnistui!'
@@ -86,11 +97,11 @@ fi:
     clear: 'Tyhjennä ostoskori'
     buyer:
       buyer: 'Ostaja'
-      none: 'Ostajaa ei ole valittu'
-      remove_selection: 'Klikkaa poistaaksesi ostajan valinnan'
+      none: 'Valitse ostaja listasta klikkaamalla'
+      remove_selection: 'Klikkaa poistaaksesi valitun ostajan'
     products:
       all: 'Tuotteet'
-      none: 'Ostoskorissa ei ole tuotteita'
+      none: 'Lisää tuotteita koriin listasta klikkaamalla'
       amount: 'Määrä'
       name: 'Tuote'
       sort_by_name: 'Järjestä aakkosjärjestykseen'

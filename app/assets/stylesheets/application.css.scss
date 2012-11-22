@@ -12,16 +12,7 @@
  *= require_tree .
  */
 
-button.small{
-    border-radius: 5px;
-    width: 2em;
-    height: inherit;
-    text-align: center;
-}
-.increment{
-    background-color: #32cd32;
-}
-.decrement, .remove{
+.remove{
     background-color: #ff0000;
 }
 .number-box{
@@ -123,7 +114,7 @@ td {
         width:340px;
         height:80px;
       }
-      button:not(.small){
+      button.small{
         width: 50px;
       }
     }

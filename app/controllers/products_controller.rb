@@ -14,15 +14,10 @@ class ProductsController < ApplicationController
   end
 
   def create
-    entries_hash = params[:product].extract! :materials
     @product = Product.new(params[:product])
-    materials = Material.where{id.in(entries_hash.keys)}.all
-    materials.each do |material|
-      @product.materials.build({:material => material, :amount => entries_hash[material.id.to_s]})
-    end
 
     if @product.save
-      render json: @product, status: :created, location: @product
+      render 'show'
     else
       render json: @product.errors, status: :unprocessable_entity
     end

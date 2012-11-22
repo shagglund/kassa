@@ -20,28 +20,39 @@ class Materials
     @localized_groups[group] = I18n.t("materials.groups.#{group}") for group in angular.fromJson('<%= escape_javascript Material.groups.to_json %>')
     @$resource.index {}, @_handleCollectionSuccess, @_handleCollectionFailure
 
-
+  selectById: (id)=>
+    return unless id
+    for material in @collection
+      select(material) is material.id == id
+    return
 
   select:(material)=>
     @selected= material
-
-  selectById: (id)=>
-    for material in @collection
-      @selected = material
-    return
-
-  isSelected: (material)=>
-    if material then material == @_toJSON else @selected != undefined
+    @selected_initial = angular.copy material
 
   unselect: =>
     @editing = false if @selected
     @selected = undefined
+    @selected_initial = undefined
+
+  hasChanges: =>
+    !angular.equals @selected, @selected_initial
+
+  isSelected: (material)=>
+    if material then @selected == material else false
+
+  save: =>
+    if @selected.id then @update() else @create()
 
   update: ()=>
     @$resource.update @_toJSON(), @_handleUpdateSuccess, @_handleUpdateFailure
 
   create: =>
     @$resource.create @_toJSON(), @_handleCreateSuccess, @_handleCreateFailure if @selected
+
+  new: =>
+    @selected = {unit: 'piece', group: 'can', stock: 1, price: 1}
+    @editing = true
 
   #used to parse only the relevant (changeable) data for server
   _toJSON: =>
@@ -65,12 +76,15 @@ class Materials
 
   _handleUpdateSuccess: (response, responseHeaders)=>
     console.log response
+    angular.copy @selected, @selected_initial
 
   _handleUpdateFailure: (response, responseHeaders)=>
     console.log response
 
   _handleCreateSuccess: (response, responseHeaders)=>
     console.log response
+    @collection.push response
+    @collection.sort
 
   _handleCreateFailure: (response, responseHeaders)=>
     console.log response
@@ -97,28 +111,44 @@ class Products
 
   select:(product)=>
     @selected= product
+    @selected_initial = angular.copy product
 
   unselect: =>
     @editing = false if @selected
     @selected = undefined
+    @selected_initial = undefined
+
+  hasChanges: =>
+    return false unless @selected and @selected_initial
+    !angular.equals(@selected, @selected_initial) and !angular.equals(@selected.materials, @selected_initial.materials)
 
   isSelected: (product)=>
-    if product then product == @selected else @selected != undefined
+    return false unless @selected
+    product == @selected
 
   addEntry: (material_and_amount)=>
-    @selected.materials.push material_and_amount
-    @update()
+    console.log material_and_amount
+    @selected.materials.push angular.copy(material_and_amount)
 
   removeEntry: (index)=>
-    @selected.materials[index].destroy = true
-    @selected.materials[index].hidden = true
-    @update()
+    if @selected.materials[index].id
+      @selected.materials[index].destroy = true
+      @selected.materials[index].hidden = true
+    else
+      @selected.materials.splice index, 1
 
-  update: ()=>
+  save: =>
+    if @selected.id then @update() else @create()
+
+  update: =>
     @$resource.update @_toJSON(), @_handleUpdateSuccess, @_handleUpdateFailure if @editing and @selected
 
   create: =>
     @$resource.create @_toJSON(), @_handleCreateSuccess, @_handleCreateFailure if @selected
+
+  new: =>
+    @select {unit: 'piece', group: 'can', materials: [], name: ''}
+    @editing = true
 
   #used to parse only the relevant (changeable) data for server
   _toJSON: ->
@@ -147,12 +177,15 @@ class Products
 
   _handleUpdateSuccess: (response, responseHeaders)=>
     console.log response
+    angular.copy @selected, @selected_initial
 
   _handleUpdateFailure: (response, responseHeaders)=>
     console.log response
 
   _handleCreateSuccess: (response, responseHeaders)=>
     console.log response
+    @collection.push response
+    @collection.sort
 
   _handleCreateFailure: (response, responseHeaders)=>
     console.log response
