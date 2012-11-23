@@ -1,7 +1,4 @@
 angular.module('Kassa.common', []).run(['$rootScope', '$timeout', ($rootScope, $timeout)->
-  #Bind the internationalization libabry to rootScope
-  #I18n exposes rails internationalizations to JavaScript using gem 'i18n-js'
-  $rootScope.I18n = I18n
 
   #simple sorting function by a field name
   $rootScope.sort = (array, field)->

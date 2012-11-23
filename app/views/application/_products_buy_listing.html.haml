@@ -1,0 +1,29 @@
+#products_for_buy{'ng-controller'=>"ProductsController"}
+  %h3=t('products.header')
+
+  .search
+    %span=t('generic.search_by_name')
+
+    %input{:type=>"text", 
+      'ng-model'=>"currentProductText", 
+      'ng-change'=>"filter(products.collection, 'name', currentProductText)",
+      'ng-list value'=>"{{currentProductText}}", 
+      'ng-init'=>"filter(products.collection, 'name', '')"}
+  %table
+
+    %tr
+
+      %th.clickable{:title=>"t('products.sort_by_name')",
+        'ng-click'=>"sort(products.collection, 'name')"}= t('products.name')
+      %th.clickable{:title=>"t('products.sort_by_stock')", 
+        'ng-click'=>"sort(products.collection, 'stock')"}= t('products.buyable')
+      %th.clickable{:title=>"t('products.sort_by_price')",
+        'ng-click'=>"sort(products.collection, 'price')"}= t('products.price')
+
+    %tr{'ng-class'=>"{highlighted: basket.indexOfProduct(product) !== -1}",
+      'ng-repeat'=>"product in products.collection",
+      'ng-hide'=>"product.hidden"}
+
+      %td.clickable{'ng-click'=>"basket.addProduct(product)"} {{product.name}}
+      %td {{product.stock | number}}
+      %td {{product.price | currency}}

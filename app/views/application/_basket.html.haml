@@ -1,0 +1,19 @@
+#basket
+  %h3= t('buys.header')
+  %div
+    %span= "#{t('buys.buyer.buyer')}:"
+    %span{title: "#{t('buys.buyer.buyer')}:" } {{basket.buyer.username}}
+  %div{'ng-hide'=>"basket.products.length"}
+    %span= t('buys.products.none')
+  %table{'ng-show'=>"basket.products.length"}
+    %tr{'ng-repeat'=>"entry in basket.products"}
+      %td {{entry.product.name}}
+      %td
+        %input.number-box{type:'text', 'ng-model'=>"entry.amount", min:1, step:1, 'ng-pattern'=>"/^[1-9]+$/"}
+      %td
+        %button{'ng-click'=>"basket.removeProduct($index)"}= t('generic.remove')
+      %td
+        %p.error-message{'ng-show'=>"basket.products.length", 'ng-show'=>"entry.error.length > 0"} {{entry.error}}
+  %button{'ng-disabled'=>"!basket.canBuy()", 'ng-click'=>"buy()"}= t('buys.buy')
+  %button{'ng-show'=>"basket.products.length", 'ng-click'=>"basket.clear()"}= t('buys.clear')
+

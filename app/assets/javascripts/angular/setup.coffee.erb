@@ -3,7 +3,7 @@
 angular.module(
   'Kassa', ['Kassa.services', 'Kassa.controllers', 'Kassa.common']
 ).config(($routeProvider) ->
-  $routeProvider.when('<%= url_helper.buys_path %>', { templateUrl: 'buys.html', controller: 'BuysController'})
+  $routeProvider.when('<%= url_helper.buys_path %>', { templateUrl: '<%= asset_path('buys.html')%>', controller: 'BuysController'})
   $routeProvider.when('<%= url_helper.products_path %>', { templateUrl: '<%= asset_path('products.html')%>', controller: 'ProductsController'})
   $routeProvider.when('<%= url_helper.users_path %>', { templateUrl: '<%= asset_path('users.html')%>', controller: 'UsersController'})
 

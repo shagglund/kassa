@@ -1,7 +1,6 @@
 <% url_helper = Kassa::Application.routes.url_helpers %>
-<% environment.context_class.instance_eval { include ActionView::Helpers::JavaScriptHelper } %>
 
-angular.module('Kassa.services', ['ngResource']).factory('Products', ($resource)->
+angular.module('Kassa.services', ['ngResource']).factory('Products', ($resource, $window)->
   class Products
     constructor: ($resource)->
       actions =
@@ -16,32 +15,30 @@ angular.module('Kassa.services', ['ngResource']).factory('Products', ($resource)
           method: 'DELETE'
       @collection = []
       @$resource = $resource '<%= url_helper.product_path(':id') %>', {id: '@id'}, actions
-      @localized_units = {}
-      @localized_units[unit] = I18n.t("products.units.#{unit}") for unit in angular.fromJson('<%= escape_javascript Product.units.to_json %>')
-      @localized_groups = {}
-      @localized_groups[group] = I18n.t("products.groups.#{group}") for group in angular.fromJson('<%= escape_javascript Product.groups.to_json %>')
+      @localizedUnits = $window.Kassa.productUnits
+      @localizedGroups = $window.Kassa.productGroups
       @$resource.index {}, @_handleCollectionSuccess, @_handleCollectionFailure
 
     select:(product)=>
       @selected= product
-      @selected_initial = angular.copy product
+      @selectedInitial = angular.copy product
 
     unselect: =>
       @editing = false if @selected
       @selected = undefined
-      @selected_initial = undefined
+      @selectedInitial = undefined
 
     hasChanges: =>
-      return false unless @selected and @selected_initial
-      !angular.equals(@selected, @selected_initial) and !angular.equals(@selected.materials, @selected_initial.materials)
+      return false unless @selected and @selectedInitial
+      !angular.equals(@selected, @selectedInitial) and !angular.equals(@selected.materials, @selectedInitial.materials)
 
     isSelected: (product)=>
       return false unless @selected
       product == @selected
 
-    addEntry: (material_and_amount)=>
-      console.log material_and_amount
-      @selected.materials.push angular.copy(material_and_amount)
+    addEntry: (materialAndAmount)=>
+      console.log materialAndAmount
+      @selected.materials.push angular.copy(materialAndAmount)
 
     removeEntry: (index)=>
       if @selected.materials[index].id
@@ -90,7 +87,7 @@ angular.module('Kassa.services', ['ngResource']).factory('Products', ($resource)
 
     _handleUpdateSuccess: (response, responseHeaders)=>
       console.log response
-      angular.copy @selected, @selected_initial
+      angular.copy @selected, @selectedInitial
 
     _handleUpdateFailure: (response, responseHeaders)=>
       console.log response
@@ -182,7 +179,7 @@ angular.module('Kassa.services', ['ngResource']).factory('Products', ($resource)
 
   #return a Session
   new Session($http)
-).factory('Materials', ($resource)->
+).factory('Materials', ($resource, $window)->
   class Materials
     constructor: ($resource)->
       actions =
@@ -197,10 +194,8 @@ angular.module('Kassa.services', ['ngResource']).factory('Products', ($resource)
           method: 'DELETE'
       @collection = []
       @$resource = $resource '<%= url_helper.material_path(':id') %>', {id: '@id'}, actions
-      @localized_units = {}
-      @localized_units[unit] = I18n.t("materials.units.#{unit}") for unit in angular.fromJson('<%= escape_javascript Material.units.to_json %>')
-      @localized_groups = {}
-      @localized_groups[group] = I18n.t("materials.groups.#{group}") for group in angular.fromJson('<%= escape_javascript Material.groups.to_json %>')
+      @localizedUnits = $window.Kassa.materialUnits
+      @localizedGroups = $window.Kassa.materialGroups
       @$resource.index {}, @_handleCollectionSuccess, @_handleCollectionFailure
 
     selectById: (id)=>
@@ -211,15 +206,15 @@ angular.module('Kassa.services', ['ngResource']).factory('Products', ($resource)
 
     select:(material)=>
       @selected= material
-      @selected_initial = angular.copy material
+      @selectedInitial = angular.copy material
 
     unselect: =>
       @editing = false if @selected
       @selected = undefined
-      @selected_initial = undefined
+      @selectedInitial = undefined
 
     hasChanges: =>
-      !angular.equals @selected, @selected_initial
+      !angular.equals @selected, @selectedInitial
 
     isSelected: (material)=>
       if material then @selected == material else false
@@ -259,7 +254,7 @@ angular.module('Kassa.services', ['ngResource']).factory('Products', ($resource)
 
     _handleUpdateSuccess: (response, responseHeaders)=>
       console.log response
-      angular.copy @selected, @selected_initial
+      angular.copy @selected, @selectedInitial
 
     _handleUpdateFailure: (response, responseHeaders)=>
       console.log response

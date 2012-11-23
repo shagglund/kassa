@@ -63,6 +63,8 @@ fi:
     materials:
       amount: 'Määrä'
     no_description: 'Ei kuvausta'
+    product:
+      selected: "Tuote:"
   materials:
     other: 'Raaka-aineet'
     one: 'Raaka-aine'

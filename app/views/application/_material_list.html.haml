@@ -1,0 +1,27 @@
+%div
+  %h3= t('materials.other')
+  .search
+    %span= t('generic.search_by_name')
+    %input{:type=>"text",
+      'ng-model'=>"currentMaterialText",
+      'ng-change'=>"filter(materials.collection, 'name', currentMaterialText)",
+      'ng-list'=>"",
+      :value=>"{{currentMaterialText}}",
+      'ng-init'=>"filter(materials.collection, 'name', '')"}
+    %button{'ng-click'=>"materials.new()"}= t('materials.create')
+
+  %table
+    %tr
+      %th= t('materials.name')
+      %th= t('materials.unit')
+      %th= t('materials.group')
+      %th= t('materials.price')
+      %th= t('materials.stock')
+
+    %tr.clickable{'ng-repeat'=>"material in materials.collection",
+        'ng-click'=>"materials.select(material)"}
+      %td {{material.name}}
+      %td {{material.unit}}
+      %td {{material.group}}
+      %td {{material.price}}
+      %td {{material.stock}}

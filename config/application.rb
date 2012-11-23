@@ -64,6 +64,7 @@ module Kassa
 
     config.generators do |g|
       g.test_framework :rspec, :view_specs => false, :fixture => true
+
     end
   end
 end

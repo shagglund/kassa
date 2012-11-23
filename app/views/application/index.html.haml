@@ -1,0 +1,43 @@
+%div{'ng-app'=>"Kassa"}
+
+  %div{'ng-controller'=>"SessionsController"}
+
+    %div{:id=>"login", 'ng-hide'=>"session.authenticated"}
+      %label{:for=>"login_email"}= t('user.email')
+      %input{:id=>"login_email",:type=>"text", 'ng-model'=>"credentials.email"}
+      %label{:for=>"login_password"}= t('user.password')
+      %input{:id=>"login_password", :type=>"password", 'ng-model'=>"credentials.password"}
+      %button{'ng-click'=>"signIn()"}= t('user.sign_in')
+
+    %div{:id=>"logout", 'ng-show'=>"session.authenticated"}
+      %button{'ng-click'=>"signOut()"}= t('user.sign_out')
+
+  %div{'ng-view'=>""}
+
+  %script{:type=>"text/ng-template", :id=>"#{asset_path('buys.html')}"}
+    =render('navigation')
+    %div
+      =render 'tabs'
+      %div{:id=>"products_and_basket"}
+        =render 'products_buy_listing'
+        =render 'basket'
+      =render 'latest_buys'
+
+  %script{:type=>"text/ng-template", :id=>"#{asset_path('products.html')}"}
+    =render 'navigation'
+    =render 'product_changes'
+    =render 'product_list'
+    =render 'material_list'
+    =render 'product_details'
+    =render 'material_details'
+
+  %script{:type=>"text/ng-template", :id=>"#{asset_path('users.html')}"}
+
+%script{:type=>"text/javascript"}
+  window.Kassa={}
+  window.Kassa.productUnits= eval("#{escape_javascript(Product.units.to_json.html_safe)}")
+  window.Kassa.productGroups= eval("#{escape_javascript(Product.groups.to_json.html_safe)}")
+  window.Kassa.materialUnits= eval("#{escape_javascript(Material.units.to_json.html_safe)}")
+  window.Kassa.materialGroups= eval("#{escape_javascript(Material.groups.to_json.html_safe)}")
+
+= javascript_include_tag "application"

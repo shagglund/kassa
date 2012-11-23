@@ -1,0 +1,51 @@
+
+<div class="selection_window material_section" ng-show="materials.selected">
+  <div class="header">
+    <button ng-click="materials.unselect()">X</button>
+    <h3>{{I18n.t('materials.details', {material: materials.selected.name, defaultValue:''})}}</h3>
+  </div>
+  <form name="material_form">
+    <ul>
+      <li>
+        <h4>{{I18n.t('materials.name')}}</h4>
+        <span  class="content" ng-hide="materials.editing">{{materials.selected.name}}</span>
+        <input ng-show="materials.editing" ng-model="materials.selected.name" required/>
+      </li>
+      <li>
+        <h4>{{I18n.t('materials.unit')}}</h4>
+        <span  class="content" ng-hide="materials.editing">{{I18n.t('materials.units.'+materials.selected.unit)}}</span>
+        <select ng-show="materials.editing" ng-model="materials.selected.unit"
+                ng-options="unit as lunit for (unit, lunit) in materials.localized_units" required ></select>
+
+      </li>
+      <li>
+        <h4>{{I18n.t('materials.group')}}</h4>
+        <span  class="content" ng-hide="materials.editing">{{I18n.t('materials.groups.'+materials.selected.group)}}</span>
+        <select ng-show="materials.editing" ng-model="materials.selected.group"
+                ng-options="group as lgroup for (group, lgroup) in materials.localized_groups" required ></select>
+      </li>
+      <li>
+        <h4>{{I18n.t('materials.stock')}}</h4>
+        <span  class="content" ng-hide="materials.editing">{{materials.selected.stock}}</span>
+        <span ng-show="materials.editing">
+          <input class="number-box" type="number" ng-model="materials.selected.stock" ng-pattern="/^\d+$/"
+                 ng-show="materials.editing" required/>
+          <button ng-click="materials.selected.stock=materials.selected.stock+24">{{I18n.t('materials.add.case')}}</button>
+          <button ng-click="materials.selected.stock=0">{{I18n.t('materials.add.nullify')}}</button>
+        </span>
+      </li>
+      <li>
+        <h4>{{I18n.t('materials.price')}}</h4>
+        <span  class="content" ng-hide="materials.editing">{{materials.selected.price}}</span>
+        <input class="number-box" type="number" min="0" step="0.1" ng-model="materials.selected.price"
+               ng-pattern="/^\d+(\.\d{1,2})?$/"  ng-show="materials.editing" required/>
+      </li>
+    </ul>
+    <div class="buttons">
+      <button ng-click="materials.editing=true" ng-hide="materials.editing">{{I18n.t('generic.edit')}}</button>
+      <button ng-click="materials.save()" ng-show="materials.editing"
+              ng-disabled="material_form.$invalid || !materials.hasChanges()">{{I18n.t('generic.save')}}</button>
+      <span ng-show="materials.hasChanges()">{{I18n.t('generic.unsaved_changes')}}</span>
+    </div>
+  </form>
+</div>

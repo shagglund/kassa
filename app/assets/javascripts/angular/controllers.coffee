@@ -1,5 +1,3 @@
-<% url_helper = Kassa::Application.routes.url_helpers %>
-
 angular.module('Kassa.controllers', ['Kassa.services'])
 .controller('BuysController', ($scope, Buys, Basket)->
   class BuysController
@@ -20,13 +18,11 @@ angular.module('Kassa.controllers', ['Kassa.services'])
 
     _handleBuySuccess: (response, headers)=>
       @$scope.latest_buys = @Buys.index()
-      notification = I18n.t('material.create.success')
-      @$scope.showNotification {name: 'buy:success', notification: notification, type:'success'}
+      @$scope.showNotification {name: 'buy:success', notification: '#TODO success message', type:'success'}
 
     _handleBuyFailure: (response,headers)=>
       if response.status == 422
-        notification = I18n.t(response.data.i18n, {defaultValue: response.data.message})
-        @$scope.showNotification {name: 'buy:failure', notification: notification, type:'error'}
+        @$scope.showNotification {name: 'buy:failure', notification: response.data.message, type:'error'}
     #TODO show errors
 
   new BuysController($scope, Buys, Basket)
@@ -64,12 +60,6 @@ angular.module('Kassa.controllers', ['Kassa.services'])
 .controller('NavigationController', ($scope, $location, Session)->
   class NavigationController
     constructor: (@$scope, @$location, @Session)->
-      @$scope.goToHome= ()=>
-        @$location.path '<%= url_helper.buys_path %>'
-      @$scope.goToProductManagement= ()=>
-        @$location.path '<%= url_helper.products_path %>'
-      @$scope.goToUserManagement= ()=>
-        @$location.path '<%= url_helper.users_path %>'
       @$scope.canManageProducts= ()=>
         @Session.signedIn.staff
       @$scope.canManageUsers= ()=>
