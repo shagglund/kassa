@@ -35,7 +35,8 @@ angular.module('Kassa.controllers', ['Kassa.services'])
       @$scope.signIn = ()=>
         @Session.signIn @$scope.credentials, ()=>
           @$scope.credentials = {}
-      @Session.checkStatus()
+      @Session.checkStatus ()=>
+        $location.path('/buys')
 
   new SessionsController($scope, $location, Session)
 )

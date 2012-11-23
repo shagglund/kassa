@@ -1,5 +1,3 @@
-<% url_helper = Kassa::Application.routes.url_helpers %>
-
 angular.module('Kassa.services', ['ngResource']).factory('Products', ($resource, $window)->
   class Products
     constructor: ($resource)->
@@ -14,7 +12,7 @@ angular.module('Kassa.services', ['ngResource']).factory('Products', ($resource,
         destroy:
           method: 'DELETE'
       @collection = []
-      @$resource = $resource '<%= url_helper.product_path(':id') %>', {id: '@id'}, actions
+      @$resource = $resource '/products/:id', {id: '@id'}, actions
       @localizedUnits = $window.Kassa.productUnits
       @localizedGroups = $window.Kassa.productGroups
       @$resource.index {}, @_handleCollectionSuccess, @_handleCollectionFailure
@@ -113,7 +111,7 @@ angular.module('Kassa.services', ['ngResource']).factory('Products', ($resource,
       method: 'PUT'
     destroy:
       method: 'DELETE'
-  $resource '<%= url_helper.user_path(':id') %>', {id: '@id'}, actions
+  $resource '/users/:id', {id: '@id'}, actions
 ).factory('Session', ($http)->
   class Session
     constructor: (@$http)->
@@ -193,7 +191,7 @@ angular.module('Kassa.services', ['ngResource']).factory('Products', ($resource,
         destroy:
           method: 'DELETE'
       @collection = []
-      @$resource = $resource '<%= url_helper.material_path(':id') %>', {id: '@id'}, actions
+      @$resource = $resource '/materials/:id', {id: '@id'}, actions
       @localizedUnits = $window.Kassa.materialUnits
       @localizedGroups = $window.Kassa.materialGroups
       @$resource.index {}, @_handleCollectionSuccess, @_handleCollectionFailure
@@ -276,7 +274,7 @@ angular.module('Kassa.services', ['ngResource']).factory('Products', ($resource,
       isArray: true
     create:
       method: 'POST'
-  $resource '<%= url_helper.buys_path %>', {}, actions
+  $resource '/buys', {}, actions
 ).factory('Basket', (Buys)->
   class Basket
     constructor: (@Buys)->

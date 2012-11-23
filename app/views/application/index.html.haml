@@ -14,7 +14,7 @@
 
   %div{'ng-view'=>""}
 
-  %script{:type=>"text/ng-template", :id=>"#{asset_path('buys.html')}"}
+  %script{:type=>"text/ng-template", :id=>"/partials/buys.html"}
     =render('navigation')
     %div
       =render 'tabs'
@@ -23,7 +23,7 @@
         =render 'basket'
       =render 'latest_buys'
 
-  %script{:type=>"text/ng-template", :id=>"#{asset_path('products.html')}"}
+  %script{:type=>"text/ng-template", :id=>"/partials/products.html"}
     =render 'navigation'
     =render 'product_changes'
     =render 'product_list'
@@ -31,7 +31,7 @@
     =render 'product_details'
     =render 'material_details'
 
-  %script{:type=>"text/ng-template", :id=>"#{asset_path('users.html')}"}
+  %script{:type=>"text/ng-template", :id=>"/partials/users.html"}
 
 %script{:type=>"text/javascript"}
   window.Kassa={}
