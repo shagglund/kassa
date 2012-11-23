@@ -1,0 +1,17 @@
+<% url_helper = Kassa::Application.routes.url_helpers %>
+
+angular.module(
+  'Kassa', ['Kassa.services', 'Kassa.controllers', 'Kassa.common']
+).config(($routeProvider) ->
+  $routeProvider.when('<%= url_helper.buys_path %>', { templateUrl: 'buys.html', controller: 'BuysController'})
+  $routeProvider.when('<%= url_helper.products_path %>', { templateUrl: '<%= asset_path('products.html')%>', controller: 'ProductsController'})
+  $routeProvider.when('<%= url_helper.users_path %>', { templateUrl: '<%= asset_path('users.html')%>', controller: 'UsersController'})
+
+  $routeProvider.otherwise {redirectTo: '/'}
+).run(['$http', ($http)->
+  if token = $("meta[name='csrf-token']").attr("content")
+    $http.defaults.headers.post['X-CSRF-Token'] = token
+    $http.defaults.headers.put['X-CSRF-Token'] = token
+    $http.defaults.headers.delete = {'X-CSRF-Token':token}
+    return
+])

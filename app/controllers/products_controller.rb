@@ -1,6 +1,5 @@
-class ProductsController < ApplicationController
+class ProductsController < AuthenticationController
   respond_to :json
-  before_filter :authenticate_user!, :only => [:create, :update, :destroy]
   before_filter :find_product, :only => [:show, :update, :destroy]
 
   def index

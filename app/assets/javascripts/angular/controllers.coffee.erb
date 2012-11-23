@@ -1,0 +1,80 @@
+<% url_helper = Kassa::Application.routes.url_helpers %>
+
+angular.module('Kassa.controllers', ['Kassa.services'])
+.controller('BuysController', ($scope, Buys, Basket)->
+  class BuysController
+    constructor: (@$scope, @Buys, @Basket) ->
+      @$scope.latest_buys = @Buys.index()
+      @$scope.basket = @Basket
+      @$scope.messageType = 'success'
+      @$scope.message = ''
+
+      @$scope.productsStr= (products)->
+        str_arr = []
+        for product in products
+          str_arr.push "#{product.amount} #{product.name}"
+        str_arr.join(', ')
+
+      @$scope.buy= =>
+        @Basket.buy @_handleBuySuccess, @_handleBuyFailure
+
+    _handleBuySuccess: (response, headers)=>
+      @$scope.latest_buys = @Buys.index()
+      notification = I18n.t('material.create.success')
+      @$scope.showNotification {name: 'buy:success', notification: notification, type:'success'}
+
+    _handleBuyFailure: (response,headers)=>
+      if response.status == 422
+        notification = I18n.t(response.data.i18n, {defaultValue: response.data.message})
+        @$scope.showNotification {name: 'buy:failure', notification: notification, type:'error'}
+    #TODO show errors
+
+  new BuysController($scope, Buys, Basket)
+)
+.controller('SessionsController', ($scope, $location, Session)->
+  class SessionsController
+    constructor: (@$scope, @$location, @Session)->
+      @$scope.credentials = {}
+      @$scope.session = @Session
+      @$scope.signIn = ()=>
+        @Session.signIn @$scope.credentials, ()=>
+          @$scope.credentials = {}
+      @Session.checkStatus()
+
+  new SessionsController($scope, $location, Session)
+)
+.controller('UsersController', ($scope, Users, Basket)->
+  class UsersController
+    constructor: (@$scope, @Users, @Basket)->
+      @$scope.basket = @Basket
+      @$scope.users = @Users.index()
+
+  new UsersController($scope, Users, Basket)
+)
+.controller('ProductsController', ($scope, Products, Materials, Basket)->
+  class ProductsController
+    constructor: (@$scope, @Products, @Materials, @Basket)->
+      @$scope.hidden = true
+      @$scope.basket = @Basket
+      @$scope.products = @Products
+      @$scope.materials = @Materials
+
+  new ProductsController($scope, Products, Materials, Basket)
+)
+.controller('NavigationController', ($scope, $location, Session)->
+  class NavigationController
+    constructor: (@$scope, @$location, @Session)->
+      @$scope.goToHome= ()=>
+        @$location.path '<%= url_helper.buys_path %>'
+      @$scope.goToProductManagement= ()=>
+        @$location.path '<%= url_helper.products_path %>'
+      @$scope.goToUserManagement= ()=>
+        @$location.path '<%= url_helper.users_path %>'
+      @$scope.canManageProducts= ()=>
+        @Session.signedIn.staff
+      @$scope.canManageUsers= ()=>
+        @Session.signedIn.admin
+
+
+  new NavigationController($scope, $location, Session)
+)

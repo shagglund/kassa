@@ -1,6 +1,0 @@
-angular.module 'Kassa.routes', ['Kassa.controllers'], ($routeProvider) ->
-  $routeProvider.when('/', { templateUrl: '<%= asset_path('buy.html')%>', controller: 'BuysCtrl'})
-  $routeProvider.when('/products/', { templateUrl: '<%= asset_path('products.html')%>', controller: 'ProductsCtrl'})
-  $routeProvider.when('/users/', { templateUrl: '<%= asset_path('users.html')%>', controller: 'UsersCtrl'})
-
-  $routeProvider.otherwise {redirectTo: '/'}

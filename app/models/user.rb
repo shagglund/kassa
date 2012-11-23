@@ -1,6 +1,6 @@
 class User < ActiveRecord::Base
-  devise :recoverable, :lockable, :registerable, :rememberable,
-         :validatable, :trackable, :recoverable, :database_authenticatable
+  devise :recoverable, :lockable, :rememberable,
+         :validatable, :trackable, :database_authenticatable
 
   audited
 

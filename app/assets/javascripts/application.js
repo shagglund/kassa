@@ -14,6 +14,7 @@
 //= require i18n/translations
 //= require jquery
 //= require jquery_ujs
-
-//= require_tree .
-
+//= require angular
+//= require angular-resource
+//= require angular-locale_fi
+//= require_tree ./angular

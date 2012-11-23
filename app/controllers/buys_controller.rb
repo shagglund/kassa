@@ -1,4 +1,4 @@
-class BuysController < ApplicationController
+class BuysController < AuthenticationController
   respond_to :json
   def index
     limit = params[:limit] || 20

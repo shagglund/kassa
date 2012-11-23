@@ -4,7 +4,9 @@ Kassa::Application.routes.draw do
 
   resources :products, :defaults => {:format => :json}
   resources :materials, :defaults => {:format => :json}
-  resources :users, :defaults => {:format => :json}
+  resources :users, :defaults => {:format => :json} do
+    get :current, :on => :collection
+  end
 
   devise_for :user
 
