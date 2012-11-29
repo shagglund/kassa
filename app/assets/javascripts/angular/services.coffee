@@ -80,7 +80,6 @@ angular.module('Kassa.services', ['ngResource']).factory('Products', ($resource,
       @collection = response
 
     _handleCollectionFailure: (response, responseHeaders)=>
-      console.log "Products collection loading failed"
       console.log response
 
     _handleUpdateSuccess: (response, responseHeaders)=>

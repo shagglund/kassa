@@ -5,6 +5,7 @@ class ProductsController < AuthenticationController
   def index
     @products = Product.eager_load{materials.material}.all
     @products.delete_if {|product| product.stock == 0} if params[:in_stock]
+    render json: @products
   end
 
   def show

@@ -2,12 +2,14 @@ class MaterialsController < AuthenticationController
   respond_to :json
   def index
     @materials = Material.all
+    render json: @materials
   end
 
   # GET /materials/1
   # GET /materials/1.json
   def show
     @material = Material.find(params[:id])
+    render json: @material
   end
 
   # POST /materials

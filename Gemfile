@@ -8,9 +8,9 @@ gem 'audited-activerecord'
 gem 'sqlite3'
 gem 'devise'
 gem 'squeel'
-gem 'rabl'
 gem 'angular-rails'
 gem 'haml-rails'
+gem "active_model_serializers", :git => "git://github.com/rails-api/active_model_serializers.git"
 
 # Gems used only for assets and not required
 # in production environments by default.

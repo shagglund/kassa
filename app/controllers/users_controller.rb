@@ -12,7 +12,7 @@ class UsersController < AuthenticationController
   end
 
   def current
-    render :json => current_user
+    render json: current_user
   end
 
   def create

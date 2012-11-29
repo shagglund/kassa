@@ -10,9 +10,7 @@
       'ng-list value'=>"{{currentProductText}}", 
       'ng-init'=>"filter(products.collection, 'name', '')"}
   %table
-
     %tr
-
       %th.clickable{:title=>"t('products.sort_by_name')",
         'ng-click'=>"sort(products.collection, 'name')"}= t('products.name')
       %th.clickable{:title=>"t('products.sort_by_stock')", 

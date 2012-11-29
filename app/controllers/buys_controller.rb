@@ -4,6 +4,7 @@ class BuysController < AuthenticationController
     limit = params[:limit] || 20
     offset = params[:offset] || 0
     @buys = Buy.latest(offset,limit)
+    render json: @buys
   end
 
   # GET /buys/1

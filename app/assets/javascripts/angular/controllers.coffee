@@ -4,13 +4,11 @@ angular.module('Kassa.controllers', ['Kassa.services'])
     constructor: (@$scope, @Buys, @Basket) ->
       @$scope.latest_buys = @Buys.index()
       @$scope.basket = @Basket
-      @$scope.messageType = 'success'
-      @$scope.message = ''
 
       @$scope.productsStr= (products)->
         str_arr = []
-        for product in products
-          str_arr.push "#{product.amount} #{product.name}"
+        for entry in products
+          str_arr.push "#{entry.amount} #{entry.product.name}"
         str_arr.join(', ')
 
       @$scope.buy= =>
@@ -36,7 +34,7 @@ angular.module('Kassa.controllers', ['Kassa.services'])
         @Session.signIn @$scope.credentials, ()=>
           @$scope.credentials = {}
       @Session.checkStatus ()=>
-        $location.path('/buys')
+        $location.path('/buys') if $location.path() == '/'
 
   new SessionsController($scope, $location, Session)
 )
