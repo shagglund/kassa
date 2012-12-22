@@ -19,9 +19,9 @@ class BuysController < AuthenticationController
   def create
     @buy = Buy.new(params[:buy])
     if @buy.save
-      render json: {status: :created, object: @buy, i18n_key: 'buys.success', message: I18n.t('buys.success')}, status: :created, location: @buy
+      render json: @buy, status: :created, location: @buy
     else
-      render json: {status: :error, errors: @buy.errors, i18n_key: 'buys.failure', message: I18n.t('buys.failure')}, status: :unprocessable_entity
+      render json: @buy.errors, status: :unprocessable_entity
     end
   end
 end

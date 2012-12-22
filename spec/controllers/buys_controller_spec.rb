@@ -19,48 +19,40 @@ require 'spec_helper'
 # that an instance is receiving a specific message.
 
 describe BuysController do
-
-  # This should return the minimal set of attributes required to create a valid
-  # Buy. As you add validations to Buy, be sure to
-  # update the return value of this method accordingly.
-  def valid_attributes
-    {}
-  end
-
-  # This should return the minimal set of values that should be in the session
-  # in order to pass any filters (e.g. authentication) defined in
-  # BuysController. Be sure to keep this updated too.
-  def valid_session
-    {}
+  before :each do
+    @user = FactoryGirl.create :user
+    sign_in :user, @user
   end
 
   describe "GET index" do
-    it "assigns all buys as @buys" do
-      buy = Buy.create! valid_attributes
-      get :index, {}, valid_session
-      assigns(:buys).should eq([buy])
+    it "assigns latest 20 buys as @buys" do
+      buy = FactoryGirl.create :buy
+      buys = [0..20].collect{|num| FactoryGirl.create(:buy)}
+      get :index, {}, :format => :json
+      assigns(:buys).should eq(buys)
+      assigns(:buys).should_not include(buy)
+    end
+    it "assigns latest 20 buys as @buys from offset of 5" do
+      buy = FactoryGirl.create :buy
+      selected_buys = [0..20].collect{|num| FactoryGirl.create(:buy)}
+      buys = [0..5].collect{|num| FactoryGirl.create(:buy)}
+      get :index, {:offset => 5}, :format => :json
+      assigns(:buys).should eq(selected_buys)
+      assigns(:buys).should_not include(buys)
+    end
+    it "assigns latest 10 buys as @buys when given a limit of 10" do
+      not_selected = [0..10].collect{|num| FactoryGirl.create(:buy)}
+      buys = [0..10].collect{|num| FactoryGirl.create(:buy)}
+      get :index, {:limit => 10}, :format => :json
+      assigns(:buys).should eq(buys)
+      assigns(:buys).should_not include(not_selected)
     end
   end
 
   describe "GET show" do
     it "assigns the requested buy as @buy" do
       buy = Buy.create! valid_attributes
-      get :show, {:id => buy.to_param}, valid_session
-      assigns(:buy).should eq(buy)
-    end
-  end
-
-  describe "GET new" do
-    it "assigns a new buy as @buy" do
-      get :new, {}, valid_session
-      assigns(:buy).should be_a_new(Buy)
-    end
-  end
-
-  describe "GET edit" do
-    it "assigns the requested buy as @buy" do
-      buy = Buy.create! valid_attributes
-      get :edit, {:id => buy.to_param}, valid_session
+      get :show, {:id => buy.to_param}, :format => :json
       assigns(:buy).should eq(buy)
     end
   end
@@ -69,19 +61,19 @@ describe BuysController do
     describe "with valid params" do
       it "creates a new Buy" do
         expect {
-          post :create, {:buy => valid_attributes}, valid_session
+          post :create, {:buy => valid_attributes}, :format => :json
         }.to change(Buy, :count).by(1)
       end
 
       it "assigns a newly created buy as @buy" do
-        post :create, {:buy => valid_attributes}, valid_session
+        post :create, {:buy => valid_attributes}, :format => :json
         assigns(:buy).should be_a(Buy)
         assigns(:buy).should be_persisted
       end
 
-      it "redirects to the created buy" do
-        post :create, {:buy => valid_attributes}, valid_session
-        response.should redirect_to(Buy.last)
+      it "returns the newly created buy as json" do
+        post :create, {:buy => valid_attributes}, :format => :json
+        response.should == Buy.last.to_json
       end
     end
 
@@ -89,75 +81,16 @@ describe BuysController do
       it "assigns a newly created but unsaved buy as @buy" do
         # Trigger the behavior that occurs when invalid params are submitted
         Buy.any_instance.stub(:save).and_return(false)
-        post :create, {:buy => {}}, valid_session
+        post :create, {:buy => {}}
         assigns(:buy).should be_a_new(Buy)
       end
 
       it "re-renders the 'new' template" do
         # Trigger the behavior that occurs when invalid params are submitted
         Buy.any_instance.stub(:save).and_return(false)
-        post :create, {:buy => {}}, valid_session
+        post :create, {:buy => {}}
         response.should render_template("new")
       end
-    end
-  end
-
-  describe "PUT update" do
-    describe "with valid params" do
-      it "updates the requested buy" do
-        buy = Buy.create! valid_attributes
-        # Assuming there are no other buys in the database, this
-        # specifies that the Buy created on the previous line
-        # receives the :update_attributes message with whatever params are
-        # submitted in the request.
-        Buy.any_instance.should_receive(:update_attributes).with({'these' => 'params'})
-        put :update, {:id => buy.to_param, :buy => {'these' => 'params'}}, valid_session
-      end
-
-      it "assigns the requested buy as @buy" do
-        buy = Buy.create! valid_attributes
-        put :update, {:id => buy.to_param, :buy => valid_attributes}, valid_session
-        assigns(:buy).should eq(buy)
-      end
-
-      it "redirects to the buy" do
-        buy = Buy.create! valid_attributes
-        put :update, {:id => buy.to_param, :buy => valid_attributes}, valid_session
-        response.should redirect_to(buy)
-      end
-    end
-
-    describe "with invalid params" do
-      it "assigns the buy as @buy" do
-        buy = Buy.create! valid_attributes
-        # Trigger the behavior that occurs when invalid params are submitted
-        Buy.any_instance.stub(:save).and_return(false)
-        put :update, {:id => buy.to_param, :buy => {}}, valid_session
-        assigns(:buy).should eq(buy)
-      end
-
-      it "re-renders the 'edit' template" do
-        buy = Buy.create! valid_attributes
-        # Trigger the behavior that occurs when invalid params are submitted
-        Buy.any_instance.stub(:save).and_return(false)
-        put :update, {:id => buy.to_param, :buy => {}}, valid_session
-        response.should render_template("edit")
-      end
-    end
-  end
-
-  describe "DELETE destroy" do
-    it "destroys the requested buy" do
-      buy = Buy.create! valid_attributes
-      expect {
-        delete :destroy, {:id => buy.to_param}, valid_session
-      }.to change(Buy, :count).by(-1)
-    end
-
-    it "redirects to the buys list" do
-      buy = Buy.create! valid_attributes
-      delete :destroy, {:id => buy.to_param}, valid_session
-      response.should redirect_to(buys_url)
     end
   end
 

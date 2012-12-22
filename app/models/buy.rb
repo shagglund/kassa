@@ -3,9 +3,8 @@ class Buy < ActiveRecord::Base
   has_many :products, class_name: 'BuyEntry'
   accepts_nested_attributes_for :products
   attr_accessible :products_attributes, :buyer_id
-  validates_presence_of :buyer_id
-  validates_presence_of :products
-  validates :price, presence: true
+
+  validates_presence_of :buyer_id, :products
   validate :products_in_stock
 
   def self.latest(offset=0, limit=20)

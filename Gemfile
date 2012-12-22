@@ -4,13 +4,13 @@ gem 'rails', '3.2.8'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
+
 gem 'audited-activerecord'
 gem 'sqlite3'
 gem 'devise'
 gem 'squeel'
-gem 'angular-rails'
 gem 'haml-rails'
-gem "active_model_serializers", :git => "git://github.com/rails-api/active_model_serializers.git"
+gem 'active_model_serializers', :git => 'git://github.com/rails-api/active_model_serializers.git'
 
 # Gems used only for assets and not required
 # in production environments by default.
@@ -32,6 +32,9 @@ group :assets do
   # gem 'therubyracer', :platforms => :ruby
 
   gem 'uglifier', '>= 1.0.3'
+  gem 'twitter-bootstrap-rails'
+  gem 'angular-rails'
+  gem 'angular-ui-rails'
 end
 
 gem 'jquery-rails'

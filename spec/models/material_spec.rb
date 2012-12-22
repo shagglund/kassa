@@ -53,5 +53,12 @@ describe Material do
       material.should have(1).error_on(:unit)
     end
 
+    it "should validate the units inclusion" do
+      material = FactoryGirl.build(:material, :unit=>"NO SUCH UNIT")
+      material.should_not be_valid
+      material.should have(1).error_on(:unit)
+      material.unit = FactoryGirl.build(:material).unit
+      material.should be_valid
+    end
   end
 end

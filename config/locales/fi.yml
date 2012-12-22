@@ -2,17 +2,57 @@
 # See https://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
 
 fi:
+  active_record:
+    material:
+      attributes:
+        name: 'Nimi'
+        stock: 'Varastossa'
+        price: 'Hinta'
+        unit: 'Yksikkö'
+        group: 'Tyyppi'
+        units:
+          piece: 'kappale'
+          litre: 'litra'
+          dl: 'desilitra'
+          cl: 'senttilitra'
+          ml: 'millilitra'
+        groups:
+          can: 'Tölkki/pullo'
+          shot: 'Shotti'
+          non_alcoholic: 'Alkoholiton'
+          food: 'Ruoka'
+    product:
+      attributes:
+        name: 'Nimi'
+        description: 'Tuotteen kuvaus'
+        stock: 'Varastossa'
+        price: 'Hinta'
+        unit: 'Yksikkö'
+        group: 'Tyyppi'
+        units:
+          piece: 'kappale'
+          litre: 'litra'
+          dl: 'desilitra'
+          cl: 'senttilitra'
+          ml: 'millilitra'
+        groups:
+          can: 'Tölkki/pullo'
+          drink: 'Drinkki'
+          shot: 'Shotti'
+          non_alcoholic: 'Alkoholiton'
+          food: 'Ruoka'
+    user:
+      attributes:
+        name: 'Nimi'
+        balance: 'Saldo'
+        buy_count: 'Ostoja'
+
   action:
+    edit: 'Muokkaa'
     saving: 'Tallennetaan...'
     saved: 'Tallennus onnistui!'
     save_failed: 'Tallennus ei onnistunut'
 
-  units:
-    piece: 'kappale'
-    litre: 'litra'
-    dl: 'desilitra'
-    cl: 'senttilitra'
-    ml: 'millilitra'
   generic:
     search_by_name: 'Etsi nimellä:'
     edit: 'Muokkaa'
@@ -35,25 +75,7 @@ fi:
   products:
     create: 'Uusi tuote'
     header: 'Tuotteet'
-    name: 'Nimi'
-    description: 'Tuotteen kuvaus'
     buyable: 'Ostettavissa'
-    stock: 'Varastossa'
-    price: 'Hinta'
-    unit: 'Yksikkö'
-    group: 'Tuoteryhmä'
-    groups:
-      can: 'Tölkki/pullo'
-      drink: 'Drinkki'
-      shot: 'Shotti'
-      non_alcoholic: 'Alkoholiton'
-      food: 'Ruoka'
-    units:
-      piece: 'kappale'
-      litre: 'litra'
-      dl: 'desilitra'
-      cl: 'senttilitra'
-      ml: 'millilitra'
     sort_by_name: 'Järjestä nimen mukaan'
     sort_by_stock: 'Järjestä tehtävissä olevan määrän mukaan'
     sort_by_price: 'Järjestä hinnan mukaan'
@@ -70,22 +92,6 @@ fi:
     one: 'Raaka-aine'
     details: 'Raaka-aineen %{material} tiedot'
     create: 'Uusi raaka-aine'
-    name: 'Nimi'
-    stock: 'Varastossa'
-    price: 'Hinta'
-    unit: 'Yksikkö'
-    group: 'Tuoteryhmä'
-    groups:
-      can: 'Tölkki/pullo'
-      shot: 'Shotti'
-      non_alcoholic: 'Alkoholiton'
-      food: 'Ruoka'
-    units:
-      piece: 'kappale'
-      litre: 'litra'
-      dl: 'desilitra'
-      cl: 'senttilitra'
-      ml: 'millilitra'
     add:
       case: '+24'
       nullify: 'Nollaa'
