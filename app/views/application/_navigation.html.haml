@@ -1,4 +1,0 @@
-%nav{'ng-controller'=>"NavigationController"}
-  %a{:href=>"##{buys_path}"}= t('navigation.buys')
-  %a{'ng-show'=>"canManageProducts()", :href=>"##{products_path}"}= t('navigation.products')
-  %a{'ng-show'=>"canManageUsers()", :href=>"##{users_path}"}= t('navigation.users')

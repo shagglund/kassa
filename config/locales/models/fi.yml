@@ -1,0 +1,66 @@
+fi:
+  active_record:
+    models:
+      material:
+        one: 'Raaka-aine'
+        other: 'Raaka-aineet'
+      product:
+        one: 'Tuote'
+        other: 'Tuotteet'
+      user:
+        one: 'Piikki'
+        other: 'Piikit'
+      buy:
+        one: 'Osto'
+        other: 'Ostot'
+        latest: 'Viimeisimmät ostot'
+
+    attributes:
+      material:
+        name: 'Nimi'
+        stock: 'Varastossa'
+        price: 'Hinta'
+        unit: 'Yksikkö'
+        group: 'Tyyppi'
+        units:
+          piece: 'kappale'
+          litre: 'litra'
+          dl: 'desilitra'
+          cl: 'senttilitra'
+          ml: 'millilitra'
+        groups:
+          can: 'Tölkki/pullo'
+          shot: 'Shotti'
+          non_alcoholic: 'Alkoholiton'
+          food: 'Ruoka'
+      product:
+        name: 'Nimi'
+        description: 'Tuotteen kuvaus'
+        stock: 'Varastossa'
+        price: 'Hinta'
+        unit: 'Yksikkö'
+        group: 'Tyyppi'
+        units:
+          piece: 'kappale'
+          litre: 'litra'
+          dl: 'desilitra'
+          cl: 'senttilitra'
+          ml: 'millilitra'
+        groups:
+          can: 'Tölkki/pullo'
+          drink: 'Drinkki'
+          shot: 'Shotti'
+          non_alcoholic: 'Alkoholiton'
+          food: 'Ruoka'
+      user:
+        name: 'Nimi'
+        balance: 'Saldo'
+        buy_count: 'Ostoja'
+      buy:
+        buyer: "Ostaja"
+        buy_time: 'Oston ajankohta'
+        products:
+          none: "Ei tuotteita"
+          other: 'Tuotteet'
+    errors:
+      product:

@@ -1,0 +1,16 @@
+.span6{'ng-controller'=>'UsersController'}
+  %table.table.table-hover.table-condensed.table-striped
+    %thead
+      %tr
+        %th
+        %th= t('active_record.user.attributes.name')
+        %th= t('active_record.user.attributes.balance')
+        %th= t('active_record.user.attributes.buy_count')
+
+    %tbody
+      %tr{'ng-repeat'=>'user in users.index()'}
+        %td
+          %a{'ng-click'=>'edit(user)'}
+        %td= "{{user.username}}"
+        %td= "{{user.balance}}"
+        %td= "{{user.buy_count}}"

@@ -1,0 +1,11 @@
+.span4
+  %h3=t('buys.latest')
+  %table.table.table-striped
+    %tr
+      %th=t('active_record.attributes.buy.buy_time')
+      %th=t('active_record.attributes.buy.buyer')
+      %th=t('active_record.attributes.buy.products.other')
+    %tr{'ng-repeat'=> "buy in latest_buys"}
+      %td="{{buy.created_at | date:'medium'}}"
+      %td {{buy.buyer.username}}
+      %td {{productsStr(buy.products)}}

@@ -1,0 +1,7 @@
+%form.form-inline
+  %label{:for=>"#{model}-search-input"}
+    =info
+  %input.input-small.ng-list{:type=>"text", :id=>"#{model}-search-input",
+    'ng-model'=>"#{model}",
+    'ng-change'=>"filter(#{collection}, '#{field}', #{model})",
+    'ng-init'=>"filter(#{collection}, '#{field}', '')"}
