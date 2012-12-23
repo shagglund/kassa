@@ -1,14 +1,16 @@
 Kassa::Application.routes.draw do
+  scope '(:locale)', :locale => /fi/ do
+    resources :buys, :defaults => {:format => :json}
 
-  resources :buys, :defaults => {:format => :json}
+    resources :products, :defaults => {:format => :json}
+    resources :materials, :defaults => {:format => :json}
+    resources :users, :defaults => {:format => :json} do
+      get :current, :on => :collection
+    end
 
-  resources :products, :defaults => {:format => :json}
-  resources :materials, :defaults => {:format => :json}
-  resources :users, :defaults => {:format => :json} do
-    get :current, :on => :collection
+    devise_for :user
+    root :to => 'application#index' #route /fi to root
   end
-
-  devise_for :user
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
