@@ -30,3 +30,4 @@ fi:
     administration: "Tuotehallinta"
   user:
     administration: "Käyttäjähallinta"
+    sign_in: "Kirjaudu sisään"

@@ -4,7 +4,7 @@ Kassa::Application.routes.draw do
 
     resources :products, :defaults => {:format => :json}
     resources :materials, :defaults => {:format => :json}
-    resources :users, :defaults => {:format => :json} do
+    resources :users, :defaults => {:format => :json}, :only=> [:index, :create, :update] do
       get :current, :on => :collection
     end
 

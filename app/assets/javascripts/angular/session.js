@@ -1,5 +1,5 @@
 angular.module('Kassa.Session', [])
-  .service('Session', function($http, $window){
+  .service('Session', function($http){
     var Session = {
       pendingUnauthorizedRequests: [],
       _runPendingRequests: function(){
@@ -14,8 +14,8 @@ angular.module('Kassa.Session', [])
         this.signedIn = user;
         this._runPendingRequests();
       },
-      signIn: function(email, password, authorized, unauthorized){
-        $http.post($window.Kassa.prefixWithLocale('/users/sign_in'), {email: email, password: password})
+      signIn: function(credentials, authorized, unauthorized){
+        $http.post('/user/sign_in', {user: credentials})
           .success(function(successResponse, status){
             if(status == 201){
               Session._setAuthenticated(successResponse)
@@ -31,7 +31,7 @@ angular.module('Kassa.Session', [])
           });
       },
       signOut: function(success, failure){
-        $http.delete($window.Kassa.prefixWithLocale('/users/sign_out'), {})
+        $http.delete('/user/sign_out', {})
           .success(function(successResponse, status){
             Session.signedIn = undefined;
             if(angular.isFunction(success)){
@@ -44,7 +44,7 @@ angular.module('Kassa.Session', [])
           });
       },
       checkStatus: function(authenticated, unauthenticated){
-        $http.get($window.Kassa.prefixWithLocale('/users/current'), {})
+        $http.get('/users/current', {})
           .success(function(user, status){
             Session._setAuthenticated(user);
             if(angular.isFunction(authenticated)){
@@ -66,8 +66,8 @@ angular.module('Kassa.Session', [])
     $scope.authenticated = function(){
       return angular.isDefined(Session.signedIn)
     };
-    $scope.signIn = function(email, password){
-      Session.signIn(email, password, function(){
+    $scope.signIn = function(){
+      Session.signIn($scope.credentials, function(){
         navigateAuthenticated();
         $scope.invalid = false
       }, function(){
@@ -75,7 +75,9 @@ angular.module('Kassa.Session', [])
       })
     };
     $scope.signOut = function(){
-      $location.path('/')
+      Session.signOut(function(){
+        $location.path('/')
+      });
     };
     Session.checkStatus(function(){
       navigateAuthenticated();

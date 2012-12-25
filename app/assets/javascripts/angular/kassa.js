@@ -18,6 +18,13 @@ angular.module('Kassa', ['Kassa.Buys', 'Kassa.Products', 'Kassa.Users', 'Kassa.S
     });
     $routeProvider.otherwise({redirectTo: '/login'});
   }).run(function($rootScope, $http){
+    var token = $("meta[name='csrf-token']").attr("content")
+    if(token !== undefined){
+      $http.defaults.headers.post['X-CSRF-Token'] = token
+      $http.defaults.headers.put['X-CSRF-Token'] = token
+      $http.defaults.headers.delete = {'X-CSRF-Token': token}
+    }
+
     $rootScope.filter = function(items, field, filterList){
       console.log(filterList)
       //Does not allow for arrays as item
@@ -71,11 +78,4 @@ angular.module('Kassa', ['Kassa.Buys', 'Kassa.Products', 'Kassa.Users', 'Kassa.S
         maybeHide(items, fieldNames)
       }
     };
-
-    var token = $("meta[name='csrf-token']").attr("content")
-    if(token !== undefined){
-      $http.defaults.headers.post['X-CSRF-Token'] = token
-      $http.defaults.headers.put['X-CSRF-Token'] = token
-      $http.defaults.headers.delete = {'X-CSRF-Token': token}
-    }
   });

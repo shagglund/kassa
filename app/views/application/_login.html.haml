@@ -1,6 +1,20 @@
-%form.form-inline{:id=>"login", 'ng-hide'=>"authenticated()"}
-  %label{:for=>"login_email"}= t('user.email')
-  %input{:id=>"login_email",:type=>"text", 'ng-model'=>"credentials.email"}
-  %label{:for=>"login_password"}= t('user.password')
-  %input{:id=>"login_password", :type=>"password", 'ng-model'=>"credentials.password"}
-  %button{'ng-click'=>"signIn()"}= t('user.sign_in')
+%fieldset.span6.offset3
+  %legend= t('user.sign_in')
+  %form.form-horizontal{:id=>"login", 'ng-hide'=>"authenticated()", 'ng-init'=>"credentials={}"}
+    .control-group
+      %label.control-label{:for=>"login_email"}= t('active_record.attributes.user.email')
+      .controls
+        %input{:id=>"login_email",:type=>"text", 'ng-model'=>"credentials.email"}
+    .control-group
+      %label.control-label{:for=>"login_password"}= t('active_record.attributes.user.password')
+      .controls
+        %input{:id=>"login_password", :type=>"password", 'ng-model'=>"credentials.password"}
+    .control-group
+      .controls
+        %label.checkbox
+          %input{:type=>'hidden', :name=>'remember_me', :value=>'0'}
+          %input{:type=>'checkbox', :name=>'remember_me', :value=>'1'}
+          =t('active_record.attributes.user.remember_me')
+    .control-group
+      .controls
+        %button.btn.btn-primary{'ng-click'=>"signIn()"}= t('user.sign_in')

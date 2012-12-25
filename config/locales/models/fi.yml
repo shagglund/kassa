@@ -56,6 +56,9 @@ fi:
         name: 'Nimi'
         balance: 'Saldo'
         buy_count: 'Ostoja'
+        password: "Salasana"
+        email: "Sähköposti"
+        remember_me: "Muista minut"
       buy:
         buyer: "Ostaja"
         buy_time: 'Oston ajankohta'
