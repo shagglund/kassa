@@ -58,13 +58,3 @@ en:
         subject: 'Reset password instructions'
       unlock_instructions:
         subject: 'Unlock Instructions'
-  buys:
-    success: "Bought successfully!"
-    latest: "Latest buys"
-    buy_notice: "%{buyer} bought %{entries} at %{time}"
-    bought_entry: "%{amount} %{product}"
-    add_product_to_basket: "Add %{product} to basket"
-    select_buyer: "Select buyer"
-  generic:
-    remove: "Remove"
-    none: "No one"

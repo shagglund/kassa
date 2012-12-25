@@ -62,5 +62,14 @@ fi:
         products:
           none: "Ei tuotteita"
           other: 'Tuotteet'
+        price: "Hinta"
     errors:
       product:
+
+      user:
+        not_found: "Käyttäjää ei löytynyt"
+      buy_entry:
+        amount_too_small: "Tuotetta on ostettava vähintään 1 kpl"
+      buy:
+        products:
+          out_of_stock: "Tuotetta ei ole riittävästi varastossa"

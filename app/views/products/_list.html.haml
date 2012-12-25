@@ -1,25 +1,23 @@
-.span4{'ng-controller'=>"ProductsController"}
-  %h3=t('active_record.models.product.other')
-
-  =render :partial => 'application/search',
-    :locals => {:collection => 'products.collection',
-                :model =>'productSearchStr',
-                :field=>'name',
-                :info => t('product.search.by_name')}
-  %table.table.table-striped.table-hover
-    %tr
-      %th.clickable{:title=>"t('products.sort_by_name')",
-        'ng-click'=>"sort(products.collection, 'name')"}= t('active_record.attributes.product.name')
-      %th.clickable{:title=>"t('products.sort_by_stock')",
-        'ng-click'=>"sort(products.collection, 'stock')"}= t('active_record.attributes.product.stock')
-      %th.clickable{:title=>"t('products.sort_by_price')",
-        'ng-click'=>"sort(products.collection, 'price')"}= t('active_record.attributes.product.price')
-
-    %tr{'ng-class'=>"{highlighted: basket.indexOfProduct(product) !== -1}",
-      'ng-repeat'=>"product in products.collection",
-      'ng-hide'=>"product.hidden"}
-
-      %td
-        %a{'ng-click'=>"basket.addProduct(product)"} {{product.name}}
-      %td {{product.stock | number}}
-      %td {{product.price | currency}}
+%fieldset.span12{'ng-controller'=>"ProductsController"}
+  %legend
+    %h3=t('active_record.models.product.other')
+  =render :partial => 'application/search', :locals => {:model => 'product', :field=>'name'}
+  .row-fluid
+    .span12
+      %table.table.table-striped.table-hover.table-condensed
+        %thead
+          %tr
+            %th{:title=>"#{t('sort.product.by_name')}",}
+              = t('active_record.attributes.product.name')
+            %th{:title=>"#{t('sort.product.by_stock')}",}
+              = t('active_record.attributes.product.stock')
+            %th{:title=>"#{t('sort.product.by_price')}"}
+              = t('active_record.attributes.product.price')
+        %tbody
+          %tr{'ng-repeat'=>"product in products.collection",
+            'ng-hide'=>"product.hidden"}
+            %td
+              %a{'ng-click'=>"basket.addProduct(product)",
+                :title => t('basket.add.product')} {{product.name}}
+            %td {{product.stock() | number}}
+            %td {{product.price() | currency}}

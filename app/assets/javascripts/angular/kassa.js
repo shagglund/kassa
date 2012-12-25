@@ -1,4 +1,4 @@
-angular.module('Kassa', ['Kassa.Buys', 'Kassa.Products', 'Kassa.Users', 'Kassa.Basket', 'Kassa.Session'])
+angular.module('Kassa', ['Kassa.Buys', 'Kassa.Products', 'Kassa.Users', 'Kassa.Session'])
   .config(function($routeProvider){
     $routeProvider.when('/buys', {
       templateUrl: '/partials/buys.html',
@@ -15,11 +15,14 @@ angular.module('Kassa', ['Kassa.Buys', 'Kassa.Products', 'Kassa.Users', 'Kassa.B
     $routeProvider.otherwise({redirectTo: '/'});
   }).run(function($rootScope, $http){
     $rootScope.filter = function(items, field, filterList){
+      console.log(filterList)
       //Does not allow for arrays as item
       function findInnermostValue(item, fieldNames, filterList){
         if(fieldNames.length > 1){
           return findInnermostValue(item[fieldNames.shift()], fieldNames, filterList)
         }else{
+          console.log()
+          console.log('Found single value for ' + fieldNames + ':' + angular.toJson(item[fieldNames]));
           return item[fieldNames]
         }
       }
@@ -27,18 +30,30 @@ angular.module('Kassa', ['Kassa.Buys', 'Kassa.Products', 'Kassa.Users', 'Kassa.B
         function containsString(haystack, needle){
           return haystack.toLowerCase().indexOf(needle.toLowerCase()) > -1;
         }
-        angular.forEach(needleList, function(needle){
-          if(containsString(haystack, needle)){
+        if(angular.isArray(needleList)){
+          for(var i = 0; i<needleList.length; i++){
+            if(containsString(haystack, needleList[i])){
+              console.log(haystack + 'matched ' + needleList[i]);
+              return true;
+            }
+          }
+        }else{
+          if(containsString(haystack, needleList)){
+            console.log(haystack + 'matched ' + needleList);
             return true;
           }
-        });
+        }
         return needleList.length == 0;
       }
 
       function maybeHide(item, fieldNames){
-        var value = findInnermostValue(items,fieldNames,filterList)
-        if(!angular.isUndefined(value)){
+        var value = findInnermostValue(item,fieldNames,filterList)
+        if(angular.isDefined(value)){
+          console.log('Checking for value: ' + value)
           item.hidden = !containsStringInList(value, filterList)
+          if(item.hidden){
+            console.log("Hid " + angular.toJson(item))
+          }
         }
       }
 

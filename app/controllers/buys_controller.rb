@@ -19,7 +19,7 @@ class BuysController < AuthenticationController
   def create
     @buy = Buy.new(params[:buy])
     if @buy.save
-      render json: @buy, status: :created, location: @buy
+      render json: @buy, status: :created
     else
       render json: @buy.errors, status: :unprocessable_entity
     end

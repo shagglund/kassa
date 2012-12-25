@@ -1,7 +1,10 @@
-%form.form-inline
-  %label{:for=>"#{model}-search-input"}
-    =info
-  %input.input-small.ng-list{:type=>"text", :id=>"#{model}-search-input",
-    'ng-model'=>"#{model}",
-    'ng-change'=>"filter(#{collection}, '#{field}', #{model})",
-    'ng-init'=>"filter(#{collection}, '#{field}', '')"}
+.row-fluid
+  %form.form-horizontal.span12
+    .input-append.row-fluid
+      %input.span10.ng-list{:type=>"text", :id=>"#{model}-search-input",
+        'ng-model'=>"#{model}SearchStr",
+        'ng-change'=>"filter(#{model}s.collection, '#{field}', #{model}SearchStr)",
+        'ng-init'=>"filter(#{model}s.collection, '#{field}', '')",
+        :placeholder => t("search.#{model}.by_#{field}")}
+      %button.btn.btn-danger{'ng-click'=>"#{model}SearchStr=''"}
+        %i.icon-remove

@@ -1,19 +1,41 @@
-#basket
-  %h3= t('active_record.models.buy.latest')
-  %div
-    = "#{t('active_record.attributes.buy.buyer')}:"
-    %span {{basket.buyer.username}}
-  %div{'ng-hide'=>"basket.products.length"}
-    %span= t('active_record.attributes.buy.products.none')
-  %table{'ng-show'=>"basket.products.length"}
-    %tr{'ng-repeat'=>"entry in basket.products"}
-      %td {{entry.product.name}}
-      %td
-        %input.number-box{type:'text', 'ng-model'=>"entry.amount", min:1, step:1, 'ng-pattern'=>"/^[1-9]+$/"}
-      %td
-        %button{'ng-click'=>"basket.removeProduct($index)"}= t('generic.remove')
-      %td
-        %p.error-message{'ng-show'=>"basket.products.length", 'ng-show'=>"entry.error.length > 0"} {{entry.error}}
-  %button{'ng-disabled'=>"!basket.canBuy()", 'ng-click'=>"basket.buy()"}= t('actions.buy')
-  %button{'ng-show'=>"basket.hasProducts()", 'ng-click'=>"basket.clear()"}= t('actions.clear')
-
+%fieldset.span12{'ng-controller'=>'BasketController'}
+  %legend
+    %h3= t('basket.title')
+  .row-fluid
+    .span12
+      %form.form-horizontal{:name => 'basketBuyForm'}
+        .control-group{'ng-class'=>"{true:'success', false:'error'}[validBuyer()]"}
+          %label.control-label{:for=>'basket-buyer'}= "#{t('active_record.attributes.buy.buyer')}:"
+          .controls
+            .input-append
+              %input.input-medium{:id=>'basket-buyer',
+                'ng-model'=>'buyerName',
+                'ng-change'=>'findBuyerByName(buyerName)',
+                :type=>'text',
+                :placeholder => t('basket.buyer.not_selected')}
+              %button.btn.btn-danger{'ng-click'=>"clearBuyer()"}
+                %i.icon-remove
+            %span.help-inline{'ng-hide'=>"validBuyer() || empty(buyerName)"}= t('active_record.errors.user.not_found')
+        .control-group{'ng-show'=>"basket.hasProducts()",
+          'ng-repeat'=>"entry in basket.products",
+          'ng-class'=>"{true:'success', false:'error'}[entry.isValid()]"}
+          %label.control-label{:for => "basket-product-{{entry.product.id}}"} {{entry.product.name}}
+          .controls
+            .input-append
+              %input.input-mini{:id=>"basket-product-{{entry.product.id}}",
+                :type => 'number', min:1, step:1,
+                'ng-model'=>"entry.amount"}
+              %button.btn.btn-danger{'ng-click'=>"basket.removeProduct($index)"}
+                %i.icon-remove
+            %p.help-inline{'ng-hide'=>"entry.positiveAmount()"}= t('active_record.errors.buy_entry.amount_too_small')
+            %p.help-inline{'ng-hide'=>"entry.enoughInStock()"}= t('active_record.errors.buy.products.out_of_stock')
+        .control-group.info
+          %label.control-label{'ng-show'=>'basket.hasProducts()'}
+            ="#{t('active_record.attributes.buy.price')}:"
+            %span {{basket.price() | currency}}
+          .controls
+            %button.btn.btn-success{'ng-disabled'=>"!basket.canBuy()",
+              'ng-show'=>"basket.canBuy()",
+              'ng-click'=>"basket.buy()"}= t('actions.buy')
+            %button.btn.btn-danger{'ng-show'=>"basket.hasProducts()",
+              'ng-click'=>"basket.clear()"}= t('actions.clear')

@@ -1,11 +1,18 @@
-.span4
-  %h3=t('buys.latest')
-  %table.table.table-striped
-    %tr
-      %th=t('active_record.attributes.buy.buy_time')
-      %th=t('active_record.attributes.buy.buyer')
-      %th=t('active_record.attributes.buy.products.other')
-    %tr{'ng-repeat'=> "buy in latest_buys"}
-      %td="{{buy.created_at | date:'medium'}}"
-      %td {{buy.buyer.username}}
-      %td {{productsStr(buy.products)}}
+%fieldset.span12
+  %legend
+    %h3=t('buy.latest')
+  .row-fluid
+    .span12
+      %table.table.table-striped.table-hover.table-condensed
+        %thead
+          %tr
+            %th=t('active_record.attributes.buy.buy_time')
+            %th=t('active_record.attributes.buy.buyer')
+            %th=t('active_record.attributes.buy.products.other')
+        %tbody
+          %tr{'ng-repeat'=> "buy in buys.collection | limitTo:10"}
+            %td.span5="{{buy.created_at | date:'medium'}}" #for intellij to not whine about formats
+            %td.span2 {{buy.buyer.username}}
+            %td.span5
+              %div{'ng-repeat'=> 'entry in buy.products'}
+                {{entry.amount}} {{entry.product.name}}

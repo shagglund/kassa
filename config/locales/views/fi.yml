@@ -1,0 +1,26 @@
+fi:
+  actions:
+    buy: "Osta"
+    clear: "Tyhjennä"
+    edit: "Muokkaa"
+  search:
+    product:
+      by_name: 'Hae tuotteen nimellä'
+    user:
+      by_username: "Hae piikin nimellä"
+  sort:
+    product:
+      by_name: 'Järjestä nimen mukaan'
+      by_stock: 'Järjestä varaston mukaan'
+      by_price: 'Järjestä hinnan mukaan'
+  basket:
+    add:
+      product: "Lisää tuote ostoskoriin"
+    select_buyer: "Aseta ostajaksi"
+    title: "Ostoskori"
+    buyer:
+      not_selected: "Ostajaa ei ole valittu"
+  buy:
+    latest: "Viimeisimmät ostot"
+    success: 'Osto onnistui'
+    error: 'Osto epäonnistui'

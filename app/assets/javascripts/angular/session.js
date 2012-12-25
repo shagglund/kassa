@@ -15,7 +15,7 @@ angular.module('Kassa.Session', [])
         this._runPendingRequests();
       },
       signIn: function(email, password, authorized, unauthorized){
-        $http.post($window.prefixWithLocale('/users/sign_in'), {email: email, password: password})
+        $http.post($window.Kassa.prefixWithLocale('/users/sign_in'), {email: email, password: password})
           .success(function(successResponse, status){
             if(status == 201){
               Session._setAuthenticated(successResponse)
@@ -31,7 +31,7 @@ angular.module('Kassa.Session', [])
           });
       },
       signOut: function(success, failure){
-        $http.delete($window.prefixWithLocale('/users/sign_out'), {})
+        $http.delete($window.Kassa.prefixWithLocale('/users/sign_out'), {})
           .success(function(successResponse, status){
             Session.signedIn = undefined;
             if(angular.isFunction(success)){
@@ -44,7 +44,7 @@ angular.module('Kassa.Session', [])
           });
       },
       checkStatus: function(authenticated, unauthenticated){
-        $http.get($window.prefixWithLocale('/users/current'), {})
+        $http.get($window.Kassa.prefixWithLocale('/users/current'), {})
           .success(function(user, status){
             Session._setAuthenticated(user);
             if(angular.isFunction(authenticated)){

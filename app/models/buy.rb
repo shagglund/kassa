@@ -26,7 +26,11 @@ class Buy < ActiveRecord::Base
 
   def products_in_stock
     products.each do |entry|
-      errors.add entry.product.name.to_sym, I18n.t('buys.products.out_of_stock', :count => entry.product.stock) if entry.product.stock < entry.amount
+      if entry.product.stock < entry.amount
+        error_msg = I18n.t('active_record.errors.buy.products.out_of_stock',
+                           :count => entry.product.stock)
+        errors.add entry.product.name.to_sym, error_msg
+      end
     end
   end
 end

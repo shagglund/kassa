@@ -1,22 +1,38 @@
-%div{'ng-app'=>"Kassa"}
-  = render 'authentication'
-
-  .row{'ng-view'=>""}
+.container-fluid{'ng-app'=>"Kassa"}
+  .row-fluid
+    .span12
+      = render 'authentication'
+  .row-fluid
+    .span6.offset3
+      =image_tag asset_path(:logo)
+  .row-fluid
+    .span12{'ng-view'=>""}
 
   %script{:type=>"text/ng-template", :id=>"/partials/buys.html"}
-    =render 'users/list'
-    =render 'products/list'
-    =render 'basket/list'
-    =render 'buys/list'
+    .row-fluid
+      .span3=render 'users/list'
+      .span4=render 'products/list'
+      .span4
+        .row-fluid
+          .span12=render 'basket/list'
+        .row-fluid
+          .span12=render 'buys/list'
 
 :javascript
-  window.prefixWithLocale = function(url){
+  window.Kassa= window.Kassa || {};
+  window.Kassa.update = function(src, dest){
+    for(var prop in src){
+      if(src.hasOwnProperty(prop)){
+        dest[prop] = src[prop]
+      }
+    }
+  };
+  window.Kassa.prefixWithLocale = function(url){
     return "/#{I18n.locale}" + (url.indexOf('/') === 0 ? url : '/' + url)
   };
-  window.Kassa={}
   window.Kassa.productUnits= eval("#{escape_javascript(Product.units.to_json.html_safe)}")
   window.Kassa.productGroups= eval("#{escape_javascript(Product.groups.to_json.html_safe)}")
   window.Kassa.materialUnits= eval("#{escape_javascript(Material.units.to_json.html_safe)}")
   window.Kassa.materialGroups= eval("#{escape_javascript(Material.groups.to_json.html_safe)}")
 
-= javascript_include_tag "application"
+= javascript_include_tag :application
