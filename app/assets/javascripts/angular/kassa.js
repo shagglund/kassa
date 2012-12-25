@@ -1,4 +1,4 @@
-angular.module('Kassa', ['Kassa.Buys', 'Kassa.Products', 'Kassa.Users', 'Kassa.Session'])
+angular.module('Kassa', ['Kassa.Buys', 'Kassa.Products', 'Kassa.Users', 'Kassa.Session', 'Kassa.Navigation'])
   .config(function($routeProvider){
     $routeProvider.when('/buys', {
       templateUrl: '/partials/buys.html',
@@ -12,7 +12,11 @@ angular.module('Kassa', ['Kassa.Buys', 'Kassa.Products', 'Kassa.Users', 'Kassa.S
       templateUrl: '/partials/users.html',
       controller: 'UsersController'
     });
-    $routeProvider.otherwise({redirectTo: '/'});
+    $routeProvider.when('/login',{
+     templateUrl: '/partials/login.html',
+     controller: 'SessionController'
+    });
+    $routeProvider.otherwise({redirectTo: '/login'});
   }).run(function($rootScope, $http){
     $rootScope.filter = function(items, field, filterList){
       console.log(filterList)

@@ -1,8 +1,6 @@
-%form.form-inline{:id=>"login", 'ng-hide'=>"authenticated()",'ng-controller'=>"SessionController"}
+%form.form-inline{:id=>"login", 'ng-hide'=>"authenticated()"}
   %label{:for=>"login_email"}= t('user.email')
   %input{:id=>"login_email",:type=>"text", 'ng-model'=>"credentials.email"}
   %label{:for=>"login_password"}= t('user.password')
   %input{:id=>"login_password", :type=>"password", 'ng-model'=>"credentials.password"}
   %button{'ng-click'=>"signIn()"}= t('user.sign_in')
-%form.pull_right{:id=>"logout", 'ng-show'=>"authenticated()", 'ng-controller'=>"SessionController"}
-  %button{'ng-click'=>"signOut()"}= t('user.sign_out')

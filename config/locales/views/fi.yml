@@ -3,6 +3,7 @@ fi:
     buy: "Osta"
     clear: "Tyhjennä"
     edit: "Muokkaa"
+    sign_out: "Kirjaudu ulos"
   search:
     product:
       by_name: 'Hae tuotteen nimellä'
@@ -24,3 +25,8 @@ fi:
     latest: "Viimeisimmät ostot"
     success: 'Osto onnistui'
     error: 'Osto epäonnistui'
+    administration: "Ostot"
+  product:
+    administration: "Tuotehallinta"
+  user:
+    administration: "Käyttäjähallinta"

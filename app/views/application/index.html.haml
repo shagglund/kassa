@@ -1,18 +1,21 @@
 .container-fluid{'ng-app'=>"Kassa"}
-  .row-fluid
-    .span12
-      = render 'authentication'
-  .row-fluid
-    .span6.offset3
-      =image_tag asset_path(:logo)
-  .row-fluid
-    .span12{'ng-view'=>""}
+  .span12
+    .row-fluid
+      .span6.offset3
+        =image_tag asset_path(:logo)
+    .row-fluid
+      .span12{'ng-view'=>""}
 
+  %script{:type=>'text/ng-template', :id=>"/partials/login.html"}
+    .row-fluid
+      .span12
+        = render 'application/login'
   %script{:type=>"text/ng-template", :id=>"/partials/buys.html"}
+    =render 'application/navigation'
     .row-fluid
       .span3=render 'users/list'
       .span4=render 'products/list'
-      .span4
+      .span5
         .row-fluid
           .span12=render 'basket/list'
         .row-fluid

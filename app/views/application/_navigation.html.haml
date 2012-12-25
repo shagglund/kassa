@@ -1,0 +1,16 @@
+.row-fluid
+  .span12
+    .navbar
+      .navbar-inner
+        %ul.nav{'ng-controller'=>'NavigationController'}
+          %li{'ng-class'=>"{true:'active', false:''}[currentLocation('/buys')]"}
+            %a{:href=>'#/buys'}= t('buy.administration')
+          %li.divider-vertical
+          %li{'ng-class'=>"{true:'active', false:''}[currentLocation('/products')]"}
+            %a{:href=>'#/products'}= t('product.administration')
+          %li.divider-vertical
+          %li{'ng-class'=>"{true:'active', false:''}[currentLocation('/users')]"}
+            %a{:href=>'#/users'}= t('user.administration')
+        %ul.nav.pull-right{'ng-show'=>"authenticated()", 'ng-controller'=>"SessionController"}
+          %li
+            %a{'ng-click'=>"signOut()"}= t('actions.sign_out')
