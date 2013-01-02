@@ -16,11 +16,10 @@ angular.module('Kassa.Buys', ['Kassa.Abstract', 'Kassa.Products', 'Kassa.Users']
         });
         return filtered
       },
-      responseFilters:{
+      responseFilters: {
         create: function(response){
           Products.updateChangedMaterials(response.materials);
           Users.updateChangedUser(response.object.buyer);
-          Buys._addBuy(response.object);
           return response.object
         }
       }
@@ -34,71 +33,80 @@ angular.module('Kassa.Buys', ['Kassa.Abstract', 'Kassa.Products', 'Kassa.Users']
       create: function(buy,success, failure){
         resource.create(buy, success, failure);
       },
-      _addBuy: function(buy){
-        this.collection.unshift(buy);
+      latest: function(){
+        var latest = [];
+        for(var prop in this.collection){
+          if(this.collection.hasOwnProperty((prop))
+            && angular.isObject(this.collection[prop])){
+            latest.push(this.collection[prop])
+          }
+        }
+        latest.sort(function(first, second){
+          return Date.parse(second.created_at) - Date.parse(first.created_at)
+        });
+        return latest.splice(0,10);
       }
     };
     return Buys;
   }).service('Basket', function(Buys, $timeout){
     var Basket = {
-      products: [],
-      buyStatus: function(status){
-        if(angular.isDefined(status)){
-          this.__status = status;
-          $timeout(function(){
-            Basket.__status = ''
-          }, 2000);
-        }
-        return this.__status
-      },
-      price: function(){
-        var price = 0.0;
-        for(var i = 0; i < this.products.length; i++){
-          price += this.products[i].price()
-        }
-        return price
-      },
-      removeProduct: function(productOrIndex){
-        var removed;
-        if(angular.isNumber(productOrIndex)){
-          //remove the product at index
-          this.products.splice(productOrIndex, 1);
-        }else{
-          //find the product and remove it
-          for(var i=0;i < this.products.length;i++){
-            if(this.products[i].id === productOrIndex.id){
-              this.products.splice(i, 1);
-              break;
+      products: {
+        collection:{},
+        price: 0.0,
+        size: 0,
+        add: function(product){
+          if(angular.isObject(this.collection[product.id])){
+            this.collection[product.id].amount++
+          }else{
+            this.collection[product.id] = {
+              product: product,
+              amount: 1,
+              positiveAmount: function(){
+                return angular.isNumber(this.amount) && this.amount > 0
+              },
+              enoughInStock: function(){
+                return (this.amount || 0) <= this.product.stock()
+              },
+              isValid: function(){
+                return this.positiveAmount() && this.enoughInStock()
+              },
+              price: function(){
+                return this.product.price() * (this.amount || 0)
+              }
             }
           }
+          this.price += product.price();
+          this.size++;
+        },
+        remove: function(product){
+          console.log(this.collection[product.id])
+          this.price -= this.collection[product.id].price();
+          this.size -= this.collection[product.id].amount;
+          delete this.collection[product.id]
+        },
+        clear: function(){
+          this.collection = {};
+          this.price = 0.0;
+          this.size = 0
+        },
+        isValid: function(){
+          for(var prop in this.collection){
+            if(angular.isFunction(this.collection[prop].isValid)
+              && !this.collection[prop].isValid()){
+              return false
+            }
+          }
+          return true
         }
       },
+      price: function(){
+        return this.products.price
+      },
+      removeProduct: function(product){
+        this.products.remove(product)
+      },
       addProduct: function(product){
-        //increment the old entrys amount if it exists
-        for(var i=0;i<this.products.length;i++){
-          if(this.products[i].product.id === product.id){
-            this.products[i].amount++;
-            return;
-          }
-        }
-
-        //otherwise create a new entry
-        this.products.push({
-          product: product,
-          amount: 1,
-          positiveAmount: function(){
-            return angular.isNumber(this.amount) && this.amount > 0
-          },
-          enoughInStock: function(){
-            return (this.amount || 0) < this.product.stock()
-          },
-          isValid: function(){
-            return this.positiveAmount() && this.enoughInStock()
-          },
-          price: function(){
-            return this.product.price() * (this.amount || 0)
-          }
-        });
+        this.products.add(product);
       },
       setBuyer: function(user){
         if(angular.isDefined(user)){
@@ -108,41 +116,39 @@ angular.module('Kassa.Buys', ['Kassa.Abstract', 'Kassa.Products', 'Kassa.Users']
         }
       },
       buy: function(success, failure){
-        Buys.create(this, function(successResponse, responseHeaders){
-          Basket.clear();
-          if(angular.isFunction(success)){
-            success(successResponse, responseHeaders)
-          }
-        }, failure)
+        Buys.create({buyer: this.buyer, products: this.products.collection},
+          function(successResponse, responseHeaders){
+            Basket.clear();
+            if(angular.isFunction(success)){
+              success(successResponse, responseHeaders)
+            }
+          }, failure)
       },
       clear: function(){
-        this.products.length = 0;
+        this.products.clear();
         this.setBuyer();
       },
       hasProducts: function(){
-        return this.products.length > 0
+        return this.products.size > 0
       },
       hasValidBuyer: function(){
         return angular.isDefined(this.buyer)
       },
       hasValidProducts: function(){
-        for(var i=0; i < this.products.length; i++){
-          if(!this.products[i].isValid()){
-            return false
-          }
+        if(!this.hasProducts()){
+          return false
         }
-        return true
+        return this.products.isValid()
       },
       canBuy: function(){
-        return this.hasProducts() && this.hasValidProducts()
-          && this.hasValidBuyer()
+        return this.hasValidProducts() && this.hasValidBuyer()
       }
     };
     return Basket;
   }).controller('BuysController', function($scope, Buys){
     $scope.buys = Buys
   }).controller('BasketController', function($scope, Basket, Users, Products){
-    $scope.basket = Basket
+    $scope.basket = Basket;
     $scope.$watch('basket.buyer', function(selectedUser, oldSelection){
       if(angular.isObject(selectedUser)){
         $scope.buyerName = selectedUser.username
@@ -151,13 +157,7 @@ angular.module('Kassa.Buys', ['Kassa.Abstract', 'Kassa.Products', 'Kassa.Users']
       }
     });
     $scope.findBuyerByName = function(username){
-      for(var i = 0; i < Users.collection.length; i++){
-        if(Users.collection[i].username.toLowerCase() === username.toLowerCase()){
-          Basket.buyer = Users.collection[i];
-          return Basket.buyer
-        }
-      }
-      $scope.buyer = undefined
+      Basket.buyer = Users.findByUsername(username)
     };
     $scope.validBuyer= function(){
       return angular.isDefined($scope.buyerName)

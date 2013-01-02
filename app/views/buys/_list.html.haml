@@ -10,7 +10,7 @@
             %th=t('active_record.attributes.buy.buyer')
             %th=t('active_record.attributes.buy.products.other')
         %tbody
-          %tr{'ng-repeat'=> "buy in buys.collection | limitTo:10"}
+          %tr{'ng-repeat'=> "buy in buys.latest()"}
             %td.span5="{{buy.created_at | date:'medium'}}" #for intellij to not whine about formats
             %td.span2 {{buy.buyer.username}}
             %td.span5

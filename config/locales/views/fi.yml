@@ -27,7 +27,7 @@ fi:
     error: 'Osto epäonnistui'
     administration: "Ostot"
   product:
-    administration: "Tuotehallinta"
+    administration: "Tuotteiden hallinta"
   user:
-    administration: "Käyttäjähallinta"
+    administration: "Piikkien hallinta"
     sign_in: "Kirjaudu sisään"

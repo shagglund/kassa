@@ -44,10 +44,21 @@ angular.module('Kassa.Users', ['Kassa.Abstract'])
             $window.Kassa.update(user, oldUser);
           }
         })
+      },
+      findByUsername: function(username){
+        for(var id in this.collection){
+          if(this.collection.hasOwnProperty(id)){
+            if(angular.isString(this.collection[id].username)
+              && this.collection[id].username === username){
+              return this.collection[id]
+            }
+          }
+        }
+        return undefined
       }
     };
     return Users;
   }).controller('UsersController', function($scope, Users, Basket){
-    $scope.users = Users
-    $scope.basket = Basket
+    $scope.users = Users;
+    $scope.basket = Basket;
   });

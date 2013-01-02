@@ -17,7 +17,7 @@
                 %i.icon-remove
             %span.help-inline{'ng-hide'=>"validBuyer() || empty(buyerName)"}= t('active_record.errors.user.not_found')
         .control-group{'ng-show'=>"basket.hasProducts()",
-          'ng-repeat'=>"entry in basket.products",
+          'ng-repeat'=>"entry in basket.products.collection",
           'ng-class'=>"{true:'success', false:'error'}[entry.isValid()]"}
           %label.control-label{:for => "basket-product-{{entry.product.id}}"} {{entry.product.name}}
           .controls
@@ -25,7 +25,7 @@
               %input.input-mini{:id=>"basket-product-{{entry.product.id}}",
                 :type => 'number', min:1, step:1,
                 'ng-model'=>"entry.amount"}
-              %button.btn.btn-danger{'ng-click'=>"basket.removeProduct($index)"}
+              %button.btn.btn-danger{'ng-click'=>"basket.products.remove(entry.product)"}
                 %i.icon-remove
             %p.help-inline{'ng-hide'=>"entry.positiveAmount()"}= t('active_record.errors.buy_entry.amount_too_small')
             %p.help-inline{'ng-hide'=>"entry.enoughInStock()"}= t('active_record.errors.buy.products.out_of_stock')

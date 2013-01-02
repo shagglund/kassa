@@ -26,14 +26,11 @@ angular.module('Kassa', ['Kassa.Buys', 'Kassa.Products', 'Kassa.Users', 'Kassa.S
     }
 
     $rootScope.filter = function(items, field, filterList){
-      console.log(filterList)
       //Does not allow for arrays as item
       function findInnermostValue(item, fieldNames, filterList){
         if(fieldNames.length > 1){
           return findInnermostValue(item[fieldNames.shift()], fieldNames, filterList)
         }else{
-          console.log()
-          console.log('Found single value for ' + fieldNames + ':' + angular.toJson(item[fieldNames]));
           return item[fieldNames]
         }
       }
@@ -44,13 +41,11 @@ angular.module('Kassa', ['Kassa.Buys', 'Kassa.Products', 'Kassa.Users', 'Kassa.S
         if(angular.isArray(needleList)){
           for(var i = 0; i<needleList.length; i++){
             if(containsString(haystack, needleList[i])){
-              console.log(haystack + 'matched ' + needleList[i]);
               return true;
             }
           }
         }else{
           if(containsString(haystack, needleList)){
-            console.log(haystack + 'matched ' + needleList);
             return true;
           }
         }
@@ -60,22 +55,16 @@ angular.module('Kassa', ['Kassa.Buys', 'Kassa.Products', 'Kassa.Users', 'Kassa.S
       function maybeHide(item, fieldNames){
         var value = findInnermostValue(item,fieldNames,filterList)
         if(angular.isDefined(value)){
-          console.log('Checking for value: ' + value)
           item.hidden = !containsStringInList(value, filterList)
-          if(item.hidden){
-            console.log("Hid " + angular.toJson(item))
-          }
         }
       }
 
       //allow for dot notated inner properties ie. 'material.name'
-      var fieldNames = field.split('.')
-      if(angular.isArray(items)){
-        angular.forEach(items,function(item){
-          maybeHide(item, fieldNames)
-        });
-      }else{
-        maybeHide(items, fieldNames)
+      var fieldNames = field.split('.');
+      for(var prop in items){
+        if(items.hasOwnProperty((prop))){
+          maybeHide(items[prop], fieldNames)
+        }
       }
     };
   });

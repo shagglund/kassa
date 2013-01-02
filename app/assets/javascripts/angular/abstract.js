@@ -53,9 +53,14 @@ angular.module('Kassa.Abstract',['ngResource'])
         scopeObj.resource.index(options,
           function(successResponse, responseHeaders){
             var filteredResponse = scopeObj.responseFilters.index(successResponse);
-            scopeObj.collection.length = 0;
+            for(var prop in scopeObj.collection){
+              if(scopeObj.collection.hasOwnProperty(prop)){
+                delete scopeObj.collection[prop]
+              }
+            }
             angular.forEach(filteredResponse, function(object){
-              scopeObj.collection.push(scopeObj.decodeFromApi(object))
+              object = scopeObj.decodeFromApi(object);
+              scopeObj.collection[object.id] = object
             });
             if(angular.isFunction(success)){
               success(filteredResponse, responseHeaders);
@@ -74,7 +79,7 @@ angular.module('Kassa.Abstract',['ngResource'])
           function(successResponse, responseHeaders){
             var filteredResponse = scopeObj.responseFilters.create(successResponse);
             filteredResponse = scopeObj.decodeFromApi(filteredResponse);
-            scopeObj.collection.push(filteredResponse);
+            scopeObj.collection[filteredResponse.id] = filteredResponse;
             if(angular.isFunction(success)){
               success(filteredResponse, responseHeaders);
             }
@@ -90,14 +95,9 @@ angular.module('Kassa.Abstract',['ngResource'])
         scopeObj.resource.update(scopeObj.encodeForApi(object),
           function(successResponse, responseHeaders){
             var filteredResponse = scopeObj.responseFilters.update(successResponse);
-            for(var i = 0; i < scopeObj.collection.length; i++){
-              if(scopeObj.collection[i].id === filteredResponse.id){
-                for(var prop in filteredResponse){
-                  scopeObj.collection[i][prop] = filteredResponse[prop];
-                }
-                break;
-              }
-            }
+            filteredResponse = scopeObj.decodeFromApi(filteredResponse);
+            scopeObj.collection[filteredResponse.id] = filteredResponse;
+
             if(angular.isFunction(success)){
               success(filteredResponse, responseHeaders);
             }
@@ -113,12 +113,8 @@ angular.module('Kassa.Abstract',['ngResource'])
         scopeObj.resource.destroy(scopeObj.encodeForApi(object),
           function(successResponse, responseHeaders){
             var filteredResponse = scopeObj.responseFilters.destroy(successResponse);
-            for(var i = 0; i < scopeObj.collection.length; i++){
-              if(scopeObj.collection[i].id === filteredResponse.id){
-                scopeObj.collection.splice(i, 1);
-                break;
-              }
-            }
+            delete scopeObj.collection[filteredResponse.id];
+
             if(angular.isFunction(success)){
               success(filteredResponse, responseHeaders);
             }
@@ -133,7 +129,7 @@ angular.module('Kassa.Abstract',['ngResource'])
       addDefaultOptions(options);
       var collectionResource = {
         resource: $resource($window.Kassa.prefixWithLocale(options.url), options.options, options.actions),
-        collection: [],
+        collection: {},
         encodeForApi: options.encodeForApi,
         decodeFromApi: options.decodeFromApi,
         responseFilters: options.responseFilters
