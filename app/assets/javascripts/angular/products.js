@@ -120,7 +120,11 @@ angular.module('Kassa.Products', ['Kassa.Abstract'])
       }
     };
     return Products;
-  }).controller('ProductsController', function($scope, Products, Basket){
+  }).controller('ProductsBuyController', function($scope, Products, Basket){
     $scope.products = Products;
     $scope.basket = Basket;
+
+    $scope.hide = function(product){
+      return product.hidden || product.stock() == 0
+    }
   });

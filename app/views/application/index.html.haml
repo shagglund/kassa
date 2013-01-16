@@ -13,13 +13,17 @@
   %script{:type=>"text/ng-template", :id=>"/partials/buys.html"}
     =render 'application/navigation'
     .row-fluid
-      .span3=render 'users/list'
-      .span4=render 'products/list'
+      .span3=render 'users/buy_list'
+      .span4=render 'products/buy_list'
       .span5
         .row-fluid
           .span12=render 'basket/list'
         .row-fluid
           .span12=render 'buys/list'
+  %script{:type=>"text/ng-template", :id=>"/partials/products.html"}
+    =render 'application/navigation'
+    .row-fluid
+      .span5=render 'products/edit_list'
 
 :javascript
   window.Kassa= window.Kassa || {};

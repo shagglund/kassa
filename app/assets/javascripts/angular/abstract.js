@@ -53,11 +53,8 @@ angular.module('Kassa.Abstract',['ngResource'])
         scopeObj.resource.index(options,
           function(successResponse, responseHeaders){
             var filteredResponse = scopeObj.responseFilters.index(successResponse);
-            for(var prop in scopeObj.collection){
-              if(scopeObj.collection.hasOwnProperty(prop)){
-                delete scopeObj.collection[prop]
-              }
-            }
+            //clear the old collection by deleting all it's properties
+            angular.copy({}, scopeObj.collection);
             angular.forEach(filteredResponse, function(object){
               object = scopeObj.decodeFromApi(object);
               scopeObj.collection[object.id] = object

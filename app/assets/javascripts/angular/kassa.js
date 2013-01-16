@@ -61,10 +61,8 @@ angular.module('Kassa', ['Kassa.Buys', 'Kassa.Products', 'Kassa.Users', 'Kassa.S
 
       //allow for dot notated inner properties ie. 'material.name'
       var fieldNames = field.split('.');
-      for(var prop in items){
-        if(items.hasOwnProperty((prop))){
-          maybeHide(items[prop], fieldNames)
-        }
-      }
+      angular.forEach(items, function(item){
+        maybeHide(item, fieldNames)
+      })
     };
   });

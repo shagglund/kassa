@@ -35,12 +35,9 @@ angular.module('Kassa.Buys', ['Kassa.Abstract', 'Kassa.Products', 'Kassa.Users']
       },
       latest: function(){
         var latest = [];
-        for(var prop in this.collection){
-          if(this.collection.hasOwnProperty((prop))
-            && angular.isObject(this.collection[prop])){
-            latest.push(this.collection[prop])
-          }
-        }
+        angular.forEach(this.collection, function(buy){
+          latest.push(buy)
+        });
         latest.sort(function(first, second){
           return Date.parse(second.created_at) - Date.parse(first.created_at)
         });
@@ -52,8 +49,6 @@ angular.module('Kassa.Buys', ['Kassa.Abstract', 'Kassa.Products', 'Kassa.Users']
     var Basket = {
       products: {
         collection:{},
-        price: 0.0,
-        size: 0,
         add: function(product){
           if(angular.isObject(this.collection[product.id])){
             this.collection[product.id].amount++
@@ -75,32 +70,27 @@ angular.module('Kassa.Buys', ['Kassa.Abstract', 'Kassa.Products', 'Kassa.Users']
               }
             }
           }
-          this.price += product.price();
-          this.size++;
         },
         remove: function(product){
-          console.log(this.collection[product.id])
-          this.price -= this.collection[product.id].price();
-          this.size -= this.collection[product.id].amount;
           delete this.collection[product.id]
         },
         clear: function(){
           this.collection = {};
-          this.price = 0.0;
-          this.size = 0
         },
         isValid: function(){
-          for(var prop in this.collection){
-            if(angular.isFunction(this.collection[prop].isValid)
-              && !this.collection[prop].isValid()){
-              return false
-            }
-          }
-          return true
+          var rv = true;
+          angular.forEach(this.collection, function(product){
+            if(rv) rv = product.isValid();
+          });
+          return rv;
         }
       },
       price: function(){
-        return this.products.price
+        var price = 0.0;
+        angular.forEach(this.products.collection, function(entry){
+          price += entry.price();
+        });
+        return price;
       },
       removeProduct: function(product){
         this.products.remove(product)
@@ -128,17 +118,19 @@ angular.module('Kassa.Buys', ['Kassa.Abstract', 'Kassa.Products', 'Kassa.Users']
         this.products.clear();
         this.setBuyer();
       },
-      hasProducts: function(){
-        return this.products.size > 0
-      },
       hasValidBuyer: function(){
         return angular.isDefined(this.buyer)
       },
       hasValidProducts: function(){
-        if(!this.hasProducts()){
-          return false
-        }
+        if(this.productCount() == 0) return false;
         return this.products.isValid()
+      },
+      productCount: function(){
+        var count = 0;
+        angular.forEach(this.products.collection, function(entry){
+          count += entry.amount;
+        });
+        return count
       },
       canBuy: function(){
         return this.hasValidProducts() && this.hasValidBuyer()

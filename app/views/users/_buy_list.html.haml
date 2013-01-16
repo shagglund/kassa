@@ -1,4 +1,4 @@
-%fieldset.span12{'ng-controller'=>'UsersController'}
+%fieldset.span12{'ng-controller'=>'UsersBuyController'}
   %legend
     %h3= t('active_record.models.user.other')
   =render :partial => 'application/search', :locals => {:model => 'user', :field=>'username'}
@@ -12,7 +12,8 @@
             %th= t('active_record.attributes.user.buy_count')
 
         %tbody
-          %tr{'ng-repeat'=>'user in users.collection', 'ng-hide'=>'user.hidden'}
+          %tr{'ng-repeat'=>'user in users.collection', 'ng-hide'=>'user.hidden',
+              'ng-class'=>'{true:"success", false:""}[basket.buyer == user]'}
             %td
               %a{'ng-click'=>'basket.setBuyer(user)',
                 :title=>t('basket.select_buyer')} {{user.username}}

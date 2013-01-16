@@ -20,7 +20,9 @@ fi:
     select_buyer: "Aseta ostajaksi"
     title: "Ostoskori"
     buyer:
-      not_selected: "Ostajaa ei ole valittu"
+      not_selected: "Valitse ostaja"
+    show_contents: "Näytä sisältö"
+    help_text: "Valitse ostaja ja lisää tuotteita ostoskoriin listoista"
   buy:
     latest: "Viimeisimmät ostot"
     success: 'Osto onnistui'
@@ -28,6 +30,7 @@ fi:
     administration: "Ostot"
   product:
     administration: "Tuotteiden hallinta"
+    select: "Valitse"
   user:
     administration: "Piikkien hallinta"
     sign_in: "Kirjaudu sisään"

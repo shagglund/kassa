@@ -58,7 +58,7 @@ angular.module('Kassa.Users', ['Kassa.Abstract'])
       }
     };
     return Users;
-  }).controller('UsersController', function($scope, Users, Basket){
+  }).controller('UsersBuyController', function($scope, Users, Basket){
     $scope.users = Users;
     $scope.basket = Basket;
   });

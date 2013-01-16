@@ -1,4 +1,4 @@
-%fieldset.span12{'ng-controller'=>"ProductsController"}
+%fieldset.span12{'ng-controller'=>"ProductsBuyController"}
   %legend
     %h3=t('active_record.models.product.other')
   =render :partial => 'application/search', :locals => {:model => 'product', :field=>'name'}
@@ -15,7 +15,7 @@
               = t('active_record.attributes.product.price')
         %tbody
           %tr{'ng-repeat'=>"product in products.collection",
-            'ng-hide'=>"product.hidden"}
+            'ng-hide'=>"hide(product)"}
             %td
               %a{'ng-click'=>"basket.addProduct(product)",
                 :title => t('basket.add.product')} {{product.name}}

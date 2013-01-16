@@ -3,6 +3,7 @@
     %h3= t('basket.title')
   .row-fluid
     .span12
+      %p= t('basket.help_text')
       %form.form-horizontal{:name => 'basketBuyForm'}
         .control-group{'ng-class'=>"{true:'success', false:'error'}[validBuyer()]"}
           %label.control-label{:for=>'basket-buyer'}= "#{t('active_record.attributes.buy.buyer')}:"
@@ -16,7 +17,7 @@
               %button.btn.btn-danger{'ng-click'=>"clearBuyer()"}
                 %i.icon-remove
             %span.help-inline{'ng-hide'=>"validBuyer() || empty(buyerName)"}= t('active_record.errors.user.not_found')
-        .control-group{'ng-show'=>"basket.hasProducts()",
+        .control-group{'ng-show'=>"basket.productCount()",
           'ng-repeat'=>"entry in basket.products.collection",
           'ng-class'=>"{true:'success', false:'error'}[entry.isValid()]"}
           %label.control-label{:for => "basket-product-{{entry.product.id}}"} {{entry.product.name}}
@@ -30,12 +31,12 @@
             %p.help-inline{'ng-hide'=>"entry.positiveAmount()"}= t('active_record.errors.buy_entry.amount_too_small')
             %p.help-inline{'ng-hide'=>"entry.enoughInStock()"}= t('active_record.errors.buy.products.out_of_stock')
         .control-group.info
-          %label.control-label{'ng-show'=>'basket.hasProducts()'}
+          %label.control-label{'ng-show'=>'basket.productCount()'}
             ="#{t('active_record.attributes.buy.price')}:"
             %span {{basket.price() | currency}}
           .controls
             %button.btn.btn-success{'ng-disabled'=>"!basket.canBuy()",
               'ng-show'=>"basket.canBuy()",
               'ng-click'=>"basket.buy()"}= t('actions.buy')
-            %button.btn.btn-danger{'ng-show'=>"basket.hasProducts()",
+            %button.btn.btn-danger{'ng-show'=>"basket.productCount()",
               'ng-click'=>"basket.clear()"}= t('actions.clear')
