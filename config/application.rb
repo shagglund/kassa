@@ -61,10 +61,11 @@ module Kassa
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
 
-    config.assets.paths << File.join(Rails.root, 'app', 'assets', 'templates')
+    config.assets.paths << Rails.root.join('app', 'assets', 'templates')
+    config.assets.paths << Rails.root.join('vendor', 'assets', 'angular-bootstrap')
 
     config.generators do |g|
-      g.test_framework :rspec, :view_specs => false, :fixture => true
+      g.test_framework :rspec, :view_specs => false, :fixture => false
 
     end
   end

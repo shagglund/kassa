@@ -1,4 +1,4 @@
-angular.module('Kassa.Buys', ['Kassa.Abstract', 'Kassa.Products', 'Kassa.Users'])
+angular.module('Kassa.Buys', ['Kassa.Abstract', 'Kassa.Products', 'Kassa.Users', 'ui.bootstrap.modal'])
   .service('Buys', function(collectionResource, Products, Users){
     var resource = collectionResource({
       url: '/buys',
@@ -45,13 +45,15 @@ angular.module('Kassa.Buys', ['Kassa.Abstract', 'Kassa.Products', 'Kassa.Users']
       }
     };
     return Buys;
-  }).service('Basket', function(Buys, $timeout){
+  })
+  .service('Basket', function(Buys, $timeout){
     var Basket = {
       products: {
         collection:{},
         add: function(product){
-          if(angular.isObject(this.collection[product.id])){
-            this.collection[product.id].amount++
+          if(this.exists(product)){
+            if(this.collection[product.id].product.stock() > this.collection[product.id].amount)
+              this.collection[product.id].amount++
           }else{
             this.collection[product.id] = {
               product: product,
@@ -67,12 +69,25 @@ angular.module('Kassa.Buys', ['Kassa.Abstract', 'Kassa.Products', 'Kassa.Users']
               },
               price: function(){
                 return this.product.price() * (this.amount || 0)
+              },
+              increaseAmount: function(){
+                if(this.amount < this.product.stock()){
+                  this.amount++;
+                }
+              },
+              decreaseAmount: function(){
+                if(this.amount > 1){
+                  this.amount--;
+                }
               }
             }
           }
         },
         remove: function(product){
           delete this.collection[product.id]
+        },
+        exists: function(product){
+          return angular.isObject(this.collection[product.id])
         },
         clear: function(){
           this.collection = {};
@@ -83,6 +98,12 @@ angular.module('Kassa.Buys', ['Kassa.Abstract', 'Kassa.Products', 'Kassa.Users']
             if(rv) rv = product.isValid();
           });
           return rv;
+        },
+        amountOf: function(product){
+          if(this.exists(product)){
+            return this.collection[product.id].amount
+          }
+          return 0
         }
       },
       price: function(){
@@ -98,11 +119,27 @@ angular.module('Kassa.Buys', ['Kassa.Abstract', 'Kassa.Products', 'Kassa.Users']
       addProduct: function(product){
         this.products.add(product);
       },
+      hasProduct: function(product){
+        return this.amountOf(product) > 0
+      },
+      amountOf: function(product){
+        if(this.products.exists(product)){
+          return this.products.collection[product.id].amount
+        }
+        return 0
+      },
       setBuyer: function(user){
-        if(angular.isDefined(user)){
+        if(angular.isDefined(user) && this.buyer !== user){
           this.buyer = user;
         }else{
           this.buyer = undefined;
+        }
+      },
+      hasBuyer: function(user){
+        if(user){
+          return this.buyer === user;
+        }else{
+          return angular.isDefined(this.buyer);
         }
       },
       buy: function(success, failure){
@@ -128,7 +165,9 @@ angular.module('Kassa.Buys', ['Kassa.Abstract', 'Kassa.Products', 'Kassa.Users']
       productCount: function(){
         var count = 0;
         angular.forEach(this.products.collection, function(entry){
-          count += entry.amount;
+          //to prevent silly behavior in UI when editing amounts straight on input
+          //without this check productCount could return 0 if only a single product is in basket
+          count += entry.amount ? entry.amount : 1;
         });
         return count
       },
@@ -137,9 +176,11 @@ angular.module('Kassa.Buys', ['Kassa.Abstract', 'Kassa.Products', 'Kassa.Users']
       }
     };
     return Basket;
-  }).controller('BuysController', function($scope, Buys){
+  })
+  .controller('BuysController', function($scope, Buys){
     $scope.buys = Buys
-  }).controller('BasketController', function($scope, Basket, Users, Products){
+  })
+  .controller('BasketController', function($scope, Basket, Users){
     $scope.basket = Basket;
     $scope.$watch('basket.buyer', function(selectedUser, oldSelection){
       if(angular.isObject(selectedUser)){
@@ -163,4 +204,20 @@ angular.module('Kassa.Buys', ['Kassa.Abstract', 'Kassa.Products', 'Kassa.Users']
       $scope.buyerName = undefined;
       Basket.setBuyer();
     };
+    $scope.openBasket = function(){
+      $scope.basketShouldBeOpen = true;
+    };
+    $scope.buyAndCloseBasket = function($event){
+      Basket.buy();
+      $scope.closeBasket($event);
+    };
+    $scope.clearAndCloseBasket = function($event){
+      Basket.clear();
+      $scope.closeBasket($event);
+    };
+    $scope.closeBasket = function($event){
+      $scope.basketShouldBeOpen = false;
+      $event.stopPropagation();
+      $event.preventDefault();
+    }
   });

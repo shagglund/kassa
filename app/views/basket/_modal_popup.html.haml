@@ -1,0 +1,35 @@
+%form.form-horizontal{:modal=>'basketShouldBeOpen'}
+  .modal-header
+    %h3
+      = t('basket.title')
+  .modal-body
+    .controls
+      %h4{'ng-show'=>'basket.hasBuyer()'}
+        ="#{t('active_record.attributes.buy.buyer')}: {{basket.buyer.username}}"
+        %span.badge.badge-success
+          %i.icon-ok
+      %h4{'ng-hide'=>'basket.hasBuyer()'}
+        =t 'basket.buyer.not_selected'
+        %span.badge.badge-important !
+    .control-group{'ng-repeat'=>'entry in basket.products.collection'}
+      %label.control-label
+        %strong {{entry.product.name}}
+      .controls
+        .input-append.input-prepend
+          %button.btn.btn-danger{'ng-click'=>'entry.decreaseAmount()'}
+            %i.icon-minus
+          %input.input-mini{'ng-model'=>'entry.amount', :type => 'number', :min=>1, :step=>1, :max=>'{{entry.product.stock()}}'}
+          %button.btn.btn-success{'ng-click'=>'entry.increaseAmount()'}
+            %i.icon-plus
+          %button.btn.btn-danger{'ng-click'=>'basket.removeProduct(entry.product)'}
+            %i.icon-trash
+    .control-group{'ng-hide'=>'basket.productCount() != 0'}
+      .controls
+        %h5= t 'basket.add.products'
+  .modal-footer
+    .btn-group.pull-right
+      %button.btn.btn-primary{'ng-click'=>'closeBasket($event)'}= t'actions.close'
+      %button.btn.btn-danger{'ng-disabled'=>"basket.productCount() == 0",
+        'ng-click'=>"clearAndCloseBasket($event)"}= t('actions.clear')
+      %button.btn.btn-success{'ng-disabled'=>"!basket.canBuy()",
+        'ng-click'=>"buyAndCloseBasket($event)"}= t('actions.buy')

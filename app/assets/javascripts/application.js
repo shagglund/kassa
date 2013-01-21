@@ -17,4 +17,6 @@
 //= require angular-resource
 //= require angular-locale_fi
 //= require angular-ui
+//= require angular-bootstrap/src/transition/transition
+//= require angular-bootstrap/src/modal/modal
 //= require_tree ./angular

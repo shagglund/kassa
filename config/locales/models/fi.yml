@@ -66,6 +66,8 @@ fi:
           none: "Ei tuotteita"
           other: 'Tuotteet'
         price: "Hinta"
+      buy_entry:
+        amount: "Määrä"
     errors:
       product:
 

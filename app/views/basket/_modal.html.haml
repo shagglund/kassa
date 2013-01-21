@@ -1,0 +1,11 @@
+%a{'ng-click'=>'openBasket()','ng-controller'=>'BasketController'}
+  %span.badge{'ng-class'=>'{true:"badge-success", false:"badge-important"}[basket.hasBuyer()]'}
+    %i.icon-user
+    %span{'ng-show'=>'basket.hasBuyer()'} {{basket.buyer.username}}
+    %span{'ng-hide'=>'basket.hasBuyer()'}= t('basket.buyer.not_selected')
+  %span.badge{'ng-class'=>'{true:"badge-success", false:"badge-important"}[basket.hasValidProducts()]'}
+    %i.icon-shopping-cart
+      %sup {{basket.productCount()}}
+  %span.badge{'ng-class'=>'{true:"badge-success", false:"badge-warning"}[basket.canBuy()]'}
+    %i.icon-arrow-right
+  =render 'basket/modal_popup'

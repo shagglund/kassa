@@ -1,8 +1,8 @@
 .row-fluid
   .span12
     .navbar
-      .navbar-inner
-        %ul.nav{'ng-controller'=>'NavigationController'}
+      .navbar-inner{'ng-controller'=>'NavigationController'}
+        %ul.nav
           %li{'ng-class'=>"{true:'active', false:''}[currentLocation('/buys')]"}
             %a{:href=>'#/buys'}= t('buy.administration')
           %li.divider-vertical
@@ -11,6 +11,8 @@
           %li.divider-vertical
           %li{'ng-class'=>"{true:'active', false:''}[currentLocation('/users')]"}
             %a{:href=>'#/users'}= t('user.administration')
-        %ul.nav.pull-right{'ng-show'=>"authenticated()", 'ng-controller'=>"SessionController"}
-          %li
+        %ul.nav.pull-right
+          %li=render 'basket/modal'
+          %li.divider-vertical
+          %li{'ng-show'=>"authenticated()", 'ng-controller'=>"SessionController"}
             %a{'ng-click'=>"signOut()"}= t('actions.sign_out')

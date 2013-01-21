@@ -4,6 +4,7 @@ fi:
     clear: "Tyhjennä"
     edit: "Muokkaa"
     sign_out: "Kirjaudu ulos"
+    close: "Sulje"
   search:
     product:
       by_name: 'Hae tuotteen nimellä'
@@ -16,13 +17,14 @@ fi:
       by_price: 'Järjestä hinnan mukaan'
   basket:
     add:
-      product: "Lisää tuote ostoskoriin"
-    select_buyer: "Aseta ostajaksi"
+      product: "Lisää tuote"
+      product_to_basket: "Lisää tuote ostoskoriin"
+      products: "Lisää tuotteita ostoskoriin listasta."
     title: "Ostoskori"
     buyer:
+      select: "Aseta ostajaksi"
       not_selected: "Valitse ostaja"
     show_contents: "Näytä sisältö"
-    help_text: "Valitse ostaja ja lisää tuotteita ostoskoriin listoista"
   buy:
     latest: "Viimeisimmät ostot"
     success: 'Osto onnistui'
@@ -31,6 +33,7 @@ fi:
   product:
     administration: "Tuotteiden hallinta"
     select: "Valitse"
+    details: "Tuotteen tiedot"
   user:
     administration: "Piikkien hallinta"
     sign_in: "Kirjaudu sisään"

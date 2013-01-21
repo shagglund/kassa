@@ -61,7 +61,10 @@ angular.module('Kassa.Session', [])
   })
   .controller('SessionController', function($scope, $location, Session){
     function navigateAuthenticated(){
-      $location.path('/buys')
+      if($location.path().indexOf('/products') == -1
+        && $location.path().indexOf('/products') == -1){
+        $location.path('/buys')
+      }
     }
     $scope.authenticated = function(){
       return angular.isDefined(Session.signedIn)

@@ -1,6 +1,5 @@
 %fieldset.span12{'ng-controller'=>"ProductsBuyController"}
-  %legend
-    %h3=t('active_record.models.product.other')
+  %legend=t('active_record.models.product.other')
   =render :partial => 'application/search', :locals => {:model => 'product', :field=>'name'}
   .row-fluid
     .span12
@@ -21,3 +20,9 @@
                 :title => t('basket.add.product')} {{product.name}}
             %td {{product.stock() | number}}
             %td {{product.price() | currency}}
+            %td
+              %i.icon-shopping-cart{'ng-show'=>'basket.hasProduct(product)'}
+                {{basket.amountOf(product)}}
+              %a{'ng-click'=> 'basket.removeProduct(product)',
+                  'ng-show'=>'basket.hasProduct(product)'}
+                %i.icon-remove
