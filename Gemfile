@@ -14,6 +14,16 @@ gem 'active_model_serializers', :git => 'git://github.com/rails-api/active_model
 
 # Gems used only for assets and not required
 # in production environments by default.
+group :test, :development do
+  gem 'spork-rails'
+  gem 'guard'
+  gem 'guard-rspec'
+  gem 'guard-jasmine'
+  gem 'jasminerice'
+  gem 'rb-inotify', :require => false
+  gem 'rb-fsevent', :require => false
+  gem 'rb-fchange', :require => false
+end
 group :test do
   gem 'capybara'
   gem 'cucumber-rails'
