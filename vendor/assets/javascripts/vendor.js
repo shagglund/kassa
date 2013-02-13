@@ -1,0 +1,9 @@
+//= require jquery
+//= require jquery_ujs
+//= require twitter/bootstrap
+//= require angular
+//= require angular-resource
+//= require angular-ui
+//= require angular-locale_fi
+//= require angular-bootstrap/src/transition/transition
+//= require angular-bootstrap/src/modal/modal
