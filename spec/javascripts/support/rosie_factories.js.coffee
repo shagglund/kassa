@@ -25,7 +25,7 @@ Factory.define('product')
   new Date().toUTCString()
 .attr 'materials', ()->
   [
-    Factory.attributes('material')
+    {amount: 1, material: Factory.build('material')}
   ]
 
 Factory.define('material')
@@ -37,3 +37,11 @@ Factory.define('material')
 .attr('price', 0.7)
 .attr('stock', 100)
 
+Factory.define('buy')
+.sequence('id')
+.attr 'buyer', ->
+  Factory.build 'user'
+.attr 'products', ->
+  [
+    {amount: 1, product: Factory.build 'product'}
+  ]

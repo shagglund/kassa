@@ -1,40 +1,20 @@
-angular.module('kassa.users', ['ngResource'])
-.service('Users', ($resource)->
-  class Users
-    constructor:($resource)->
-      options =
-        id: '@id'
-      actions=
-        index:
-          method: 'GET'
-        create:
-          method: 'POST'
-        update:
-          method: 'PUT'
-      @resource = $resource '/users/:id', options, actions
-      @collection = []
+angular.module('kassa.users', ['kassa.common'])
+.service('Users', (BaseService)->
+  options =
+    id: '@id'
+  actions=
+    index:
+      method: 'GET'
+    create:
+      method: 'POST'
+    update:
+      method: 'PUT'
+  class Users extends BaseService
+    constructor: ->
+      super '/users/:id', options, actions
 
-    index: (options={})=>
-      deferred = @resource.index options
-      deferred.then (response)=>
-        @collection.length = 0
-        @collection.push response.collection...
-      deferred
-
-    create: (user)=>
-      deferred = @resource.create @_encode user
-      deferred.then (response)=>
-        @collection.push response.object
-      deferred
-
-    update: (user)=>
-      @resource.update @_encode user
-
-    destroy: (user)=>
-      deferred = @resource.destroy user.id
-      deferred.then (response)=>
-        @_removeLocally user
-      deferred
+    updateChanged: (user)=>
+      @_update user
 
     _encode: (user)->
       r =
@@ -44,14 +24,8 @@ angular.module('kassa.users', ['ngResource'])
         email: user.email,
         username: user.username,
         balance: user.balance
-    
-    _removeLocally: (user)=>
-      @collection.splice i,1 for u, i in @collection when u.id == user.id
 
-    _updateLocally: (user)=>
-      @collection[i] = user for u, i in @collection when u.id == user.id
-
-  new Users($resource)
+  new Users()
 ).controller('UsersController', ($scope, Users)->
   $scope.users = Users
 )

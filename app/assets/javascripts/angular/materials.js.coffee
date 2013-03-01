@@ -15,7 +15,7 @@ angular.module('kassa.materials', ['kassa.common'])
       super '/materials/:id', options, actions
     
     updateChanged: (material...)=>
-      @_updateLocally mat for mat in material
+      @_update mat for mat in material
       return
 
    _encode: (material)=>

@@ -1,41 +1,27 @@
 angular.
-module('kassa.buys', ['kassa.abstract', 'kassa.products', 'kassa.users', 'ui.bootstrap.modal']).
-service('Buys', ($resource, Products, Users)->
-  class Buys
-    constructor: ($resource)->
-      options = {}
-      actions =
-        index:
-          method: 'GET'
-        create:
-          method: 'POST'
-      @resource = $resource '/buys', options, actions
-      @collection = []
-      @index()
-
-    index: (opts={}, success, failure)=>
-      middle = (response)=>
-        @collection.length = 0
-        @collection.push buy for buy in response.collection
-        opts.success @collection if angular.isFunction opts.success
-        return
-      @resource.index(opts.options, middle, opts.failure)
-
-    create: (opts={})=>
-      return unless opts.buy
-      middle = (response)=>
-        Products.updateChangedMaterials response.materials
-        Users.updateChangedUser response.object.buyer
-        opts.success response.object if angular.isFunction opts.success
-        return
-
-      apiBuy = @_encode opts.buy
-      @resource.create(apiBuy, middle, opts.failure)
-
+module('kassa.buys', ['kassa.common','kassa.products', 'kassa.materials', 'kassa.users', 'ui.bootstrap.modal']).
+service('Buys', (BaseService, Materials, Users)->
+  options = {}
+  actions =
+    index:
+      method: 'GET'
+    create:
+      method: 'POST'
+  class Buys extends BaseService
+    constructor: (@materialService, @userService)->
+      super '/buys', options, actions
+      
     latest: ()=>
-      @collection.sort (first, second)->
+      col = @entries()
+      col.sort (first, second)->
         Date.parse(second.created_at) - Date.parse(first.created_at)
-      @collection[0..9]
+      col[0..9]
+
+    _handleResponse: (action, response, responseHeaders)=>
+      if action is 'create'
+        @materialService.updateChanged response.materials
+        @userService.updateChanged response.buyer
+      return
 
     _encode: (buy)->
       buyer_id: buy.id, products_attributes: @_encodeEntries(buy.products)
@@ -46,14 +32,14 @@ service('Buys', ($resource, Products, Users)->
     _encodeEntry: (entry)->
       product_id: entry.product.id, amount: entry.amount
 
-  new Buys()
+  new Buys(Materials, Users)
 ).service('Basket', (Buys, Products)->
   class Basket
-    constructor: ->
+    constructor: (@buyService, @productService)->
       @_products = []
     
     entries: ->
-      entry for entry in @_products
+      @_products
 
     setBuyer: (buyer)=>
       if @buyer != buyer
@@ -112,7 +98,7 @@ service('Buys', ($resource, Products, Users)->
       price = 0.00
       for entry in @_products
         do (entry)->
-          price += Products.priceOf(entry.product) * entry.amount
+          price += @productService.priceOf(entry.product) * entry.amount
       price
     
     hasValidBuyer: =>
@@ -132,11 +118,10 @@ service('Buys', ($resource, Products, Users)->
     valid: =>
       @hasValidProducts() and @hasValidBuyer()
 
-    buy: (success,failure) =>
+    buy: () =>
       if @valid()
-        Buys.create(@, success, failure)
+        @buyService.create(@)
       else
-        failure('Invalid basket')
         false
 
     _canBeBought: (entry)=>
@@ -159,9 +144,9 @@ service('Buys', ($resource, Products, Users)->
         entry.amount = 1
 
     _enoughInStock: (product, amount)->
-      Products.stockOf(product) >= amount
+      @productService.stockOf(product) >= amount
 
-  new Basket()
+  new Basket(Buys, Products)
 
 ).controller('BuysController', ($scope, Buys)->
   $scope.buys = Buys
@@ -183,8 +168,9 @@ service('Buys', ($resource, Products, Users)->
 
   $scope.buyAndCloseBasket= ($event)=>
     _stopEvent($event)
-    Basket.buy((closeBasket)->
-    )
+    Basket.buy().then ()->
+      Basket.clear()
+      $scope.closeBasket()
 
   $scope.clearAndCloseBasket=($event)=>
     Basket.clear()

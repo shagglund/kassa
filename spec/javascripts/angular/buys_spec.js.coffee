@@ -13,7 +13,7 @@ describe 'Module kassa.buys', ->
         controller = $controller 'BuysController', {$scope: scope, Buys: buys}
       
       it 'should bind Buys-service to the scope ', ()->
-        expect(scope.buys).toBe(buys);
+        expect(scope.buys).toBe(buys)
 
     describe 'BasketController', ->
       controller = undefined
@@ -21,7 +21,7 @@ describe 'Module kassa.buys', ->
       products = undefined
       users = undefined
       beforeEach inject ($controller)->
-        users = 
+        users =
           findByUsername: ()->
         basket =
           _products: {}
@@ -62,38 +62,18 @@ describe 'Module kassa.buys', ->
     basket = undefined
     products = undefined
     buys = undefined
+    product = undefined
     beforeEach ->
-      module 'kassa.buys', ($provide)-> 
-        $provide.service 'Buys', ()->
-          buys = {}
-        $provide.service 'Products', ()->
-          products = {priceOf: jasmine.createSpy(), stockOf: jasmine.createSpy()}
-          products.priceOf.andCallFake (product)->
-            price = 0.00
-            for mat in product.materials 
-              do (mat)->
-                price+= mat.price
-            price.toFixed(2)
-          products.stockOf.andCallFake (product)->
-            min = -1
-            for mat in product.materials 
-              do (mat)->
-                if mat.stock < min or min is -1
-                  min = mat.stock
-            min
-          products
-        return
+      module 'kassa.buys'
       inject ($injector)->
         basket = $injector.get 'Basket'
-   
+      product = Factory.build 'product'
+
     it 'should keep a list of the products in basket', ->
       basket.add Factory.build 'product'
       expect(basket.entries().length).toBe 1
-      
-    describe 'adding and removing products', ->
-      product=undefined
-      beforeEach ()->
-        product = Factory.build('product')
+
+    describe '#add', ->
       it 'can add products', ->
         basket.add product
         expect(basket._products[0].product).toEqual product
@@ -102,42 +82,45 @@ describe 'Module kassa.buys', ->
         basket.add product for num in [0..1] 
         expect(basket._products[0].amount).toEqual 2
 
+    describe '#remove', ->
       it 'can remove products', ->
         basket.add product
         basket.remove product
-        expect(basket._products.length).toBe 0
+        expect(basket.entries().length).toBe 0
       
       it 'removes only a single product, aka decrements the product amount', ->
         basket.add product for num in [0..2]
         basket.remove product
         expect(basket._products[0].amount).toBe 2
-
+  
+    describe '#removeAll', ->
       it 'removes all entries of a single product on removeAll(product)', ->
-        basket.add product for num in [0..2]
+        basket.add product for i in [0..2]
         basket.removeAll product
-        expect(basket._products.indexOf(product)).toBe -1
+        expect(basket.hasProduct(product)).toBe false
       
       it 'removes all products on removeAll()', ->
-        basket.add product
-        basket.add Factory.build 'product'
+        basket.add Factory.build 'product' for i in [0..2]
         basket.removeAll()
         expect(basket._products.length).toBe 0
-
+    
+    describe '#clear', ->
       it 'removes all products on clear',->
-        basket.add product
         basket.clear()
         expect(basket._products.length).toBe 0
-      
+    
+    describe '#hasProduct', ->
       it 'should tell whether a product is in basket or not', ->
         basket.add product
         expect(basket.hasProduct(product)).toBe true
-      
+    
+    describe '#productCount', ->
       it 'should tell the total of products in basket', ->
         basket.add product for i in [0..2]
         basket.add Factory.build 'product'
         expect(basket.productCount()).toBe 4
 
-    describe 'setting and removing buyer', ->
+    describe '#setBuyer', ->
       it 'can set the buyer', ->
         expect(angular.isDefined(basket.buyer)).toBe false
         basket.setBuyer Factory.build 'user'
@@ -147,7 +130,8 @@ describe 'Module kassa.buys', ->
         user = Factory.build 'user'
         basket.setBuyer user
         expect(basket.isBuyer(user)).toBe true
-      
+
+    describe '#clearBuyer', ->
       it 'can clear the buyer', ()->
         user = Factory.build 'user'
         basket.setBuyer user
@@ -156,10 +140,6 @@ describe 'Module kassa.buys', ->
         expect(basket.hasBuyer()).toBe false
         
     describe 'valid basket', ->
-      product = undefined
-      beforeEach ->
-        product = Factory.build 'product'
-
       it 'all products should have amounts >= 1', ->
         basket.add product
         expect(basket.hasValidProducts()).toBe true
@@ -172,7 +152,7 @@ describe 'Module kassa.buys', ->
         expect(basket.hasValidBuyer()).toBe true
       
       it 'all products should have amounts <= their stock', ->
-        products.stockOf.andReturn(100)
+        e.material.stock = e.amount for e in product.materials
         basket.add product
         expect(basket.hasValidProducts()).toBe true
         
@@ -182,17 +162,13 @@ describe 'Module kassa.buys', ->
         expect(basket.valid()).toBe true
 
     describe 'invalid basket', ->
-      product = undefined
-      beforeEach ->
-        product = Factory.build 'product'
-
       it 'has product(s) with amount < 1', ()->
         basket.add product
         basket._products[0].amount = 0
         expect(basket.hasValidProducts()).toBe false
 
       it 'has more product(s) than in stock', ()->
-        products.stockOf.andReturn 0
+        e.material.stock = e.amount-=1 for e in product.materials
         basket.add product
         expect(basket.hasValidProducts()).toBe false
 
@@ -207,3 +183,53 @@ describe 'Module kassa.buys', ->
       it 'cannot be bought when buyer is invalid', ()->
         spyOn(basket,'hasValidBuyer').andReturn false
         expect(basket.valid()).toBe false
+
+  describe 'Buys', ->
+    buys = undefined
+    $httpBackend = undefined
+    users = undefined
+    materials = undefined
+    beforeEach ->
+      module 'kassa.buys'
+      inject ($injector)->
+        buys = $injector.get 'Buys'
+        $httpBackend = $injector.get '$httpBackend'
+        users = $injector.get 'Users'
+        materials = $injector.get 'Materials'
+
+    describe '#create', ->
+      user = Factory.build 'user'
+      fakeResponse =
+        object: Factory.build('buy', {buyer: user})
+        materials: []
+        buyer: user
+
+      it 'can be created when valid', ->
+        $httpBackend.expectPOST('/buys').respond 201, fakeResponse
+        s = jasmine.createSpy()
+        buys.create(Factory.build 'buy').then s
+        $httpBackend.flush()
+        expect(s).toHaveBeenCalledWith(fakeResponse.object)
+
+      it 'calls the Materials-service to update the changed materials', ->
+        $httpBackend.expectPOST('/buys').respond 201, fakeResponse
+        spyOn(materials, 'updateChanged').andCallThrough()
+        buys.create Factory.build 'buy'
+        $httpBackend.flush()
+        expect(materials.updateChanged).toHaveBeenCalledWith(fakeResponse.materials)
+
+      it 'calls the Users-service to update the changed user', ->
+        $httpBackend.expectPOST('/buys').respond 201, fakeResponse
+        spyOn(users, 'updateChanged').andCallThrough()
+        buys.create Factory.build 'buy'
+        $httpBackend.flush()
+        expect(users.updateChanged).toHaveBeenCalledWith(fakeResponse.buyer)
+
+      it 'calls the failure callback when the buy is invalid', ->
+        $httpBackend.expectPOST('/buys').respond 422, {}
+        f = jasmine.createSpy()
+        s = ->
+        buys.create(Factory.build 'buy').then s,f
+        $httpBackend.flush()
+        expect(f).toHaveBeenCalled()
+        
