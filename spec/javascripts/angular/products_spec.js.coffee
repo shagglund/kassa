@@ -25,13 +25,13 @@ describe 'Products module', ->
       it 'returns the price of the material * amount required for making the product', ->
         m = Factory.build 'material', {price: 1}
         product =Factory.build 'product', {materials: [{material: m, amount: 2}]}
-        expect(service.priceOf(product)).toBe 2
+        expect(service.priceOf(product)).toBe (2).toFixed(2)
 
       it 'returns the sum of the material prices * amounts required for making the product', ->
         m1 = Factory.build 'material', {price: 0.7}
         m2 = Factory.build 'material', {price: 1}
         product = Factory.build 'product', {materials: [{material: m1, amount:1}, {material: m2, amount:2}]}
-        expect(service.priceOf(product)).toBe 2.70
+        expect(service.priceOf(product)).toBe (2.70).toFixed(2)
         
     describe 'with valid product', ->
 
