@@ -1,4 +1,4 @@
-angular.module('Kassa.Session', [])
+angular.module('kassa.session', [])
   .service('Session', function($http){
     var Session = {
       pendingUnauthorizedRequests: [],
