@@ -1,37 +1,9 @@
-.container-fluid{'ng-app'=>"Kassa"}
-  .span12
-    .row-fluid
-      .span6.offset3
-        =image_tag asset_path(:logo)
-    .row-fluid
-      .span12{'ng-view'=>""}
-
-  %script{:type=>'text/ng-template', :id=>"/partials/login.html"}
-    .row-fluid
-      .span12
-        = render 'application/login'
-  %script{:type=>"text/ng-template", :id=>"/partials/buys.html"}
-    =render 'application/navigation'
-    .row-fluid
-      .span3=render 'users/buy_list'
-      .span4=render 'products/buy_list'
-      .span4.offset1=render 'buys/latest_list'
-
-:javascript
-  window.Kassa= window.Kassa || {};
-  window.Kassa.update = function(src, dest){
-    for(var prop in src){
-      if(src.hasOwnProperty(prop)){
-        dest[prop] = src[prop]
-      }
-    }
-  };
-  window.Kassa.prefixWithLocale = function(url){
-    return "/#{I18n.locale}" + (url.indexOf('/') === 0 ? url : '/' + url)
-  };
-  window.Kassa.productUnits= eval("#{escape_javascript(Product.units.to_json.html_safe)}")
-  window.Kassa.productGroups= eval("#{escape_javascript(Product.groups.to_json.html_safe)}")
-  window.Kassa.materialUnits= eval("#{escape_javascript(Material.units.to_json.html_safe)}")
-  window.Kassa.materialGroups= eval("#{escape_javascript(Material.groups.to_json.html_safe)}")
-
-= javascript_include_tag :application
+%script{:type=>'text/ng-template', :id=>"/partials/login.html"}
+  .row-fluid
+    .span12
+      = render 'login'
+%script{:type=>"text/ng-template", :id=>"/partials/buys.html"}
+  .row-fluid
+    .span3=render 'users/buy_list'
+    .span4=render 'products/buy_list'
+    .span4.offset1=render 'buys/latest_list'

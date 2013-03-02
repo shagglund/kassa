@@ -1,0 +1,5 @@
+%fieldset.span6.offset3
+  %legend= t('user.sign_in')
+  =form_for(resource, :as => resource_name, :url => session_path(resource_name), :class=>'form-horizontal') do |f|
+    =render 'login_fields'
+  = render "devise/shared/links"

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+%html
+  %head
+    %title Kassa
+  = stylesheet_link_tag "application", :media => "all"
+  = csrf_meta_tags 
+%body
+  -if signed_in?
+    .container-fluid{'ng-app'=>'kassa'}
+      .span12
+        .row-fluid
+          =render 'navigation'
+        .row-fluid
+          .span6.offset3
+            =image_tag asset_path :logo
+        .row-fluid
+          .span12{'ng-view'=>""}
+      =yield
+    = javascript_include_tag :application
+  -else
+    .container-fluid
+      .span12
+        .row-fluid
+          .span6.offset3
+            =image_tag asset_path :logo
+        .row-fluid
+          .span12
+            = yield

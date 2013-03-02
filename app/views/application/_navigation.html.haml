@@ -12,7 +12,5 @@
           %li{'ng-class'=>"{true:'active', false:''}[currentLocation('/users')]"}
             %a{:href=>'#/users'}= t('user.administration')
         %ul.nav.pull-right
-          %li=render 'basket/modal'
-          %li.divider-vertical
-          %li{'ng-show'=>"authenticated()", 'ng-controller'=>"SessionController"}
+          %li{'ng-init'=>'init()', 'ng-show'=>"authenticated()", 'ng-controller'=>"SessionController"}
             %a{'ng-click'=>"signOut()"}= t('actions.sign_out')
