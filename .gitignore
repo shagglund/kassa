@@ -23,4 +23,5 @@ Gemfile.lock
 #ignore the private configuration file
 /config/config.yml
 
-
+sqlite-jdbc-3.7.2.jar
+xerial-sqlite-license.txt
