@@ -29,16 +29,25 @@ angular.module('kassa.products', ['kassa.common', 'kassa.materials'])
           stock = amount if stock == -1 or stock > amount
       stock
 
-    _add: (products...)=>
-      for product in products
-        do (product)=>
-          entry.material = @materialService.findById entry.material for entry in product.materials
-          @collection.push product
-      return products
+    _addSingle: (product)=>
+      for entry in product.materials
+        do (entry)=>
+          unless angular.isObject entry.material
+            entry.material = @materialService.findById entry.material
+      super product
 
     _encode: (product)=>
-      product #TODO minimize and encode for rails
-    
+      prod =
+        id: product.id
+        description: product.description
+        name: product.name
+        unit: product.unit
+        group: product.group
+        materials_attributes: @_encodeMaterials product.materials
+
+    _encodeMaterials: (entries)=>
+      {amount: entry.amount, material: entry.material.id} for entry in entries
+
   new Products(Materials)
 ).controller('ProductsController', ($scope, Products, Basket)->
 

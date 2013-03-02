@@ -9,13 +9,25 @@ angular.module('kassa.common', ['ngResource'])
     entries: =>
       @collection
 
-    _add: (items...)=>
-      @collection.push item for item in items
+    findById: (id)=>
+      return item for item in @collection when item.id == id
 
-    _update: (item)=>
+    _add: (items...)=>
+      @_addSingle item for item in items
+
+    _addSingle: (item)=>
+      @collection.push item
+
+    _update: (items...)=>
+      @_updateSingle item for item in items
+
+    _updateSingle: (item)=>
       return @collection[i]=item for it, i in @collection when it.id == item.id
 
-    _remove: (item)=>
+    _remove: (items...)=>
+      @_removeSingle item for item in items
+
+    _removeSingle: (item)=>
       return @collection.splice i,1 for it, i in @collection when it.id == item.id
 
     _defer: (actionFunc, options)=>
@@ -26,24 +38,24 @@ angular.module('kassa.common', ['ngResource'])
     _encode: (item)=>
       item
     
-    _handleResponse: (action, response, responseHeaders)->
+    _handleRawResponse: (action, response, responseHeaders)->
       return
 
     _setupActionMethods: (actions)=>
       if angular.isDefined actions.index
-        @index = (options)=>
+        @index = (options={})=>
           deferred = @_defer @resource.index, options
           deferred.then (response, responseHeaders)=>
-            @_handleResponse 'index', response, responseHeaders
+            @_handleRawResponse 'index', response, responseHeaders
             @collection.length = 0
-            @_add response.collection
+            @_add response.collection...
             @collection
 
       if angular.isDefined actions.create
         @create = (item)=>
           deferred = @_defer @resource.create, @_encode item
           deferred.then (response, responseHeaders)=>
-            @_handleResponse 'create', response, responseHeaders
+            @_handleRawResponse 'create', response, responseHeaders
             @_add response.object
             response.object
 
@@ -51,7 +63,7 @@ angular.module('kassa.common', ['ngResource'])
         @update = (item)=>
           deferred = @_defer @resource.update, @_encode item
           deferred.then (response, responseHeaders)=>
-            @_handleResponse 'update', response, responseHeaders
+            @_handleRawResponse 'update', response, responseHeaders
             @_update item
             item
 
@@ -59,7 +71,7 @@ angular.module('kassa.common', ['ngResource'])
         @destroy = (item)=>
           deferred = @_defer @resource.destroy, {id: item.id}
           deferred.then (response, responseHeaders)=>
-            @_handleResponse 'destroy', response, responseHeaders
+            @_handleRawResponse 'destroy', response, responseHeaders
             @_remove item
             item
 )
