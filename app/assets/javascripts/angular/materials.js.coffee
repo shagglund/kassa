@@ -14,12 +14,8 @@ angular.module('kassa.materials', ['kassa.common'])
     constructor: ()->
       super '/materials/:id', options, actions
     
-    updateChanged: (material...)=>
-      @_update mat for mat in material
-      return
-
-   _encode: (material)=>
-      material
+    updateChanged: (materials...)=>
+      @_update materials...
 
   return new Materials()
 )
