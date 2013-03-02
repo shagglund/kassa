@@ -29,6 +29,9 @@ angular.module('kassa.products', ['kassa.common', 'kassa.materials'])
           stock = amount if stock == -1 or stock > amount
       stock
 
+    _handleRawResponse: (action, response, responseHeaders)=>
+      if action is 'index'
+        @materialService.updateChanged response.materials...
     _addSingle: (product)=>
       for entry in product.materials
         do (entry)=>
@@ -50,6 +53,6 @@ angular.module('kassa.products', ['kassa.common', 'kassa.materials'])
       {amount: entry.amount, material: entry.material.id} for entry in entries
 
   new Products(Materials)
-).controller('ProductsController', ($scope, Products, Basket)->
-
+).controller('ProductsController', ($scope, Products)->
+  $scope.products = Products
 )

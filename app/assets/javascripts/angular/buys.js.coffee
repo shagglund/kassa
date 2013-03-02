@@ -183,4 +183,18 @@ service('Buys', (BaseService, Materials, Users)->
   _stopEvent=($event)->
     $event.stopPropagation()
     $event.preventDefault()
+).controller('BuysProductsController', ($scope, Basket, Products)->
+  $scope.basket = Basket
+  $scope.products = Products
+  
+  $scope.entries = ->
+    (p for p in Products.entries() when Products.stockOf(p) > 0)
+
+  $scope.init = ->
+    unless Products.entries().length
+      Products.index()
+
+).controller('BuysUsersController', ($scope, Basket, Users)->
+  $scope.basket = Basket
+  $scope.users = Users
 )

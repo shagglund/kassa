@@ -26,13 +26,18 @@ describe 'Materials Module', ->
         
       it 'can update multiple materials from an array',inject (Materials)->
         materials = (Factory.build 'material' for i in [0..2])
-        Materials._add mat for mat in materials
-        for mat,i in materials
-          do (mat,i)->
-            copy = angular.copy mat
-            copy.price = mat.price += 1
-            materials[i] = copy
-        expect(Materials.collection[i].price).toBe materials[i].price for mat, i in Materials.collection
+        Materials._add materials...
+        copies = (angular.copy mat for mat in materials)
+        copy.price += 1 for copy in copies
+        Materials.updateChanged copies...
+        expect(mat.price).toBe copies[i].price for mat, i in Materials.entries()
+      
+      it 'adds missing materials to the collection', inject (Materials)->
+        materials = (Factory.build 'material' for i in [0..2])
+        Materials._add materials...
+        materials.push (Factory.build 'material')
+        Materials.updateChanged materials...
+        expect(Materials.entries().length).toBe materials.length
 
     describe 'BaseService inheritance', ->
       it 'is an instance of BaseService', inject (BaseService, Materials)->

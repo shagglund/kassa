@@ -19,7 +19,10 @@ angular.module('kassa.common', ['ngResource'])
       @collection.push item
 
     _update: (items...)=>
-      @_updateSingle item for item in items
+      for item in items
+        do (item)=>
+          unless @_updateSingle item
+            @_addSingle item
 
     _updateSingle: (item)=>
       return @collection[i]=item for it, i in @collection when it.id == item.id

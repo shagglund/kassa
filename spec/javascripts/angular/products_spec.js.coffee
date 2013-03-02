@@ -1,76 +1,97 @@
 describe 'Products module', -> 
+  beforeEach ->
+    module 'kassa.products'
+  
   describe 'Products service', ->
-    service = undefined
-    beforeEach ->
-      module 'kassa.products'
-      inject ($injector)->
-        service = $injector.get 'Products'
-
     describe '#stockOf', ->
-      it 'should return the materials stock / amount required for the product', ->
+      it 'should return the materials stock / amount required for the product', inject (Products)->
         m1 = Factory.build 'material', {stock:1}
         product = Factory.build 'product', {materials:  [{material: m1, amount:1}]}
-        expect(service.stockOf product).toBe 1
+        expect(Products.stockOf product).toBe 1
 
-      it 'should return the smallest stock from multiple materials', ->
+      it 'should return the smallest stock from multiple materials', inject (Products)->
         m1 = Factory.build 'material', {stock: 3}
         m2 = Factory.build 'material', {stock: 4}
         product = Factory.build 'product', {materials: [{material: m1, amount: 1}, {material: m2, amount:2}]}
-        expect(service.stockOf product).toBe 2
+        expect(Products.stockOf product).toBe 2
 
     describe '#priceOf', ->
-      it 'returns the price of the material * amount required for making the product', ->
+      it 'returns the price of the material * amount required for making the product', inject (Products)->
         m = Factory.build 'material', {price: 1}
         product =Factory.build 'product', {materials: [{material: m, amount: 2}]}
-        expect(service.priceOf product).toBeCloseTo 2, 0.001
+        expect(Products.priceOf product).toBeCloseTo 2, 0.001
 
-      it 'returns the sum of the material prices * amounts required for making the product', ->
+      it 'returns the sum of the material prices * amounts required for making the product', inject (Products)->
         m1 = Factory.build 'material', {price: 0.7}
         m2 = Factory.build 'material', {price: 1}
         product = Factory.build 'product', {materials: [{material: m1, amount:1}, {material: m2, amount:2}]}
-        expect(service.priceOf product).toBeCloseTo 2.7, 0.001
+        expect(Products.priceOf product).toBeCloseTo 2.7, 0.001
+
+    describe '#_handleRawResponse', ->
+      it 'should update materials to materials service on index load', inject (Materials, Products)->
+        response =
+          collection:[]
+          materials: (Factory.build 'material' for i in [0..2])
+        spy = spyOn(Materials, 'updateChanged')
+        Products._handleRawResponse 'index', response
+        expect(spy).toHaveBeenCalledWith response.materials...
 
     describe '#_addSingle',->
-      it 'binds the materials by ids using Materials service', ->
+      it 'binds the materials by ids using Materials service', inject (Products)->
         m = Factory.build 'material'
         product = Factory.build 'product', {materials: [{material: m.id, amount:1}]}
-        spy = spyOn(service.materialService, 'findById').andReturn m
-        service._addSingle product
+        spy = spyOn(Products.materialService, 'findById').andReturn m
+        Products._addSingle product
         expect(product.materials[0].material).toBe m
         expect(spy).toHaveBeenCalledWith m.id
 
-      it 'doesn\'t try to bind materials that are already bound', ->
+      it 'doesn\'t try to bind materials that are already bound', inject (Products)->
         product = Factory.build 'product'
-        spy = spyOn(service.materialService, 'findById')
-        service._addSingle product
+        spy = spyOn(Products.materialService, 'findById')
+        Products._addSingle product
         expect(spy).not.toHaveBeenCalled()
 
-      it 'adds the product to the collection', ->
+      it 'adds the product to the collection', inject (Products)->
         product = Factory.build 'product'
-        service._addSingle product
-        expect(service.entries()).toContain(product)
+        Products._addSingle product
+        expect(Products.entries()).toContain(product)
 
     describe '#_encode', ->
-      it 'returns a rails record compatible object', ->
+      it 'returns a rails record compatible object', inject (Products)->
         product = Factory.build 'product'
-        encoded = service._encode product
+        encoded = Products._encode product
         allowed = ['name','id','description','unit','group','materials_attributes']
         expect(encoded.id).toBe product.id
         expect(encoded.product).toBeDefined()
         expect(allowed).toContain(prop) for prop of encoded.product when encoded.product.hasOwnProperty(prop)
 
     describe 'BaseService inheritance', ->
-      it 'is an instance of BaseService', inject (BaseService)->
-        expect(service instanceof BaseService).toBeTruthy()
+      it 'is an instance of BaseService', inject (BaseService, Products)->
+        expect(Products instanceof BaseService).toBeTruthy()
 
-      it 'has an #index method from BaseService', ->
-        expect(service.index).toBeDefined()
+      it 'has an #index method from BaseService', inject (Products)->
+        expect(Products.index).toBeDefined()
 
-      it 'has a #create method from BaseService', ->
-        expect(service.create).toBeDefined()
+      it 'has a #create method from BaseService', inject (Products)->
+        expect(Products.create).toBeDefined()
 
-      it 'has a #update method from BaseService', ->
-        expect(service.update).toBeDefined()
+      it 'has a #update method from BaseService', inject (Products)->
+        expect(Products.update).toBeDefined()
 
-      it 'has a #destroy method from BaseService', ->
-        expect(service.destroy).toBeDefined()
+      it 'has a #destroy method from BaseService', inject (Products)->
+        expect(Products.destroy).toBeDefined()
+  
+  describe 'Controllers', ->
+    scope = undefined
+    beforeEach ->
+      inject ($rootScope)->
+        scope = $rootScope.$new()
+
+    describe 'ProductsController', ->
+      controller = undefined
+      beforeEach inject ($controller)->
+        controller = $controller 'ProductsController', {$scope: scope}
+
+      it 'should bind products service to the scope', inject (Products)->
+        expect(scope.products).toBe Products
+    

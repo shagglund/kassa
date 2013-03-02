@@ -4,19 +4,58 @@ describe 'Module kassa.buys', ->
 
   describe 'Controllers', ->
     scope = undefined
+    controller = undefined
     beforeEach inject ($rootScope)->
       scope = $rootScope.$new()
 
     describe 'BuysController', ->
-      controller = undefined
       beforeEach inject ($controller)->
         controller = $controller 'BuysController', {$scope: scope}
       
       it 'should bind Buys-service to the scope ', inject (Buys)->
         expect(scope.buys).toBe(Buys)
 
+    describe 'BuysProductsController', ->
+      beforeEach inject ($controller)->
+        controller = $controller 'BuysProductsController', {$scope: scope}
+
+      it 'should bind basket to the scope', inject (Basket)->
+        expect(scope.basket).toBe Basket
+
+      it 'should bind products to the scope', inject (Products)->
+        expect(scope.products).toBe Products
+
+      describe '#entries', ->
+        it 'returns a list of buyable products', inject (Products)->
+          Products._add Factory.build 'product'
+          expect(scope.entries().length).toBe 1
+          spyOn(Products, 'stockOf').andReturn 0
+          expect(scope.entries().length).toBe 0
+      
+      describe '#init', ->
+        it 'fetches from server if there are no objects', inject (Products)->
+          spy = spyOn(Products, 'index')
+          scope.init()
+          expect(spy).toHaveBeenCalled()
+
+        it 'doesn\'t fetch the objects if already fetched', inject (Products)->
+          products = (Factory.build 'product' for i in [0..2])
+          spy = spyOn(Products, 'index')
+          spyOn(Products, 'entries').andReturn products
+          scope.init()
+          expect(spy).not.toHaveBeenCalled()
+
+    describe 'BuysUsersController', ->
+      beforeEach inject ($controller)->
+        controller = $controller 'BuysUsersController', {$scope: scope}
+
+      it 'should bind basket to the scope', inject (Basket)->
+        expect(scope.basket).toBe Basket
+
+      it 'should bind users to the scope', inject (Users)->
+        expect(scope.users).toBe Users
+      
     describe 'BasketController', ->
-      controller = undefined
       beforeEach inject ($controller)->
         controller = $controller 'BasketController', {$scope: scope}
 
