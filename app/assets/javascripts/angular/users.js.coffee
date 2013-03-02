@@ -16,6 +16,9 @@ angular.module('kassa.users', ['kassa.common'])
     updateChanged: (users...)=>
       @_update users...
 
+    findByUsername: (username)=>
+      return user for user in @entries() when user.username == username
+
     _encode: (user)->
       retVal =
         id: user.id,

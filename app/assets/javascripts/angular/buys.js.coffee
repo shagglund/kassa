@@ -17,7 +17,7 @@ service('Buys', (BaseService, Materials, Users)->
         Date.parse(second.created_at) - Date.parse(first.created_at)
       col[0..9]
 
-    _handleResponse: (action, response, responseHeaders)=>
+    _handleRawResponse: (action, response, responseHeaders)=>
       if action is 'create'
         @materialService.updateChanged response.materials
         @userService.updateChanged response.buyer
