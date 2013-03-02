@@ -52,9 +52,12 @@ describe 'Products module', ->
 
     describe '#_encode', ->
       it 'returns a rails record compatible object', ->
-        obj = service._encode Factory.build 'product'
+        product = Factory.build 'product'
+        encoded = service._encode product
         allowed = ['name','id','description','unit','group','materials_attributes']
-        expect(allowed).toContain(prop) for prop of obj when obj.hasOwnProperty(prop)
+        expect(encoded.id).toBe product.id
+        expect(encoded.product).toBeDefined()
+        expect(allowed).toContain(prop) for prop of encoded.product when encoded.product.hasOwnProperty(prop)
 
     describe 'BaseService inheritance', ->
       it 'is an instance of BaseService', inject (BaseService)->

@@ -39,11 +39,12 @@ angular.module('kassa.products', ['kassa.common', 'kassa.materials'])
     _encode: (product)=>
       prod =
         id: product.id
-        description: product.description
-        name: product.name
-        unit: product.unit
-        group: product.group
-        materials_attributes: @_encodeMaterials product.materials
+        product:
+          description: product.description
+          name: product.name
+          unit: product.unit
+          group: product.group
+          materials_attributes: @_encodeMaterials product.materials
 
     _encodeMaterials: (entries)=>
       {amount: entry.amount, material: entry.material.id} for entry in entries

@@ -13,17 +13,18 @@ angular.module('kassa.users', ['kassa.common'])
     constructor: ->
       super '/users/:id', options, actions
 
-    updateChanged: (user)=>
-      @_update user
+    updateChanged: (users...)=>
+      @_update users...
 
     _encode: (user)->
-      r =
+      retVal =
         id: user.id,
-        first_name: user.first_name,
-        last_name: user.last_name,
-        email: user.email,
-        username: user.username,
-        balance: user.balance
+        user:
+          first_name: user.first_name,
+          last_name: user.last_name,
+          email: user.email,
+          username: user.username,
+          balance: user.balance
 
   new Users()
 ).controller('UsersController', ($scope, Users)->
