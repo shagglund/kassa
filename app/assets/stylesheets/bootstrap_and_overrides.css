@@ -5,3 +5,17 @@ Use Font Awesome icons (default)
 To use Glyphicons sprites instead of Font Awesome, replace with "require twitter-bootstrap-static/sprites"
 =require twitter-bootstrap-static/fontawesome
 */
+
+.well-mini{
+  padding:2px 10px;
+  margin-bottom:5px;
+}
+.clickable{
+  cursor: pointer;
+}
+.scrollable{
+  overflow: scroll;
+}
+.selected-buyer{
+  background-color:#CCFECC;
+}

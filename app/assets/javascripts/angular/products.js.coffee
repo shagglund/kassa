@@ -55,4 +55,11 @@ angular.module('kassa.products', ['kassa.common', 'kassa.materials'])
   new Products(Materials)
 ).controller('ProductsController', ($scope, Products)->
   $scope.products = Products
+
+  $scope.entries = ()->
+    Products.entries()
+
+  $scope.init = ()->
+    unless Products.entries().length > 0
+      Products.index()
 )

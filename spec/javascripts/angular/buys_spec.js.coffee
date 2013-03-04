@@ -15,6 +15,24 @@ describe 'Module kassa.buys', ->
       it 'should bind Buys-service to the scope ', inject (Buys)->
         expect(scope.buys).toBe(Buys)
 
+      describe '#init', ->
+        it 'fetches from server if there are no objects', inject (Buys)->
+          spy = spyOn(Buys, 'index')
+          scope.init()
+          expect(spy).toHaveBeenCalled()
+
+        it 'doesn\'t fetch the objects if already fetched', inject (Buys)->
+          buys = (Factory.build 'buy' for i in [0..2])
+          spy = spyOn(Buys, 'index')
+          spyOn(Buys, 'entries').andReturn buys
+          scope.init()
+          expect(spy).not.toHaveBeenCalled()
+      
+      describe '#gravatarUrl', ->
+        it 'returns an gravatar url from email with size 16 and mystery man default', ->
+          url = Gravtastic('email@example.com', {default: 'mm', size: 16})
+          expect(scope.gravatarUrl('email@example.com')).toBe url
+
     describe 'BuysProductsController', ->
       beforeEach inject ($controller)->
         controller = $controller 'BuysProductsController', {$scope: scope}
@@ -26,9 +44,12 @@ describe 'Module kassa.buys', ->
         expect(scope.products).toBe Products
 
       describe '#entries', ->
-        it 'returns a list of buyable products', inject (Products)->
+        it 'returns a list of products', inject (Products)->
           Products._add Factory.build 'product'
           expect(scope.entries().length).toBe 1
+          
+        it 'doesn\'t return products not in stock', inject (Products)->
+          Products._add Factory.build 'product'
           spyOn(Products, 'stockOf').andReturn 0
           expect(scope.entries().length).toBe 0
       
@@ -55,6 +76,28 @@ describe 'Module kassa.buys', ->
       it 'should bind users to the scope', inject (Users)->
         expect(scope.users).toBe Users
       
+      describe '#entries', ->
+        it 'returns all active users', inject (Users)->
+          Users._add Factory.build 'user'
+          expect(scope.entries().length).toBe Users.entries().length
+
+      describe '#init', ->
+        it 'fetches users from server if not fetched', inject (Users)->
+          spy = spyOn Users, 'index'
+          scope.init()
+          expect(spy).toHaveBeenCalled()
+
+        it 'doesn\'t fetch users from server if already fetched', inject (Users)->
+          spyOn(Users, 'entries').andReturn (Factory.build 'user' for i in [0..2])
+          spy = spyOn Users, 'index'
+          scope.init()
+          expect(spy).not.toHaveBeenCalled()
+
+      describe '#gravatarUrl', ->
+        it 'returns a size 16 gravatar url with mystery man default', ->
+          url = Gravtastic 'email@example.com', {default:'mm', size:16}
+          expect(scope.gravatarUrl('email@example.com')).toBe url
+
     describe 'BasketController', ->
       beforeEach inject ($controller)->
         controller = $controller 'BasketController', {$scope: scope}
@@ -83,7 +126,7 @@ describe 'Module kassa.buys', ->
 
     it 'should keep a list of the products in basket', inject (Basket)->
       Basket.add Factory.build 'product'
-      expect(Basket.entries().length).toBe 1
+      expect(Basket.products().length).toBe 1
 
     describe '#add', ->
       it 'can add products', inject (Basket)->
@@ -98,7 +141,7 @@ describe 'Module kassa.buys', ->
       it 'can remove products', inject (Basket)->
         Basket.add product
         Basket.remove product
-        expect(Basket.entries().length).toBe 0
+        expect(Basket.products().length).toBe 0
       
       it 'removes only a single product, aka decrements the product amount', inject (Basket)->
         Basket.add product for num in [0..2]
@@ -171,7 +214,7 @@ describe 'Module kassa.buys', ->
       it 'can be bought', inject (Basket)->
         Basket.add product
         Basket.setBuyer Factory.build 'user'
-        expect(Basket.valid()).toBe true
+        expect(Basket.isValid()).toBe true
 
     describe 'invalid basket', ->
       it 'has product(s) with amount < 1', inject (Basket)->
@@ -190,11 +233,11 @@ describe 'Module kassa.buys', ->
       
       it 'cannot be bought when products are invalid', inject (Basket)->
         spyOn(Basket,'hasValidProducts').andReturn false
-        expect(Basket.valid()).toBe false
+        expect(Basket.isValid()).toBe false
 
       it 'cannot be bought when buyer is invalid', inject (Basket)->
         spyOn(Basket,'hasValidBuyer').andReturn false
-        expect(Basket.valid()).toBe false
+        expect(Basket.isValid()).toBe false
 
   describe 'Buys', ->
     describe '#create', ->

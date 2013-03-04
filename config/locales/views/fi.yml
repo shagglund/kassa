@@ -16,15 +16,18 @@ fi:
       by_stock: 'Järjestä varaston mukaan'
       by_price: 'Järjestä hinnan mukaan'
   basket:
+    product:
+      add_to_list: "Lisää tuotteita ostoskoriin listasta"
     add:
       product: "Lisää tuote"
       product_to_basket: "Lisää tuote ostoskoriin"
-      products: "Lisää tuotteita ostoskoriin listasta."
     title: "Ostoskori"
     buyer:
       select: "Aseta ostajaksi"
       not_selected: "Valitse ostaja"
+      select_from_list: 'Valitse ostaja listasta'
     show_contents: "Näytä sisältö"
+    total: 'Yhteensä:'
   buy:
     latest: "Viimeisimmät ostot"
     success: 'Osto onnistui'

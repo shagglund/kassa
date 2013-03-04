@@ -6,5 +6,5 @@
         'ng-change'=>"filter(#{model}s.collection, '#{field}', #{model}SearchStr)",
         'ng-init'=>"filter(#{model}s.collection, '#{field}', '')",
         :placeholder => t("search.#{model}.by_#{field}")}
-      %button.btn.btn-danger{'ng-click'=>"filter(#{model}s.collection, '#{field}', '');#{model}SearchStr=''"}
+      %button.btn.btn-danger{'ng-click'=>"filter(#{model}s.entries(), '#{field}', '');#{model}SearchStr=''"}
         %i.icon-remove

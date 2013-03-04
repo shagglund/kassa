@@ -1,17 +1,12 @@
-%fieldset.span12
-  %legend=t('buy.latest')
-  .row-fluid
-    .span12
-      %table.table.table-striped.table-hover.table-condensed
-        %thead
-          %tr
-            %th=t('active_record.attributes.buy.buy_time')
-            %th=t('active_record.attributes.buy.buyer')
-            %th=t('active_record.attributes.buy.products.other')
-        %tbody
-          %tr{'ng-repeat'=> "buy in buys.latest()"}
-            %td.span5="{{buy.created_at | date:'medium'}}" #for intellij to not whine about formats
-            %td.span2 {{buy.buyer.username}}
-            %td.span5
-              %div{'ng-repeat'=> 'entry in buy.products'}
-                {{entry.amount}} {{entry.product.name}}
+.span12{'ng-controller'=>'BuysController', 'ng-init'=>'init()'}
+  %h3=t('buy.latest')
+  .row-fluid{'ng-repeat'=> "buy in buys.latest()"}
+    %small.span4.muted
+      {{buy.created_at | date:'medium'}}
+    .span3
+      %img{'ng-src'=>'{{gravatarUrl(buy.buyer.email)}}'}
+      %a{:href => '#/users/{{buy.buyer.id}}'} {{buy.buyer.username}}
+    .span5
+      %a{:href=>'#/buys/{{buy.id}}',
+        'ng-repeat'=> 'entry in buy.products'}
+        {{entry.amount}} {{entry.product.name}}

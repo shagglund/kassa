@@ -59,6 +59,7 @@ fi:
         password: "Salasana"
         email: "Sähköposti"
         remember_me: "Muista minut"
+        time_of_last_buy: "Viimeisin osto"
       buy:
         buyer: "Ostaja"
         buy_time: 'Oston ajankohta'
@@ -69,12 +70,8 @@ fi:
       buy_entry:
         amount: "Määrä"
     errors:
-      product:
-
-      user:
-        not_found: "Käyttäjää ei löytynyt"
-      buy_entry:
-        amount_too_small: "Tuotetta on ostettava vähintään 1 kpl"
-      buy:
-        products:
-          out_of_stock: "Tuotetta ei ole riittävästi varastossa"
+      models:
+        buy:
+          attributes:
+            buyer_id:
+              blank: 'Ostaja puuttuu'

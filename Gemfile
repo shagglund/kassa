@@ -11,6 +11,7 @@ gem 'devise'
 gem 'squeel'
 gem 'haml-rails'
 gem 'active_model_serializers', :git => 'git://github.com/rails-api/active_model_serializers.git'
+gem 'gravtastic'
 
 # Gems used only for assets and not required
 # in production environments by default.

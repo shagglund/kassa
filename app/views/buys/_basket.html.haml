@@ -1,0 +1,38 @@
+%div{:modal=>'modal.isOpen()','ng-controller'=>'BasketController'}
+  .modal-header
+    %h3= t('basket.title')
+  .modal-body
+    .row-fluid
+      .span3.offset3
+        %h4=t('active_record.attributes.buy.buyer') 
+      .span3
+        %h4
+          %img{'ng-src'=>'{{gravatarUrl(basket.buyer.email, 24)}}'}
+          {{basket.buyer.username}}
+    .row-fluid{'ng-repeat'=>'entry in basket.products()'}
+      .span3.offset3
+        %strong {{entry.product.name}}
+      .span3
+        .btn-group
+          %button.btn.btn-primary.btn-mini{'ng-click'=>'basket.remove(entry.product)', 'ng-disabled'=>'basket.isMinBuyable(entry)'}
+            %i.icon-minus
+          %button.btn.btn-inverse.btn-mini{'disabled'=>'disabled'} 
+            {{entry.amount}}
+          %button.btn.btn-primary.btn-mini{'ng-click'=>'basket.add(entry.product)', 'ng-disabled'=>'basket.isMaxBuyable(entry)'}
+            %i.icon-plus
+          %button.btn.btn-danger.btn-mini{'ng-click'=>'basket.removeAll(entry.product)'}
+            %i.icon-trash
+      .span2
+        %strong {{basket.priceOf(entry) | currency}}
+    .row-fluid
+      .span2.offset7
+        %strong.pull-right= t('basket.total')
+      .span2
+        %strong {{basket.totalPrice() | currency}}
+  .modal-footer
+    .btn-group.pull-right
+      %button.btn.btn-primary{'ng-click'=>'modal.close()'}= t('actions.close')
+      %button.btn.btn-danger{'ng-disabled'=>"basket.productCount() == 0",
+        'ng-click'=>"clear()"}= t('actions.clear')
+      %button.btn.btn-success{'ng-disabled'=>"!basket.isValid()",
+        'ng-click'=>"buy()"}= t('actions.buy')

@@ -37,15 +37,12 @@ service('Buys', (BaseService, Materials, Users)->
   class Basket
     constructor: (@buyService, @productService)->
       @_products = []
-    
-    entries: ->
+
+    products: =>
       @_products
 
     setBuyer: (buyer)=>
-      if @buyer != buyer
-        @buyer = buyer
-      else
-        @clearBuyer()
+      @buyer = buyer
     
     getEntry: (product)->
       return entry for entry in @_products when entry.product == product
@@ -94,13 +91,14 @@ service('Buys', (BaseService, Materials, Users)->
     isBuyer: (user)=>
       @buyer == user
 
-    price: =>
+    totalPrice: =>
       price = 0.00
-      for entry in @_products
-        do (entry)->
-          price += @productService.priceOf(entry.product) * entry.amount
+      price += @priceOf(entry) for entry in @products()
       price
-    
+
+    priceOf: (entry)=>
+      entry.amount * @productService.priceOf(entry.product)
+      
     hasValidBuyer: =>
       @hasBuyer()
 
@@ -115,20 +113,26 @@ service('Buys', (BaseService, Materials, Users)->
       return true for entry in @_products when entry.product == product
       return false
 
-    valid: =>
+    isValid: =>
       @hasValidProducts() and @hasValidBuyer()
 
     buy: () =>
-      if @valid()
+      if @isValid()
         @buyService.create(@)
       else
         false
+
+    isMaxBuyable: (entry)=>
+      @productService.stockOf(entry.product) is entry.amount
+
+    isMinBuyable: (entry)->
+      entry.amount is 1
 
     _canBeBought: (entry)=>
       return @_enoughInStock(entry.product, entry.amount) and entry.amount > 0
     
     _remove: (product)=>
-      @_products.splice i for entry, i in @_products when entry.product == product
+      @_products.splice(i,1) for entry, i in @_products when entry.product == product
       
     _addNewProduct:(product, amount=1)=>
       @_products.push product: product, amount: amount
@@ -138,21 +142,40 @@ service('Buys', (BaseService, Materials, Users)->
       return unless entry
       if amount > 0 and @_enoughInStock product, entry.amount+amount
         entry.amount+=amount
-      else if amount < 0 and entry.amount + amount > 1
+      else if amount < 0 and entry.amount + amount >= 1
         entry.amount += amount
-      else
-        entry.amount = 1
 
     _enoughInStock: (product, amount)->
       @productService.stockOf(product) >= amount
 
   new Basket(Buys, Products)
 
+).service('BasketModal', (Basket)->
+  class BasketModal
+    constructor: ->
+      @_isOpen = false
+  
+    open: =>
+      @_isOpen = true
+    
+    close: =>
+      @_isOpen = false
+
+    isOpen: =>
+      @_isOpen
+
+  new BasketModal()
 ).controller('BuysController', ($scope, Buys)->
   $scope.buys = Buys
+  
+  $scope.init = ->
+    unless Buys.entries().length > 0
+      Buys.index()
 
-).controller('BasketController', ($scope, Basket, Users, Products)->
+).controller('BasketController', ($scope, Basket, Users, Products, BasketModal)->
+  errors = {}
   $scope.basket = Basket
+  $scope.modal = BasketModal
 
   $scope.maxBuyable= (product)->
     Products.stockOf(product)
@@ -162,39 +185,87 @@ service('Buys', (BaseService, Materials, Users)->
 
   $scope.setBuyerByName= (username)->
     Basket.buyer = Users.findByUsername username
-
-  $scope.openBasket= ->
-    $scope.basketShouldBeOpen = true
-
-  $scope.buyAndCloseBasket= ($event)=>
-    _stopEvent($event)
-    Basket.buy().then ()->
+  
+  $scope.buy= ()=>
+    success = ->
       Basket.clear()
-      $scope.closeBasket()
+      BasketModal.close()
+    failure=  (errorResponse)->
+      errors = errorResponse.data
+    Basket.buy().then success, failure
 
-  $scope.clearAndCloseBasket=($event)=>
+  $scope.clear=()=>
     Basket.clear()
-    $scope.closeBasket($event)
+    BasketModal.close()
 
-  $scope.closeBasket=($event)=>
-    $scope.basketShouldBeOpen = false
-    _stopEvent($event)
-
-  _stopEvent=($event)->
-    $event.stopPropagation()
-    $event.preventDefault()
-).controller('BuysProductsController', ($scope, Basket, Products)->
+).controller('BuysProductsController', ($scope, Basket, Products, BasketModal)->
+  filtered = []
+  DEFAULTS=
+    filterQuery: []
+    filterField: 'name'
   $scope.basket = Basket
   $scope.products = Products
+  $scope.filterField = DEFAULTS.filterField
+  $scope.filterQuery = DEFAULTS.filterQuery
+  $scope.modal = BasketModal
   
   $scope.entries = ->
-    (p for p in Products.entries() when Products.stockOf(p) > 0)
+    $scope.refilter() unless filtered.length > 0
+    filtered
+  
+  $scope.refilter = ->
+    filtered.length = 0
+    buyable = (p for p in Products.entries() when Products.stockOf(p) > 0)
+    filtered = $scope.filter(buyable, $scope.filterQuery, $scope.filterField)
+
+  $scope.clearFilter = ->
+    $scope.filterField = DEFAULTS.filterField
+    $scope.filterQuery = DEFAULTS.filterQuery
+    $scope.refilter()
 
   $scope.init = ->
     unless Products.entries().length
       Products.index()
 
-).controller('BuysUsersController', ($scope, Basket, Users)->
+).controller('BuysUsersController', ($scope, Basket, Users, BasketModal)->
+  filtered = []
+  DEFAULTS=
+    filterQuery: []
+    filterField: 'username'
   $scope.basket = Basket
   $scope.users = Users
+  $scope.filterField = DEFAULTS.filterField
+  $scope.filterQuery = DEFAULTS.filterQuery
+  $scope.modal = BasketModal
+    
+  $scope.entries = ->
+    $scope.refilter() unless filtered.length > 0
+    filtered
+  
+  $scope.refilter = ->
+    filtered.length = 0
+    filtered = $scope.filter(Users.entries(), $scope.filterQuery, $scope.filterField)
+
+  $scope.clearFilter = ->
+    $scope.filterField = DEFAULTS.filterField
+    $scope.filterQuery = DEFAULTS.filterQuery
+    $scope.refilter()
+
+  $scope.init = ->
+    unless Users.entries().length > 0
+      Users.index()
+
+  $scope.iconByBalance = (balance)->
+    if balance > 50
+      'icon-briefcase'
+    else if balance > 0
+      'icon-star'
+    else if balance > -25
+      'icon-thumbs-down'
+    else if balance > -50
+      'icon-warning-sign'
+    else if balance > -100
+      'icon-fire'
+    else
+      'icon-ban-circle'
 )

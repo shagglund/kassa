@@ -14,10 +14,11 @@ angular.module('kassa', ['kassa.buys', 'kassa.products', 'kassa.users', 'kassa.s
       controller: 'SessionController'
     $routeProvider.otherwise
       redirectTo: '/login'
-  ).run( ($rootScope, $http)->
+  ).run( ($http)->
     token = $("meta[name='csrf-token']").attr("content")
     if angular.isDefined token
       $http.defaults.headers.post['X-CSRF-Token'] = token
       $http.defaults.headers.put['X-CSRF-Token'] = token
       $http.defaults.headers.delete = {'X-CSRF-Token': token}
+
   )

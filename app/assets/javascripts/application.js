@@ -14,6 +14,7 @@
 //= require jquery_ujs
 //= require twitter/bootstrap
 //= require angular
+//= require gravtastic
 //= require angular-resource
 //= require angular-locale_fi
 //= require angular-ui
