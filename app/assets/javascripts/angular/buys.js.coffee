@@ -198,6 +198,9 @@ service('Buys', (BaseService, Materials, Users)->
     Basket.clear()
     BasketModal.close()
 
+  $scope.buyerBalanceAfterBuy = ->
+    Basket.buyer.balance - Basket.totalPrice()
+
 ).controller('BuysProductsController', ($scope, Basket, Products, BasketModal)->
   filtered = []
   DEFAULTS=

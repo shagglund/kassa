@@ -28,6 +28,7 @@ fi:
       select_from_list: 'Valitse ostaja listasta'
     show_contents: "Näytä sisältö"
     total: 'Yhteensä:'
+    balance_after_buy: 'Saldo oston jälkeen:'
   buy:
     latest: "Viimeisimmät ostot"
     success: 'Osto onnistui'

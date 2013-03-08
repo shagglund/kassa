@@ -29,6 +29,11 @@
         %strong.pull-right= t('basket.total')
       .span2
         %strong {{basket.totalPrice() | currency}}
+    .row-fluid
+      .span4.offset5
+        %strong.pull-right= t('basket.balance_after_buy')
+      .span2
+        %strong{'ng-class'=>'{true:"text-success", false:"text-error"}[buyerBalanceAfterBuy() >= 0]'} {{buyerBalanceAfterBuy() | currency}}
   .modal-footer
     .btn-group.pull-right
       %button.btn.btn-primary{'ng-click'=>'modal.close()'}= t('actions.close')
