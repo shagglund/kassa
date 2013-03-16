@@ -75,3 +75,8 @@ fi:
           attributes:
             buyer_id:
               blank: 'Ostaja puuttuu'
+        product:
+          attributes:
+            name:
+              taken: "Saman niminen tuote on jo olemassa"
+              blank: "Tuotteella on oltava yksilöllinen nimi"

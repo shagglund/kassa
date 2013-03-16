@@ -14,6 +14,9 @@ angular.module('kassa.products', ['kassa.common', 'kassa.materials'])
     constructor: (@materialService)->
       super '/products/:id', options, actions
 
+    first: =>
+      @collection[0]
+
     priceOf: (product)=>
       price = 0.00
       for entry in product.materials
@@ -62,4 +65,13 @@ angular.module('kassa.products', ['kassa.common', 'kassa.materials'])
   $scope.init = ()->
     unless Products.entries().length > 0
       Products.index()
+    
+  $scope.selectFirst = ->
+    $scope.currentProduct = Products.first()
+
+  $scope.select = (product)->
+    $scope.currentProduct = product
+
+  $scope.isSelected = (product)=>
+    $scope.currentProduct == product
 )

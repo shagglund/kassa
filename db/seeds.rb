@@ -18,7 +18,3 @@
 #                              :materials_attributes => [{amount: 1, material_id: material.id}]
 #  end
 #end
-
-user = User.find_by_username('tester')
-user.password= 'password'
-user.save!

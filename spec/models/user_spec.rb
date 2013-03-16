@@ -1,32 +1,28 @@
 require 'spec_helper'
 
 describe User do
-  context "#username"do
-    it "can't be null" do
-      user = FactoryGirl.build(:user, :username => nil)
-      user.should_not be_valid
-      user.should have(2).errors_on(:username)
-    end
-
-    it "must be between 3 and 16 characters long" do
-      user = FactoryGirl.build(:user, :username => "a"*2)
-      user.should_not be_valid
-      user.should have(1).error_on(:username)
-      user.username = "a"*17
-      user.should_not be_valid
-      user.should have(1).error_on(:username)
-    end
+  it {should validate_presence_of :username}
+  it "should validate uniqueness of username" do
+    FactoryGirl.create :user
+    should validate_uniqueness_of(:username)
   end
+  it {should ensure_length_of(:username).is_at_least(3).is_at_most(16)}
+  it {should allow_mass_assignment_of :username}
 
-  it "should have an email" do
-    user = FactoryGirl.build(:user, :email => nil)
-    user.should_not be_valid
-    user.should have(1).error_on(:email)
-  end
+  it {should validate_presence_of :email}
+  it {should allow_mass_assignment_of :email}
 
-  it "should have a password" do
-    user = FactoryGirl.build(:user, :password => nil)
-    user.should_not be_valid
-    user.should have(1).error_on(:password)
-  end
+  it {should validate_numericality_of :balance}
+  it {should ensure_inclusion_of(:balance).in_range(-1000..1000)}
+  it {should allow_mass_assignment_of :balance}
+
+  it {should validate_numericality_of(:buy_count)}
+  it {should ensure_inclusion_of(:buy_count).in_range(0..100000)}
+  it {should_not allow_mass_assignment_of :buy_count}
+
+  it {should validate_presence_of :password}
+  it {should_not allow_mass_assignment_of :password}
+  it {should_not allow_mass_assignment_of :password_confirmation}
+
+  it {should have_many :buys}
 end

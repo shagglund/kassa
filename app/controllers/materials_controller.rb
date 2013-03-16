@@ -1,44 +1,34 @@
-class MaterialsController < AuthenticationController
+class MaterialsController < ApplicationController
   respond_to :json
+  before_filter :find_material, only: [:show, :update, :destroy]
   def index
     @materials = Material.all
-    render json: @materials
+    respond_with @materials
   end
 
-  # GET /materials/1
-  # GET /materials/1.json
   def show
-    @material = Material.find(params[:id])
-    render json: @material
+    respond_with @material
   end
 
   # POST /materials
   # POST /materials.json
   def create
-    @material = Material.new(params[:material])
-    if @material.save
-      render json: @material, status: :created, location: @material
-    else
-      render json: @material.errors, status: :unprocessable_entity
-    end
+    @material = Material.create(params[:material])
+    respond_with @material
   end
 
-  # PUT /materials/1
-  # PUT /materials/1.json
   def update
-    @material = Material.find(params[:id])
-    if @material.update_attributes(params[:material])
-      head :no_content
-    else
-      render json: @material.errors, status: :unprocessable_entity
-    end
+    @material.update_attributes(params[:material])
+    respond_with @material  
   end
 
-  # DELETE /materials/1
-  # DELETE /materials/1.json
   def destroy
-    @material = Material.find(params[:id])
     @material.destroy
-    head :no_content
+    respond_with @material
+  end
+
+  private
+  def find_material
+    @material = Material.find params[:id]
   end
 end

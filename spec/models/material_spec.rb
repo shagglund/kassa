@@ -1,64 +1,27 @@
 require 'spec_helper'
 
 describe Material do
-  context "#name" do
-    it "should be required" do
-      material = FactoryGirl.build(:material, :name=>nil)
-      material.should_not be_valid
-      material.should have(1).error_on(:name)
-    end
+  it {should validate_presence_of :name }
+  it "should validate uniqueness of name" do
+    FactoryGirl.create :material
+    should validate_uniqueness_of :name
   end
-  context "#price" do
-    it "can't be null" do
-      material = FactoryGirl.build(:material, :price=>nil)
-      material.should_not be_valid
-      material.should have(2).errors_on(:price)
-    end
-    it "should be greater than or equal to 0" do
-      material = FactoryGirl.build(:material, :price=>-1)
-      material.should_not be_valid
-      material.should have(1).errors_on(:price)
-    end
+  it {should allow_mass_assignment_of :name}
 
-    it "can be decimal" do
-      material = FactoryGirl.build(:material, :price=> 0.5)
-      material.should be_valid
-    end
-  end
+  it {should validate_numericality_of :price}
+  it {should ensure_inclusion_of(:price).in_range(0..99)}
+  it {should allow_mass_assignment_of :price}
 
-  context "#stock" do
-    it "should be greater than or equal to 0" do
-      material = FactoryGirl.build(:material, :stock=>-1)
-      material.should_not be_valid
-      material.should have(1).errors_on(:stock)
-    end
+  it {should validate_numericality_of(:stock).only_integer}
+  it {should ensure_inclusion_of(:stock).in_range(0..9999)}
+  it {should allow_mass_assignment_of :stock}
 
-    it "should be an integer" do
-      material = FactoryGirl.build(:material, :stock=>1.5)
-      material.should_not be_valid
-      material.should have(1).errors_on(:stock)
-    end
+  it {should ensure_inclusion_of(:unit).in_array Material.units}
+  it {should allow_mass_assignment_of :unit}
 
-    it "can't be null" do
-      material = FactoryGirl.build(:material, :stock=>nil)
-      material.should_not be_valid
-      material.should have(2).errors_on(:stock)
-    end
-  end
-  context "#unit" do
-
-    it "should require a unit" do
-      material = FactoryGirl.build(:material, :unit=>nil)
-      material.should_not be_valid
-      material.should have(1).error_on(:unit)
-    end
-
-    it "should validate the units inclusion" do
-      material = FactoryGirl.build(:material, :unit=>"NO SUCH UNIT")
-      material.should_not be_valid
-      material.should have(1).error_on(:unit)
-      material.unit = FactoryGirl.build(:material).unit
-      material.should be_valid
-    end
-  end
+  it {should ensure_inclusion_of(:group).in_array Material.groups}
+  it {should allow_mass_assignment_of :group}
+  
+  it {should have_many :product_entries}
+  it {should have_many(:products).through :product_entries }
 end

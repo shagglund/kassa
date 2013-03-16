@@ -1,16 +1,16 @@
 class Material < ActiveRecord::Base
-  @@groups = %w(can shot food non_alcoholic )
-  @@units = %w(piece ml cl dl litre)
+  @@groups = [:can, :shot, :food, :other]
+  @@units = [:piece, :ml, :cl, :dl, :litre]
   cattr_reader :groups, :units
-  audited
 
-  attr_accessible :name, :price, :stock, :unit, :group , :action_by
+  attr_accessible :name, :price, :stock, :unit, :group
 
   has_many :product_entries
+  has_many :products, through: :product_entries
 
   validates :name, presence: true, uniqueness: true
-  validates :price, presence: true, numericality: {greater_than_or_equal_to: 0}
-  validates :stock, presence: true, numericality: {only_integer: true, greater_than_or_equal_to: 0}
-  validates :unit, presence: true, :inclusion => {:in => @@units}
-  validates :group, presence: true, :inclusion => {:in => @@groups}
+  validates :price, numericality: {only_integer: false}, inclusion: {in: 0..99}
+  validates :stock, numericality: {only_integer: true}, inclusion: {in: 0..9999}
+  validates :unit, inclusion: {in: @@units}
+  validates :group, inclusion: {in: @@groups}
 end

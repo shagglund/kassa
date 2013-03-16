@@ -1,30 +1,28 @@
 require 'spec_helper'
 
 describe BuyEntry do
-  it "should be linked to a buy" do
-    entry = FactoryGirl.build(:buy_entry, :buy => nil)
-    entry.should_not be_valid
-    entry.should have(1).error_on(:buy_id)
-  end
+  it {should belong_to :product}
+  it {should validate_presence_of :product}
+  it {should allow_mass_assignment_of :product}
 
-  it "should be linked to a product" do
-    entry = FactoryGirl.build(:buy_entry, :product => nil)
-    entry.should_not be_valid
-    entry.should have(1).error_on(:product_id)
-  end
+  it {should belong_to :buy}
+  it {should validate_presence_of :buy}
+  it {should allow_mass_assignment_of :buy}
 
-  it "should have an amount" do
-    entry = FactoryGirl.build(:buy_entry, :amount => nil)
-    entry.should_not be_valid
-    entry.should have(2).errors_on(:amount)
-  end
+  it {should validate_numericality_of(:amount).only_integer}
+  it {should ensure_inclusion_of(:amount).in_range(1..1000)}
+  it {should allow_mass_assignment_of :amount}
 
-  it "amount should be greater than 0" do
-    entry = FactoryGirl.build(:buy_entry, :amount => -1)
-    entry.should_not be_valid
-    entry.should have(1).error_on(:amount)
-    entry.amount = 0
-    entry.should_not be_valid
-    entry.should have(1).error_on(:amount)
+  subject { FactoryGirl.build :buy_entry }
+
+  context "#amount" do
+    it "should add an error to product if not enough in stock" do
+      zero_stock_on_first
+      subject.should_not be_valid
+      subject.should have(1).error_on(:product)
+    end
+    def zero_stock_on_first
+      subject.product.consists_of_materials.first.material.stock = 0
+    end
   end
 end

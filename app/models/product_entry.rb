@@ -1,15 +1,17 @@
 class ProductEntry < ActiveRecord::Base
-  audited
-
   belongs_to :product, :touch => true
   belongs_to :material
-  attr_accessible :amount, :material_id, :product_id
+  attr_accessible :amount, :material, :product
 
-  validates_presence_of :material_id
-  validates_presence_of :product_id, :on => :update
-  validates :amount, presence: true, numericality: {greater_than_or_equal_to: 1}
+  validates_presence_of :material
+  validates_presence_of :product
+  validates :amount, numericality: {only_integer: true}, inclusion: {in: 1..999}
 
   def stock
     material.stock / amount
+  end
+  
+  def price
+    material.price * amount
   end
 end

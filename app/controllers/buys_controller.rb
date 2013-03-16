@@ -1,27 +1,24 @@
-class BuysController < AuthenticationController
+class BuysController < ApplicationController
   respond_to :json
+  before_filter :find_buy, only: :show
   def index
     limit = params[:limit] || 20
     offset = params[:offset] || 0
-    @buys = Buy.latest(offset,limit)
-    render json: @buys
+    @buys = Buy.offset(offset).latest(limit).all
+    respond_with @buys
   end
 
-  # GET /buys/1
-  # GET /buys/1.json
   def show
-    @buy = Buy.find(params[:id])
-    render json: @buy
+    respond_with @buy
   end
 
-  # POST /buys
-  # POST /buys.json
   def create
-    @buy = Buy.new(params[:buy])
-    if @buy.save
-      render json: @buy, status: :created
-    else
-      render json: @buy.errors, status: :unprocessable_entity
-    end
+    @buy = Buy.create params[:buy]
+    respond_with @buy
+  end
+
+  private
+  def find_buy
+    @buy = Buy.find params[:id]
   end
 end

@@ -1,2 +1,7 @@
-.row-fluid{'ng-repeat'=>'product in entries()'}
-  .span5 {{product.name}}
+.tabbable.tabs-left
+  %ul.nav.nav-tabs{'ng-init' => 'selectFirst()'}
+    %li{'ng-repeat'=>'product in entries()',
+        'ng-class'=>'{true:"active", false:""}[isSelected(product)]'}
+      %a{'ng-click'=>'select(product)'} {{product.name}}
+  .tab-content
+    {{currentProduct.name}}

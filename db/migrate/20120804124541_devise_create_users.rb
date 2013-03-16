@@ -33,7 +33,7 @@ class DeviseCreateUsers < ActiveRecord::Migration
       ## Token authenticatable
       t.string :authentication_token
 
-      t.string :username
+      t.string :username, :unique => true
       t.decimal :balance, :null => false, :default => 0, :precision => 6, :scale => 2
       t.integer :buy_count, :default => 0
       t.boolean :admin, :default => false

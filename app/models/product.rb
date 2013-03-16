@@ -1,29 +1,35 @@
 class Product < ActiveRecord::Base
-  @@groups = %w(can drink shot food non_alcoholic )
-  @@units = %w(piece ml cl dl litre)
+  @@groups = [:can, :drink, :shot, :food, :non_alcoholic]
+  @@units = [:piece, :ml, :cl, :dl, :litre]
   cattr_reader :groups, :units
-  audited
 
-  attr_accessible :description, :name, :unit, :group, :materials_attributes
+  attr_accessible :description, :name, :unit, :group, :consists_of_materials_attributes
 
-  has_many :materials, :class_name => 'ProductEntry'
-  accepts_nested_attributes_for :materials, :allow_destroy => true
-  validates_associated :materials
-  validates_presence_of :materials
+  has_many :consists_of_materials, :class_name => 'ProductEntry'
+  has_many :materials, through: :consists_of_materials
+
+  accepts_nested_attributes_for :consists_of_materials, :allow_destroy => true
+  validates_associated :consists_of_materials
 
   validates :name, presence: true, uniqueness: true
-  validates :unit, presence: true, :inclusion => {:in => @@units}
-  validates :group, presence: true, :inclusion => {:in => @@groups}
+  validates :unit, :inclusion => {:in => @@units}
+  validates :group, :inclusion => {:in => @@groups}
+  validates :consists_of_materials, length: {minimum: 1}
+ 
+  def self.in_stock
+    sub = Product.joins{consists_of_materials.material}.where{consists_of_materials.amount > material.stock}
+    where{id.not_in(sub)}
+  end
 
   def stock
-    materials.min_by {|entry| entry.stock} .stock
+    material_least_in_stock.stock
+  end
+  
+  def material_least_in_stock
+    consists_of_materials.min_by {|entry| entry.stock}
   end
 
   def price
-    price = 0
-    materials.each do |entry|
-      price += entry.material.price * entry.amount
-    end
-    price
+    consists_of_materials.inject(0.0) {|price, entry| price + entry.price }
   end
 end
