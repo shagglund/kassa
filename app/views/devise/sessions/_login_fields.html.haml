@@ -1,18 +1,21 @@
 .control-group
-  = f.label :email, :class => 'control-label'
+  = form.label :email, :class => 'control-label'
   .controls
-    = f.email_field :email
+    = form.email_field :email
 .control-group
-  = f.label :password, :class => 'control-label'
+  = form.label :password, :class => 'control-label'
   .controls
-    = f.password_field :password 
+    = form.password_field :password 
 
 -if devise_mapping.rememberable?
   .control-group
     .controls
-      = f.check_box :remember_me
-      = f.label :remember_me
+      %label.checkbox
+        = form.check_box :remember_me
+        = t('activerecord.attributes.user.remember_me')
 
+-if flash[:alert]
+  %p.text-error= flash[:alert]
 .control-group
   %button.btn.btn-primary{:type=>'submit'}= t('user.sign_in')
 

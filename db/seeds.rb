@@ -18,3 +18,13 @@
 #                              :materials_attributes => [{amount: 1, material_id: material.id}]
 #  end
 #end
+
+user = User.find_by_email 'test@example.com'
+if user.nil?
+  user=User.new email: 'test@example.com', username:'tester'
+  user.password= 'password'
+  user.admin= true
+  user.staff= true
+  user.save!
+end
+
