@@ -1,23 +1,22 @@
-angular.
-module('kassa.buys', ['kassa.common','kassa.products', 'kassa.materials', 'kassa.users', 'ui.bootstrap.modal']).
+angular.module('kassa.buys', ['kassa.common','kassa.products', 'kassa.materials', 'kassa.users', 'ui.bootstrap.modal']).
 service('Buys', (BaseService, Materials, Users)->
-  options = {}
-  actions =
-    index:
-      method: 'GET'
-    create:
-      method: 'POST'
   class Buys extends BaseService
     constructor: (@materialService, @userService)->
+      options = {}
+      actions =
+        index:
+          method: 'GET'
+        create:
+          method: 'POST'
       super '/buys', options, actions
       
-    latest: ()=>
+    latest: ->
       col = @entries()
       col.sort (first, second)->
         Date.parse(second.created_at) - Date.parse(first.created_at)
       col[0..9]
 
-    _handleRawResponse: (action, response, responseHeaders)=>
+    _handleRawResponse: (action, response, responseHeaders)->
       if action is 'create'
         @materialService.updateChanged response.materials
         @userService.updateChanged response.buyer
@@ -38,106 +37,106 @@ service('Buys', (BaseService, Materials, Users)->
     constructor: (@buyService, @productService)->
       @_products = []
 
-    products: =>
+    products: ->
       @_products
 
-    setBuyer: (buyer)=>
+    setBuyer: (buyer)->
       @buyer = buyer
     
     getEntry: (product)->
       return entry for entry in @_products when entry.product == product
 
-    add: (product, amount=1) =>
+    add: (product, amount=1) ->
       return unless amount > 0
       if @hasProduct product
         @_changeAmount product, amount
       else
         @_addNewProduct product, amount
 
-    remove: (product, amount=1)=>
+    remove: (product, amount=1)->
       return unless amount > 0
       if @countOf(product) <= 1
         @_remove product
       else
         @_changeAmount product, -amount
 
-    removeAll: (product)=>
+    removeAll: (product)->
       if angular.isDefined product
         @_remove product
       else
         @_products.length = 0
     
-    countOf: (product)=>
+    countOf: (product)->
       p = @getEntry product
       if p then p.amount else 0
 
-    productCount: =>
+    productCount: ->
       count = 0
       for entry in @_products
         do (entry) ->
           count += entry.amount
       count
 
-    clear: =>
+    clear: ->
       @removeAll()
       @clearBuyer()
 
-    clearBuyer: =>
+    clearBuyer: ->
       @buyer = undefined
 
-    hasBuyer: ()=>
+    hasBuyer: ->
       angular.isDefined(@buyer)
 
-    isBuyer: (user)=>
+    isBuyer: (user)->
       @buyer == user
 
-    totalPrice: =>
+    totalPrice: ->
       price = 0.00
       price += @priceOf(entry) for entry in @products()
       price
 
-    priceOf: (entry)=>
+    priceOf: (entry)->
       entry.amount * @productService.priceOf(entry.product)
       
-    hasValidBuyer: =>
+    hasValidBuyer: ->
       @hasBuyer()
 
-    hasValidProducts: =>
+    hasValidProducts: ->
       return false for entry in @_products when !@_canBeBought(entry)
       @hasProducts()
 
-    hasProducts: =>
+    hasProducts: ->
       @_products.length > 0
     
-    hasProduct: (product) =>
+    hasProduct: (product) ->
       return true for entry in @_products when entry.product == product
       return false
 
-    isValid: =>
+    isValid: ->
       @hasValidProducts() and @hasValidBuyer()
 
-    buy: () =>
+    buy: () ->
       if @isValid()
         @buyService.create(@)
       else
         false
 
-    isMaxBuyable: (entry)=>
+    isMaxBuyable: (entry)->
       @productService.stockOf(entry.product) is entry.amount
 
     isMinBuyable: (entry)->
       entry.amount is 1
 
-    _canBeBought: (entry)=>
+    _canBeBought: (entry)->
       return @_enoughInStock(entry.product, entry.amount) and entry.amount > 0
     
-    _remove: (product)=>
+    _remove: (product)->
       @_products.splice(i,1) for entry, i in @_products when entry.product == product
       
-    _addNewProduct:(product, amount=1)=>
+    _addNewProduct:(product, amount=1)->
       @_products.push product: product, amount: amount
   
-    _changeAmount: (product, amount)=>
+    _changeAmount: (product, amount)->
       entry = @getEntry product
       return unless entry
       if amount > 0 and @_enoughInStock product, entry.amount+amount
@@ -155,13 +154,13 @@ service('Buys', (BaseService, Materials, Users)->
     constructor: ->
       @_isOpen = false
   
-    open: =>
+    open: ->
       @_isOpen = true
     
-    close: =>
+    close: ->
       @_isOpen = false
 
-    isOpen: =>
+    isOpen: ->
       @_isOpen
 
   new BasketModal()
@@ -186,7 +185,7 @@ service('Buys', (BaseService, Materials, Users)->
   $scope.setBuyerByName= (username)->
     Basket.buyer = Users.findByUsername username
   
-  $scope.buy= ()=>
+  $scope.buy= ->
     success = ->
       Basket.clear()
       BasketModal.close()
@@ -194,7 +193,7 @@ service('Buys', (BaseService, Materials, Users)->
       errors = errorResponse.data
     Basket.buy().then success, failure
 
-  $scope.clear=()=>
+  $scope.clear=->
     Basket.clear()
     BasketModal.close()
 

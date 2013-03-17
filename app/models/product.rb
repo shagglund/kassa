@@ -1,5 +1,5 @@
 class Product < ActiveRecord::Base
-  @@groups = [:can, :drink, :shot, :food, :non_alcoholic]
+  @@groups = [:beer, :long_drink, :cider, :drink, :shot, :food, :other]
   @@units = [:piece, :ml, :cl, :dl, :litre]
   cattr_reader :groups, :units
 
@@ -16,6 +16,12 @@ class Product < ActiveRecord::Base
   validates :group, :inclusion => {:in => @@groups}
   validates :consists_of_materials, length: {minimum: 1}
  
+  def self.localized_units
+    self.units.collect{|u| {unit: u, translation: I18n.t("activerecord.attributes.product.units.#{u}")}}
+  end
+  def self.localized_groups
+    self.groups.collect{|g| {group: g, translation: I18n.t("activerecord.attributes.product.groups.#{g}")}}
+  end
   def self.in_stock
     sub = Product.joins{consists_of_materials.material}.where{consists_of_materials.amount > material.stock}
     where{id.not_in(sub)}

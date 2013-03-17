@@ -1,30 +1,30 @@
 angular.module('kassa.products', ['kassa.common', 'kassa.materials'])
 .service('Products', (BaseService, Materials)->
-  options = {id: '@id'}
-  actions =
-    index:
-      method: 'GET'
-    create:
-      method: 'POST'
-    update:
-      method: 'PUT'
-    destroy:
-      method: 'DELETE'
-  class Products extends BaseService
+  class ProductService extends BaseService
     constructor: (@materialService)->
+      options = {id: '@id'}
+      actions =
+        index:
+          method: 'GET'
+        create:
+          method: 'POST'
+        update:
+          method: 'PUT'
+        destroy:
+          method: 'DELETE'
       super '/products/:id', options, actions
 
-    first: =>
+    first: ->
       @collection[0]
 
-    priceOf: (product)=>
+    priceOf: (product)->
       price = 0.00
       for entry in product.materials
         do (entry)->
           price += entry.material.price * entry.amount
       price.toFixed 2
 
-    stockOf: (product)=>
+    stockOf: (product)->
       stock = -1
       for entry in product.materials
         do (entry)->
@@ -32,30 +32,32 @@ angular.module('kassa.products', ['kassa.common', 'kassa.materials'])
           stock = amount if stock == -1 or stock > amount
       stock
 
-    _handleRawResponse: (action, response, responseHeaders)=>
+    _handleRawResponse: (action, response, responseHeaders)->
       if action is 'index'
         @materialService.updateChanged response.materials...
-    _addSingle: (product)=>
+
+    _addSingle: (product)->
       for entry in product.materials
         do (entry)=>
-          unless angular.isObject entry.material
+          if angular.isNumber entry.material
             entry.material = @materialService.findById entry.material
       super product
 
-    _encode: (product)=>
+    _encode: (product)->
       prod =
         id: product.id
         product:
+          id: product.id
           description: product.description
           name: product.name
           unit: product.unit
           group: product.group
-          materials_attributes: @_encodeMaterials product.materials
+          consists_of_materials_attributes: @_encodeMaterials product.materials
 
-    _encodeMaterials: (entries)=>
+    _encodeMaterials: (entries)->
       {amount: entry.amount, material: entry.material.id} for entry in entries
 
-  new Products(Materials)
+  new ProductService(Materials)
 ).controller('ProductsController', ($scope, Products)->
   $scope.products = Products
 
@@ -66,12 +68,15 @@ angular.module('kassa.products', ['kassa.common', 'kassa.materials'])
     unless Products.entries().length > 0
       Products.index()
     
-  $scope.selectFirst = ->
-    $scope.currentProduct = Products.first()
+  $scope.newProduct= ->
+    $scope.currentProduct = $scope.newProduct ={}
 
   $scope.select = (product)->
-    $scope.currentProduct = product
+    $scope.currentProduct = angular.copy(product)
 
-  $scope.isSelected = (product)=>
+  $scope.isSelected = (product)->
     $scope.currentProduct == product
+
+  $scope.isBeer= (product)->
+    product.group == 'beer'
 )

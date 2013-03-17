@@ -1,7 +1,11 @@
-describe 'Products module', -> 
+describe 'Products module', ->
+  context = {}
   beforeEach ->
     module 'kassa.products'
-  
+  afterEach ->
+    #hack so won't need to specify variables as undefined for coffeescript scoping
+    context = {}
+
   describe 'Products service', ->
     describe '#stockOf', ->
       it 'should return the materials stock / amount required for the product', inject (Products)->
@@ -57,13 +61,20 @@ describe 'Products module', ->
         expect(Products.entries()).toContain(product)
 
     describe '#_encode', ->
-      it 'returns a rails record compatible object', inject (Products)->
-        product = Factory.build 'product'
-        encoded = Products._encode product
-        allowed = ['name','id','description','unit','group','materials_attributes']
-        expect(encoded.id).toBe product.id
-        expect(encoded.product).toBeDefined()
-        expect(allowed).toContain(prop) for prop of encoded.product when encoded.product.hasOwnProperty(prop)
+      beforeEach inject (Products)->
+        context.product = Factory.build 'product'
+        console.log Products._encode
+        context.encoded = Products._encode context.product
+        context.allowed = ['name','id','description','unit','group','consists_of_materials_attributes']
+
+      it 'should add the id as encoded.id if present', inject (Products)->
+        expect(context.encoded.id).toBe context.product.id
+
+      it 'should add the product information in encoded.product for rails', inject (Products)->
+        expect(context.encoded.product).toBeDefined()
+
+      it 'should only encode changeable properties', inject (Products)->
+        expect(context.allowed).toContain(prop) for own prop of context.encoded.product
 
     describe 'BaseService inheritance', ->
       it 'is an instance of BaseService', inject (BaseService, Products)->

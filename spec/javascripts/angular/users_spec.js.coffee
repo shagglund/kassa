@@ -29,7 +29,7 @@ describe 'Module kassa.users', ->
 
     describe '#_encode', ->
       it 'returns an transformed object with only changeable data in rails format', inject (Users)->
-        allowed = ['first_name','last_name','email','username','balance']
+        allowed = ['id','first_name','last_name','email','username','balance']
         encoded = Users._encode user
         expect(encoded.id).toBe user.id
         expect(encoded.user).toBeDefined()
