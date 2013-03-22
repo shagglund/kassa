@@ -6,20 +6,17 @@ describe Product do
     should validate_uniqueness_of :name
   end
   it {should validate_presence_of :name}
-  it {should allow_mass_assignment_of :description}
-
-  it {should ensure_inclusion_of(:unit).in_array Product.units}
-  it {should allow_mass_assignment_of :unit}
 
   it {should ensure_inclusion_of(:group).in_array Product.groups}
-  it {should allow_mass_assignment_of :group}
+  it "should provide translation to the groups in a hash" do
+    Product.localized_groups.each_pair do |group, translation|
+      translation.should eq I18n.t("activerecord.attributes.product.groups.#{group}")
+    end
+  end
 
   it {should have_many :consists_of_materials}
-  it {should_not allow_mass_assignment_of :consists_of_materials}
 
   it {should have_many(:materials).through :consists_of_materials}
-  it {should_not allow_mass_assignment_of :materials}
-
 
   subject(:product){FactoryGirl.build :product_with_materials}
 

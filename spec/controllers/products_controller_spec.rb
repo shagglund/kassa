@@ -27,6 +27,13 @@ describe ProductsController do
       context "with invalid data" do
         include_examples "a create with invalid data"
       end
+      context "permitted attributes" do
+        include_examples "setup create request before each" 
+        it "should allow name, description, group and materials to be set" do
+          fake_params.should_receive(:permit).with(:name, :description, :group, consists_of_materials_attributes: [:id, :amount, :material_id, :_destroy])
+          post :create, format: :json
+        end
+      end
     end
     context "#PUT update" do
       context "with valid data" do
@@ -34,6 +41,13 @@ describe ProductsController do
       end
       context "with invalid data" do
         include_examples "an update with invalid data"
+      end
+      context "permitted attributes" do
+        include_examples "setup update request before each" 
+        it "should allow name, description, group and materials to be set" do
+          fake_params.should_receive(:permit).with(:name, :description, :group, consists_of_materials_attributes: [:id, :amount, :material_id, :_destroy])
+          put :update, format: :json, id: 1
+        end
       end
     end
     context "#DELETE destroy" do

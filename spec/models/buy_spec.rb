@@ -3,17 +3,11 @@ require 'spec_helper'
 describe Buy do
   subject { FactoryGirl.build :buy }
 
-  it {should validate_presence_of :buyer}
+  it {should validate_presence_of :buyer_id}
   it {should belong_to(:buyer).class_name 'User' }
-  it {should allow_mass_assignment_of :buyer}
 
   it {should have_many :consists_of_products}
   it {should have_many(:products).through :consists_of_products }
-
-  it "should have a price" do
-    subject.should be_valid
-    subject.price.should == subject.price
-  end
 
   context "#consists_of_products" do
     it "should have at least a single product" do

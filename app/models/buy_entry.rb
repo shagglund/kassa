@@ -1,10 +1,8 @@
 class BuyEntry < ActiveRecord::Base
   belongs_to :buy
   belongs_to :product
-  attr_accessible :amount, :product, :buy
 
-  validates :buy, presence: true
-  validates :product, presence: true
+  validates :product_id, presence: true
   validates :amount, numericality: {only_integer: true}, inclusion: {in: 1..1000}
   validate :error_if_not_in_stock
 

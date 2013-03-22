@@ -10,15 +10,13 @@ class MaterialsController < ApplicationController
     respond_with @material
   end
 
-  # POST /materials
-  # POST /materials.json
   def create
-    @material = Material.create(params[:material])
+    @material = Material.create material_params
     respond_with @material
   end
 
   def update
-    @material.update_attributes(params[:material])
+    @material.update_attributes material_params
     respond_with @material  
   end
 
@@ -30,5 +28,9 @@ class MaterialsController < ApplicationController
   private
   def find_material
     @material = Material.find params[:id]
+  end
+
+  def material_params
+    params.require(:material).permit(:unit, :group, :name, :price, :stock) 
   end
 end

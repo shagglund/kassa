@@ -10,8 +10,7 @@ FactoryGirl.define do
   end
 
   factory :product do
-    unit :cl
-    group :can
+    group "beer"
     description {Faker::Lorem.paragraph}
     name {Faker::Product.product}
     
@@ -23,8 +22,8 @@ FactoryGirl.define do
         product.consists_of_materials << list
       end
       
-      after :create do |p, e|
-        p.consists_of_materials.each {|m| m.save!}
+      after :create do |product|
+        product.consists_of_materials.each {|e| e.save!}
       end
     end
   end
@@ -36,8 +35,8 @@ FactoryGirl.define do
   end
 
   factory :material do
-    unit :cl
-    group :can
+    unit "piece"
+    group "beer"
     stock 24
     price 0.7
     name { Faker::Product.product_name }

@@ -20,6 +20,13 @@ describe MaterialsController do
       context "with invalid data" do
         include_examples "an update with invalid data"
       end
+      context "permitted attributes" do
+        include_examples "setup update request before each" 
+        it "should allow unit, group, name, price and stock to be set" do
+          fake_params.should_receive(:permit).with(:unit, :group, :name, :price, :stock)
+          put :update, format: :json, id: 1
+        end
+      end
     end
     describe "POST create" do
       context "with valid data" do
@@ -27,6 +34,13 @@ describe MaterialsController do
       end
       context "with invalid data" do
         include_examples "a create with invalid data"
+      end
+      context "permitted attributes" do
+        include_examples "setup create request before each" 
+        it "should allow unit, group, name, price and stock to be set" do
+          fake_params.should_receive(:permit).with(:unit, :group, :name, :price, :stock)
+          post :create, format: :json 
+        end
       end
     end
     describe "DELETE destroy" do

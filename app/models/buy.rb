@@ -6,9 +6,9 @@ class Buy < ActiveRecord::Base
   belongs_to :buyer, class_name: 'User'
   has_many :consists_of_products, class_name: 'BuyEntry'
   has_many :products, through: :consists_of_products
-  attr_accessible :consists_of_products, :buyer
+  accepts_nested_attributes_for :consists_of_products, allow_destroy: true
 
-  validates :buyer, presence: true
+  validates :buyer_id, presence: true
   validates :consists_of_products, length: {minimum: 1}
   validate :enough_products_in_stock
 
@@ -17,7 +17,7 @@ class Buy < ActiveRecord::Base
     consists_of_products.inject(0){|s, e| s + e.amount * e.product.price}
   end
   def product_count
-    consists_of_products.count
+    consists_of_products.length
   end
   def self.latest(limit=20)
     with_buyer_and_products.in_create_order.limit(limit)
@@ -43,7 +43,7 @@ class Buy < ActiveRecord::Base
   end
 
   def product_count_changed?
-    last_product_count != consists_of_products.count
+    last_product_count != consists_of_products.length
   end
 
   #ActiveRecord callbacks
@@ -52,7 +52,7 @@ class Buy < ActiveRecord::Base
   end
 
   def update_buyer
-    buyer.buy_count += product_count
+    buyer.buy_count += consists_of_products.inject(0) {|s, e| s + e.amount}
     buyer.balance -= price
     buyer.time_of_last_buy = DateTime.now
     buyer.save

@@ -1,9 +1,7 @@
 class Material < ActiveRecord::Base
-  @@groups = [:can, :shot, :food, :other]
-  @@units = [:piece, :ml, :cl, :dl, :litre]
+  @@groups = %w(beer long_drink cider shot other).freeze
+  @@units = %w(piece ml cl dl litre).freeze
   cattr_reader :groups, :units
-
-  attr_accessible :name, :price, :stock, :unit, :group
 
   has_many :product_entries
   has_many :products, through: :product_entries
@@ -13,4 +11,20 @@ class Material < ActiveRecord::Base
   validates :stock, numericality: {only_integer: true}, inclusion: {in: 0..9999}
   validates :unit, inclusion: {in: @@units}
   validates :group, inclusion: {in: @@groups}
+
+  def self.localized_units
+    as_hash_with_internationalization "unit", units
+  end
+  def self.localized_groups
+    as_hash_with_internationalization "group", groups
+  end
+
+  private
+  def self.as_hash_with_internationalization(type, values)
+    hash = {}
+    values.each do |value|
+      hash[value] = I18n.t("activerecord.attributes.material.#{type}s.#{value}")
+    end
+    hash
+  end
 end

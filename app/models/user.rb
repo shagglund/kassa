@@ -2,8 +2,6 @@ class User < ActiveRecord::Base
   devise :recoverable, :lockable, :rememberable,
          :validatable, :trackable, :database_authenticatable
 
-  attr_accessible :username, :balance, :email
-
   has_many :buys, foreign_key: 'buyer_id'
 
   validates :username, presence: true, length: {in: 3..16}, uniqueness: true

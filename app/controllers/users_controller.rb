@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   respond_to :json
-  before_filter :authenticate_admin!, except: [:index, :show, :current]
+  before_filter :authenticate_admin!, only: :create
   before_filter :find_user, only: [:show, :update]
 
   def index
@@ -18,14 +18,12 @@ class UsersController < ApplicationController
   end
 
   def create
-    @user = User.create params[:user]
+    @user = User.create user_params
     respond_with @user
   end
 
   def update
-    maybe_set_admin
-    maybe_set_staff
-    @user.update_attributes params[:user]
+    @user.update_attributes user_params
     respond_with @user
   end
 
@@ -33,10 +31,17 @@ class UsersController < ApplicationController
   def find_user
     @user = User.find params[:id]
   end
-  def maybe_set_admin
-    @user.admin = !!params[:user].delete(:admin) if params.has_key? :admin
-  end
-  def maybe_set_staff
-    @user.staff = !!params[:user].delete(:staff) if params.has_key? :staff
+
+  def user_params
+    req = params.require(:user)
+    if current_user.admin? and params[:action] == 'create'
+      req.permit(:password, :password_confirmation, :username, :email, :admin, :staff, :balance)
+    elsif current_user.admin?
+      req.permit(:username, :email, :admin, :staff, :balance)
+    elsif current_user == @user #allow self update of these fields
+      req.permit(:username, :email, :balance)
+    else
+      req.permit()
+    end
   end
 end

@@ -1,16 +1,12 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
-  before_filter :set_locale
   before_filter :authenticate_user!
 
   def index
   end
 
-  def set_locale
-    I18n.locale = params[:locale] || I18n.default_locale
-  end
-
   protected
+
   def authenticate_admin!
     authenticate_user! if current_user.nil?
     unless current_user.admin?

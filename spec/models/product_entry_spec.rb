@@ -3,13 +3,10 @@ require 'spec_helper'
 describe ProductEntry do
   it {should validate_numericality_of :amount}
   it {should ensure_inclusion_of(:amount).in_range(1..999)}
-  it {should allow_mass_assignment_of :amount}
+
   it {should belong_to :material}
   it {should validate_presence_of :material}
-  it {should allow_mass_assignment_of :material}
   it {should belong_to :product}
-  it {should validate_presence_of :product}
-  it {should allow_mass_assignment_of :product}
 
   subject { FactoryGirl.build :product_entry }
 

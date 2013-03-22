@@ -11,6 +11,7 @@ gem 'devise'
 gem 'squeel'
 gem 'haml-rails'
 gem 'active_model_serializers'
+gem 'strong_parameters'
 gem 'gravtastic'
 
 group :test, :development do
@@ -38,9 +39,11 @@ group :test do
 end
 
 group :assets do
+  gem 'lodash-rails'
   gem 'sass-rails'
   gem 'coffee-rails'
   gem 'jquery-rails'
+  gem 'chosen-rails'
   gem 'uglifier'
   gem 'twitter-bootstrap-rails'
   gem 'angular-rails'

@@ -32,6 +32,13 @@ describe BuysController do
       context "with invalid buy data" do
         include_examples "a create with invalid data"
       end
+      context "permitted attributes" do
+        include_examples "setup create request before each" 
+        it "should allow buyer_id, price and products to be set" do
+          fake_params.should_receive(:permit).with(:buyer_id, :price, consists_of_products_attributes: [:amount, :product_id])
+          post :create, format: :json
+        end
+      end
     end
   end
   context "with an unauthenticated user" do

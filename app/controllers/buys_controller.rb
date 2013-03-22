@@ -13,12 +13,16 @@ class BuysController < ApplicationController
   end
 
   def create
-    @buy = Buy.create params[:buy]
+    @buy = Buy.create buy_params
     respond_with @buy
   end
 
   private
   def find_buy
     @buy = Buy.find params[:id]
+  end
+
+  def buy_params
+    params.require(:buy).permit(:buyer_id, :price, consists_of_products_attributes:[:amount, :product_id])
   end
 end
