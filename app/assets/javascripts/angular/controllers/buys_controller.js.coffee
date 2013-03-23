@@ -3,7 +3,10 @@ dependencies=[
 ]
 angular.module('kassa.controllers.buys', dependencies)
 .controller('BuysController', ($scope, DataService)->
-  $scope.entries= ->
-    DataService.collection 'buys'
+  $scope.buys = ->
+    DataService.collection('buys')
+
+  $scope.latest= ->
+    $scope.buys().reverse()
 
 )

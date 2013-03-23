@@ -160,6 +160,11 @@ class Buy extends BaseModel
     else
       @dataService.find('user', @attributes.buyer_id)
 
+  products: ->
+    _.collect @attributes.consists_of_products, (e)=>
+      e.product = @dataService.find('product', e.product_id)
+      e
+
   add: (product, amount=1)->
     @attributes.consists_of_products.push {amount: amount, product_id: product.attributes.id}
 
