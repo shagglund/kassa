@@ -9,6 +9,11 @@ angular.module('kassa.controllers.buys.products', dependencies)
   $scope.dialog = BasketDialog
   
   $scope.entries = ->
-    DataService.collection('products')
+    if angular.isDefined($scope.filterQueries) and $scope.filterQueries.length > 0
+      exps = (new RegExp(query,'i') for query in $scope.filterQueries)
+      _.select DataService.collection('products'), (p)->
+        return true for e in exps when e.test p.attributes.name
+    else
+      DataService.collection('products')
 
 )

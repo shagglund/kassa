@@ -1,7 +1,10 @@
 %form.form-horizontal
   %fieldset
-    %legend{'ng-hide'=>'currentProduct.isNew()'}=t('.update_header')
-    %legend{'ng-show'=>'currentProduct.isNew()'}=t('.create_header')
+    %legend
+      %span{'ng-hide'=>'currentProduct.isNew()'}
+        =t('.update_header')
+      %span{'ng-show'=>'currentProduct.isNew()'}
+        =t('.create_header')
     .control-group
       %label.control-label{for: 'productName'}
         =t('name', scope:'activerecord.attributes.product')
@@ -65,7 +68,8 @@
         .btn-group
           %button.btn{'ng-click'=>'currentProduct.cancelChanges()'}
             =t('actions.cancel')
-          %button.btn.btn-primary{'ng-click'=>'currentProduct.save()'}
+          %button.btn.btn-primary{'ng-click'=>'currentProduct.save()',
+              'ng-disabled'=>'!currentProduct.hasUnsavedChanges()'}
             %span{'ng-show'=>'currentProduct.isNew()'}=t('.create')
             %span{'ng-hide'=>'currentProduct.isNew()'}=t('.update')
 

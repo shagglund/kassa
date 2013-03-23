@@ -17,6 +17,7 @@ fi:
       shots: 'Shotit'
       other: 'Muu'
     product_form:
+      unsaved_changes: 'Tallentamattomia muutoksia'
       update_header: 'Muuta tuotteen tietoja'
       update: 'Tallenna muuttuneet tiedot'
       create_header: 'Luo uusi tuote'
@@ -41,6 +42,7 @@ fi:
       cancelAndClose: 'Sulje'
       cancelChanges: 'Peruuta muutokset'
     material_form:
+      unsaved_changes: 'Tallentamattomia muutoksia'
       name: 'Raaka-aineen nimi'
       price: 'Hinta euroissa'
       stock: 'Määrä valitussa yksikössä'
@@ -53,6 +55,7 @@ fi:
     list:
       users: 'Piikit'
     user_form:
+      unsaved_changes: 'Tallentamattomia muutoksia'
       update_header: 'Muuta piikin tietoja'
       create_header: 'Luo uusi piikki'
       username: 'Piikin nimi'

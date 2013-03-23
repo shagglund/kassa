@@ -9,9 +9,9 @@
         %input.span8{:type=>'text', 'ng-change'=>'refilter()',
                       'ng-model'=>'filterQuery', 'ng-list'=>',','ng-init'=>'filterQuery=""',
                       :placeholder=>"#{t('search_by_username')}"}
-        %button.btn.btn-danger{'ng-click'=>'clearFilter()'}
+        %button.btn.btn-danger{'ng-click'=>'filterQuery = ""'}
           %i.icon-remove
-  .row-fluid{'ng-repeat'=>'user in entries()|filter:usernameContains(user, filterQuery)'}
+  .row-fluid{'ng-repeat'=>'user in users()'}
     .span4
       %img{'ng-src'=> "{{user.gravatarUrl()}}"}
       %a{'ng-click'=>'basket.setBuyer(user)'} {{user.attributes.username}}

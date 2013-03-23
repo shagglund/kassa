@@ -8,8 +8,13 @@ angular.module('kassa.controllers.buys.users', dependencies)
   $scope.basket = Basket
   $scope.dialog = BasketDialog
     
-  $scope.entries = ->
-    DataService.collection('users')
+  $scope.users = ->
+    if angular.isDefined($scope.filterQuery) and $scope.filterQuery.length > 0
+      exp = new RegExp($scope.filterQuery, 'i')
+      _.select DataService.collection('users'), (u)->
+        exp.test u.attributes.username
+    else
+      DataService.collection('users')
   
   $scope.usernameContainsAny = (user, searchTerms)->
     return false unless angular.isObject(user)

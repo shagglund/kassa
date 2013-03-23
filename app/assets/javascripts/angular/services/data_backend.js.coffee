@@ -23,6 +23,13 @@ class BaseModel
       !angular.equals @attributes[attr], @_attributes[attr]
     else
       !angular.equals @attributes, @_attributes
+
+  hasUnsavedChanges: (attr)->
+    changed = @changed(attr)
+    if changed
+      @status = 'unsaved_changes'
+    changed
+
   new: ->
     @dataService.new @type
 
@@ -43,10 +50,6 @@ class BaseModel
     @status = ''
 
   _updateLocally: (attributes)->
-    console.log "CHANGING FROM"
-    console.log @_attributes
-    console.log "TO"
-    console.log attributes
     @_attributes = attributes
     @attributes = angular.copy(attributes)
     @id = attributes.id
@@ -286,19 +289,14 @@ class DataService
     deferred.promise
   
   _handleSuccess: (action, type, sentItem, response, responseHeaders)=>
-    console.log "ACTION: #{action} for #{type}"
     if action == 'update'
-      console.log "UPDATE WITH SENT ITEM:"
-      console.log sentItem
       @_update type, sentItem.attributes
-    if action == 'destroy'
+    else if action == 'destroy'
       @_destroy type, sentItem.attributes
     else
       @_update rType, values for own rType, values of response
 
   _update: (type, items)->
-    console.log "UPDATE RECEIVED:"
-    console.log items
     matcher = @_matchers[type]
     return unless angular.isDefined(matcher)
     if angular.isArray items
@@ -312,9 +310,6 @@ class DataService
     if angular.isUndefined(model)
       model = new matcher.modelConstructor(@, item)
     else
-      console.log "UPDATING EXISTING:"
-      console.log model
-      console.log item
       model._updateLocally item
     matcher.collection[item.id] = model
 
