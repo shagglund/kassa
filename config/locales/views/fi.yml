@@ -67,6 +67,17 @@ fi:
       create: 'Luo piikki'
       update: 'Päivitä piikin tiedot'
       empty: 'Tyhjennä muutokset'
+  buys:
+    latest_list:
+      latest: 'Viimeisimmät ostot'
+    user_list:
+      select_from_list: 'Valitse ostaja'
+      tabs: 'Piikit'
+      search_by_username: 'Hae piikin nimellä'
+    product_list:
+      products: 'Tuotteet'
+      select_from_list: 'Lisää tuotteita ostoskoriin'
+      search_by_name: 'Hae tuotteiden nimillä'
   actions:
     buy: "Osta"
     clear: "Tyhjennä"

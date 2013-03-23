@@ -1,13 +1,13 @@
 .span12{'ng-controller'=>"BuysProductsController"}
   %h3
-    =t('other', scope:'active_record.models.product')
+    =t('.products')
     %small{'ng-hide'=>'basket.hasProducts()'}
-      =t('add_to_list')
+      =t('.select_from_list')
   .row-fluid
     %form.form-horizontal.span12
       .input-append.row-fluid
         %input.span8{:type=>'text', 'ng-model'=>'filterQueries',
-                      'ng-list'=>',', :placeholder=> t("search_by_name")}
+                      'ng-list'=>',', :placeholder=> t(".search_by_name")}
         %button.btn.btn-danger{'ng-click'=>'filterQueries = ""'}
           %i.icon-remove
   .row-fluid{'ng-repeat'=>"product in entries()"}

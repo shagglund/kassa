@@ -1,6 +1,6 @@
 .span12{'ng-controller'=>'BuysUsersController'}
   %h3
-    =t('other', scope:'active_record.models.user')
+    =t('.tabs')
     %small{'ng-hide'=>'basket.hasBuyer()'}
       =t('.select_from_list')
   .row-fluid
@@ -8,7 +8,7 @@
       .input-append.row-fluid
         %input.span8{:type=>'text', 'ng-change'=>'refilter()',
                       'ng-model'=>'filterQuery', 'ng-list'=>',','ng-init'=>'filterQuery=""',
-                      :placeholder=>"#{t('search_by_username')}"}
+                      :placeholder=>"#{t('.search_by_username')}"}
         %button.btn.btn-danger{'ng-click'=>'filterQuery = ""'}
           %i.icon-remove
   .row-fluid{'ng-repeat'=>'user in users()'}
