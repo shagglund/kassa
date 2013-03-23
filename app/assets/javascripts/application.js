@@ -10,9 +10,10 @@
 // WARNING: THE FIRST BLANK LINE MARKS THE END OF WHAT'S TO BE PROCESSED, ANY BLANK LINE SHOULD
 // GO AFTER THE REQUIRES BELOW.
 //
+//= require lodash
 //= require jquery
 //= require jquery_ujs
-//= require twitter/bootstrap
+//= require chosen-jquery
 //= require angular
 //= require gravtastic
 //= require angular-resource
@@ -20,4 +21,5 @@
 //= require angular-ui
 //= require angular-bootstrap/src/transition/transition
 //= require angular-bootstrap/src/modal/modal
+//= require angular-bootstrap/src/dialog/dialog
 //= require_tree ./angular

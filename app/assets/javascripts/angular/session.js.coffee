@@ -3,10 +3,10 @@ angular.module('kassa.session', [])
     class Session
       constructor: (@$http, @$q)->
         @pendingUnauthorizedRequests = []
-        @_authenticated = undefined
+        @currentUser = undefined
 
       authenticatedUser: ()=>
-        @_authenticated
+        @currentUser
 
       signIn: (credentials)=>
         success = (successResponse, status)=>
@@ -29,12 +29,12 @@ angular.module('kassa.session', [])
               request.deferred.resolve(response)
         @pendingUnauthorizedRequests.length = 0
       
-      _setAuthenticated: (user)=>
-        @_authenticated = user
+      _setAuthenticated: (response)=>
+        @currentUser = response.user
         @_runPendingRequests()
 
       _setUnauthenticated: ()=>
-        @_authenticated = undefined
+        @currentUser = undefined
       
       _defer: (httpFunc, url, options)=>
         deferred = @$q.defer()
