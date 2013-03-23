@@ -8,9 +8,11 @@
           %li.divider-vertical
           %li{'ng-class'=>"{true:'active', false:''}[currentLocation('/products')]"}
             %a{:href=>'#/products'}= t('product.administration')
-          %li.divider-vertical
-          %li{'ng-class'=>"{true:'active', false:''}[currentLocation('/users')]"}
+          %li.divider-vertical.ng-cloak{'ng-show'=>'session.currentUser.admin'}
+          %li.ng-cloak{'ng-class'=>"{true:'active', false:''}[currentLocation('/users')]",
+            'ng-show'=>'session.currentUser.admin'}
             %a{:href=>'#/users'}= t('user.administration')
         %ul.nav.pull-right
-          %li{'ng-init'=>'init()', 'ng-show'=>"authenticated()", 'ng-controller'=>"SessionController"}
+          %li{'ng-init'=>'init()', 'ng-show'=>"authenticated()", 
+              'ng-controller'=>"SessionController"}
             %a{'ng-click'=>"signOut()"}= t('actions.sign_out')

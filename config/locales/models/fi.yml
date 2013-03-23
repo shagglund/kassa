@@ -1,5 +1,5 @@
 fi:
-  active_record:
+  activerecord:
     models:
       material:
         one: 'Raaka-aine'
@@ -29,9 +29,11 @@ fi:
           cl: 'senttilitra'
           ml: 'millilitra'
         groups:
-          can: 'Tölkki/pullo'
+          beer: 'Kalja'
+          cider: 'Siideri'
+          long_drink: 'Lonkero'
           shot: 'Shotti'
-          non_alcoholic: 'Alkoholiton'
+          other: 'Muu'
           food: 'Ruoka'
       product:
         name: 'Nimi'
@@ -40,26 +42,24 @@ fi:
         price: 'Hinta'
         unit: 'Yksikkö'
         group: 'Tyyppi'
-        units:
-          piece: 'kappale'
-          litre: 'litra'
-          dl: 'desilitra'
-          cl: 'senttilitra'
-          ml: 'millilitra'
         groups:
-          can: 'Tölkki/pullo'
+          beer: 'Olut'
+          cider: 'Siideri'
+          long_drink: 'Lonkero'
           drink: 'Drinkki'
           shot: 'Shotti'
-          non_alcoholic: 'Alkoholiton'
           food: 'Ruoka'
+          other: 'Muu'
       user:
-        name: 'Nimi'
+        username: 'Nimi'
         balance: 'Saldo'
         buy_count: 'Ostoja'
         password: "Salasana"
+        password_confirmation: 'Salasana (varmistus)'
         email: "Sähköposti"
         remember_me: "Muista minut"
         time_of_last_buy: "Viimeisin osto"
+        admin: 'Ylläpitäjä'
       buy:
         buyer: "Ostaja"
         buy_time: 'Oston ajankohta'
@@ -80,3 +80,12 @@ fi:
             name:
               taken: "Saman niminen tuote on jo olemassa"
               blank: "Tuotteella on oltava yksilöllinen nimi"
+        material:
+          attributes:
+            name:
+              blank: 'Anna raaka-aineelle nimi'
+              taken: 'Raaka-aine samalla nimellä on jo olemassa'
+            group:
+              inclusion: 'Valitse tuoteryhmä'
+            unit:
+              inclusion: 'Valitse raaka-aineen yksikkö'

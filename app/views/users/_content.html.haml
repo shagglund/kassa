@@ -1,3 +1,16 @@
+.navbar
+  .navbar-inner
+    %form.navbar-search
+      %input.search-query{placeholder: "#{t('.search_by_username')}",
+        type:'text', 'ng-model'=>'searchQuery'}
+    %ul.nav
+      %li
+        %a{href:'#/users/'}
+          %i.icon-plus
+          = t('.create_new_user')
 .row-fluid
   .span12
-    .row-fluid{'ng-repeat'=>'user for entries()'}
+    .span2.well.well-small
+      =render 'users/list'
+    .span10.well.well-small
+      =render 'users/user_form'

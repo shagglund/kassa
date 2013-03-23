@@ -1,4 +1,17 @@
-.row-fluid{'ng-controller'=>'ProductsController', 'ng-init'=>'init()'}
-  .span4
-    =render 'products/list'
+.navbar
+  .navbar-inner
+    %form.navbar-search
+      %input.search-query{placeholder: "#{t('.search_by_name')}",
+        type:'text', 'ng-model'=>'searchQuery'}
+    %ul.nav
+      %li
+        %a{href:'#/products/'}
+          %i.icon-plus
+          = t('.create_new_product')
+.row-fluid
+  .span8
+    .span4
+      =render 'products/list'
+    .span8
+      = render 'products/product_form'
   

@@ -13,6 +13,8 @@ fi:
       timeout: Istuntosi on vanhentunut, ole hyvä ja kirjaudu sisään jatkaaksesi.
       unauthenticated: Sinun pitää kirjautua sisään tai rekisteröityä ennen kuin voit jatkaa.
       unconfirmed: Sinun täytyy vahvistaa tunnuksesi ennen kuin voit jatkaa.
+      user:
+        not_found_in_database: Käyttäjää ei ole tai käyttäjä ja salasana eivät täsmää
     mailer:
       confirmation_instructions:
         subject: Vahvistusohjeet

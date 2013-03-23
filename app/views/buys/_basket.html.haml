@@ -1,43 +1,46 @@
-%div{:modal=>'modal.isOpen()','ng-controller'=>'BasketController'}
-  .modal-header
-    %h3= t('basket.title')
-  .modal-body
-    .row-fluid
-      .span3.offset3
-        %h4=t('active_record.attributes.buy.buyer') 
-      .span3
-        %h4
-          %img{'ng-src'=>'{{gravatarUrl(basket.buyer.email, 24)}}'}
-          {{basket.buyer.username}}
-    .row-fluid{'ng-repeat'=>'entry in basket.products()'}
-      .span3.offset3
-        %strong {{entry.product.name}}
-      .span3
-        .btn-group
-          %button.btn.btn-primary.btn-mini{'ng-click'=>'basket.remove(entry.product)', 'ng-disabled'=>'basket.isMinBuyable(entry)'}
-            %i.icon-minus
-          %button.btn.btn-inverse.btn-mini{'disabled'=>'disabled'} 
-            {{entry.amount}}
-          %button.btn.btn-primary.btn-mini{'ng-click'=>'basket.add(entry.product)', 'ng-disabled'=>'basket.isMaxBuyable(entry)'}
-            %i.icon-plus
-          %button.btn.btn-danger.btn-mini{'ng-click'=>'basket.removeAll(entry.product)'}
-            %i.icon-trash
-      .span2
-        %strong {{basket.priceOf(entry) | currency}}
-    .row-fluid
-      .span2.offset7
-        %strong.pull-right= t('basket.total')
-      .span2
-        %strong {{basket.totalPrice() | currency}}
-    .row-fluid
-      .span4.offset5
-        %strong.pull-right= t('basket.balance_after_buy')
-      .span2
-        %strong{'ng-class'=>'{true:"text-success", false:"text-error"}[buyerBalanceAfterBuy() >= 0]'} {{buyerBalanceAfterBuy() | currency}}
-  .modal-footer
-    .btn-group.pull-right
-      %button.btn.btn-primary{'ng-click'=>'modal.close()'}= t('actions.close')
-      %button.btn.btn-danger{'ng-disabled'=>"basket.productCount() == 0",
-        'ng-click'=>"clear()"}= t('actions.clear')
-      %button.btn.btn-success{'ng-disabled'=>"!basket.isValid()",
-        'ng-click'=>"buy()"}= t('actions.buy')
+.modal-header
+  %h3= t('.title')
+.modal-body
+  .row-fluid
+    .span3.offset3
+      %h4=t('buyer', scope: 'active_record.attributes.buy') 
+    .span3
+      %h4
+        %img{'ng-src'=>'{{basket.buyer.gravatarUrl(24)}}'}
+        {{basket.buyer.attributes.username}}
+  .row-fluid{'ng-repeat'=>'entry in basket.products'}
+    .span3.offset3
+      %strong {{entry.product.attributes.name}}
+    .span3
+      .btn-group
+        %button.btn.btn-primary.btn-mini{'ng-click'=>'basket.changeAmount(entry.product, -1)', 
+          'ng-disabled'=>'entry.amount == 1'}
+          %i.icon-minus
+        %button.btn.btn-inverse.btn-mini{'disabled'=>'disabled'} 
+          {{entry.amount}}
+        %button.btn.btn-primary.btn-mini{'ng-click'=>'basket.changeAmount(entry.product, 1)',
+          'ng-disabled'=>'entry.amount == entry.product.stock()'}
+          %i.icon-plus
+        %button.btn.btn-danger.btn-mini{'ng-click'=>'basket.remove(entry.product)'}
+          %i.icon-trash
+    .span2
+      %strong {{entry.product.price() | currency}}
+  .row-fluid
+    .span2.offset7
+      %strong.pull-right= t('.total')
+    .span2
+      %strong {{basket.totalPrice() | currency}}
+.modal-footer 
+  .row-fluid
+    .span4
+      %strong.pull-right= t('.balance_after_buy')
+    .span2
+      %strong{'ng-class'=>'{true:"text-success", false:"text-error"}[balanceAfterBuy() >= 0]'} 
+        {{balanceAfterBuy() | currency}}
+    .span6
+      .btn-group.pull-right
+        %button.btn.btn-primary{'ng-click'=>'dialog.close()'}= t('.close')
+        %button.btn.btn-danger{'ng-disabled'=>"basket.productCount() == 0",
+          'ng-click'=>"clear()"}= t('.clear')
+        %button.btn.btn-success{'ng-disabled'=>"!basket.isValid()",
+          'ng-click'=>"buy()"}= t('.buy')

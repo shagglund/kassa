@@ -1,12 +1,11 @@
 .span12{'ng-controller'=>'BuysController', 'ng-init'=>'init()'}
-  %h3=t('buy.latest')
-  .row-fluid{'ng-repeat'=> "buy in buys.latest()"}
+  %h3=t('.latest')
+  .row-fluid{'ng-repeat'=> "buy in latest()"}
     %small.span4.muted
       {{buy.created_at | date:'medium'}}
     .span3
-      %img{'ng-src'=>'{{gravatarUrl(buy.buyer.email)}}'}
-      %a{:href => '#/users/{{buy.buyer.id}}'} {{buy.buyer.username}}
+      %img{'ng-src'=>'{{buy.buyer().gravatarUrl()}}'}
+      {{buy.buyer().attributes.username}}
     .span5
-      %a{:href=>'#/buys/{{buy.id}}',
-        'ng-repeat'=> 'entry in buy.products'}
-        {{entry.amount}} {{entry.product.name}}
+      %span{'ng-repeat'=> 'entry in buy.products()'}
+        {{entry.amount}} {{entry.product().attributes.name}}

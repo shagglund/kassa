@@ -1,36 +1,35 @@
-.span12{'ng-controller'=>"BuysProductsController", 'ng-init'=>'init()'}
+.span12{'ng-controller'=>"BuysProductsController"}
   %h3
-    =t('active_record.models.product.other')
+    =t('other', scope:'active_record.models.product')
     %small{'ng-hide'=>'basket.hasProducts()'}
-      =t('basket.product.add_to_list')
+      =t('add_to_list')
   .row-fluid
     %form.form-horizontal.span12
       .input-append.row-fluid
         %input.span8{:type=>'text', 'ng-model'=>'filterQuery',
-                      'ng-list'=>',', 'ng-change'=>'refilter()',
-                      :placeholder=> t("search.product.by_name")}
+                      'ng-list'=>',', :placeholder=> t("search_by_name")}
         %button.btn.btn-danger{'ng-click'=>'clearFilter()'}
           %i.icon-remove
   .row-fluid{'ng-repeat'=>"product in entries()"}
     .span4 
-      %a{'ng-click'=>"basket.add(product)"} {{product.name}}
+      %a{'ng-click'=>"basket.add(product)"} {{product.attributes.name}}
     .span2
       %i.icon-glass
-      {{products.stockOf(product) | number}}
-    .span2 {{products.priceOf(product) | currency}}
+      {{product.stock()| number}}
+    .span2 {{product.price() | currency}}
     .span4{'ng-show'=>'basket.hasProduct(product)'} 
       .btn-group
-        %button.btn.btn-mini.btn-primary{'ng-click'=>'basket.remove(product)',
-                                          'ng-disabled'=>'basket.isMinBuyable(basket.getEntry(product))'}
+        %button.btn.btn-mini.btn-primary{'ng-click'=>'basket.changeAmount(product, -1)',
+                                          'ng-disabled'=>'basket.productCount(product) <= 1'}
           %i.icon-minus
         %button.btn.btn-mini.btn-inverse{'disabled'=>'disabled'}
-          {{basket.countOf(product)}}
-        %button.btn.btn-mini.btn-primary{'ng-click'=>'basket.add(product)', 
-                                          'ng-disabled'=>'basket.isMaxBuyable(basket.getEntry(product))'}
+          {{basket.productCount(product)}}
+        %button.btn.btn-mini.btn-primary{'ng-click'=>'basket.changeAmount(product,1)', 
+                                          'ng-disabled'=>'basket.productCount(product) >= product.stock()'}
           %i.icon-plus
-        %button.btn.btn-mini.btn-success{'ng-click'=>'modal.open()', 
+        %button.btn.btn-mini.btn-success{'ng-click'=>'dialog.open()', 
                                           'ng-disabled'=>'!basket.isValid()'}
           %i.icon-shopping-cart
-        %button.btn.btn-mini.btn-danger{'ng-click'=> 'basket.removeAll(product)',
+        %button.btn.btn-mini.btn-danger{'ng-click'=> 'basket.remove(product)',
           'ng-disabled'=>'!basket.hasProduct(product)'}
           %i.icon-remove

@@ -1,10 +1,78 @@
 fi:
+  application:
+    status:
+      create_success: 'Luonti onnistui'
+      create_failed: 'Luonti epäonnistui'
+      update_success: 'Tietojen muutos onnistui'
+      updated_failed: 'Tietojen muutos epäonnistui'
+  products:
+    content:
+      search_by_name: 'Hae tuotteen nimellä'
+      create_new_product: 'Luo uusi tuote'
+    nav_links:
+      beers: 'Oluet'
+      long_drinks: 'Lonkerot'
+      ciders: 'Siiderit'
+      drinks: 'Drinkit'
+      shots: 'Shotit'
+      other: 'Muu'
+    product_form:
+      update_header: 'Muuta tuotteen tietoja'
+      update: 'Tallenna muuttuneet tiedot'
+      create_header: 'Luo uusi tuote'
+      create: 'Luo tuote näillä tiedoilla'
+      product_info: 'Tuotteen tiedot'
+      name: 'Tuotteen nimi'
+      description: 'Tuotteen vapaamuotoinen kuvaus'
+      unit: 'Tuotteen koko'
+      group: 'Tuoteryhmä'
+      materials: 'Tuote koostuu..'
+      select_material_from_list: 'raaka-aine listasta'
+      add_material: 'Lisää'
+      create_material: 'tai luo uusi'
+    list:
+      new_product: 'Uusi tuote'
+      create_new_product: 'Luo uusi tuote'
+    modal_material_form:
+      create_header: 'Uuden raaka-aineen tiedot'
+      update_header: 'Raaka-aineen tiedot'
+      create: 'Luo raaka-aine'
+      update: 'Päivitä muuttuneet tiedot'
+      cancelAndClose: 'Sulje'
+      cancelChanges: 'Peruuta muutokset'
+    material_form:
+      name: 'Raaka-aineen nimi'
+      price: 'Hinta euroissa'
+      stock: 'Määrä valitussa yksikössä'
+      unit: 'Yksikkö'
+      group: 'Ryhmä'
+  users:
+    content:
+      create_new_user: 'Luo uusi piikki'
+      search_by_username: 'Hae piikin nimellä'
+    list:
+      users: 'Piikit'
+    user_form:
+      update_header: 'Muuta piikin tietoja'
+      create_header: 'Luo uusi piikki'
+      username: 'Piikin nimi'
+      email: 'Piikin omistajan sähköposti'
+      password: 'Salasana'
+      password_confirmation: 'Salasana uudelleen'
+      balance: 'Piikin saldo'
+      admin: 'Annetaanko ylläpitäjän oikeudet?'
+      create: 'Luo piikki'
+      update: 'Päivitä piikin tiedot'
+      empty: 'Tyhjennä muutokset'
   actions:
     buy: "Osta"
     clear: "Tyhjennä"
     edit: "Muokkaa"
     sign_out: "Kirjaudu ulos"
     close: "Sulje"
+    create: 'Luo'
+    cancel: 'Peruuta'
+    update: 'Päivitä'
   search:
     product:
       by_name: 'Hae tuotteen nimellä'

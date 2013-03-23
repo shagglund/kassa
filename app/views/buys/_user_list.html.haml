@@ -1,28 +1,27 @@
-.span12{'ng-controller'=>'BuysUsersController', 'ng-init'=>'init()'}
+.span12{'ng-controller'=>'BuysUsersController'}
   %h3
-    =t('active_record.models.user.other')
+    =t('other', scope:'active_record.models.user')
     %small{'ng-hide'=>'basket.hasBuyer()'}
-      =t('basket.buyer.select_from_list')
+      =t('.select_from_list')
   .row-fluid
     %form.form-horizontal.span12
       .input-append.row-fluid
         %input.span8{:type=>'text', 'ng-change'=>'refilter()',
-                      'ng-model'=>'filterQuery', 'ng-list'=>',',
-                      :placeholder=>"#{t('search.user.by_username')}"}
+                      'ng-model'=>'filterQuery', 'ng-list'=>',','ng-init'=>'filterQuery=""',
+                      :placeholder=>"#{t('search_by_username')}"}
         %button.btn.btn-danger{'ng-click'=>'clearFilter()'}
           %i.icon-remove
-  .row-fluid{'ng-repeat'=>'user in entries()'}
+  .row-fluid{'ng-repeat'=>'user in entries()|filter:usernameContains(user, filterQuery)'}
     .span4
-      %img{'ng-src'=> "{{gravatarUrl(user.email)}}"}
-      %a{'ng-click'=>'basket.setBuyer(user)'}
-        {{user.username}}
+      %img{'ng-src'=> "{{user.gravatarUrl()}}"}
+      %a{'ng-click'=>'basket.setBuyer(user)'} {{user.attributes.username}}
     .span2
       %i.icon-glass
-      {{user.buy_count | number}}
-    .span3{'ng-class'=>'{true: "text-success", false: "text-error"}[user.balance >= 0]'}
-      {{user.balance | currency}}
+      {{user.attributes.buy_count | number}}
+    .span3{'ng-class'=>'{false: "text-success", true: "text-error"}[user.inDebt()]'}
+      {{user.attributes.balance | currency}}
     .btn-group.span2{'ng-show'=>'basket.isBuyer(user)'}
-      %button.btn.btn-success.btn-mini{'ng-click'=>'modal.open()',
+      %button.btn.btn-success.btn-mini{'ng-click'=>'dialog.open()',
                                         'ng-disabled'=>'!basket.isValid()'}
         %i.icon-shopping-cart
       %button.btn.btn-danger.btn-mini{'ng-click'=>'basket.clearBuyer()'}

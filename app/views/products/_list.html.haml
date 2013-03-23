@@ -1,7 +1,8 @@
-.tabbable.tabs-left
-  %ul.nav.nav-tabs{'ng-init' => 'selectFirst()'}
-    %li{'ng-repeat'=>'product in entries()',
-        'ng-class'=>'{true:"active", false:""}[isSelected(product)]'}
-      %a{'ng-click'=>'select(product)'} {{product.name}}
-  .tab-content
-    {{currentProduct.name}}
+.well.well-small
+  %ul.nav.nav-list
+    =render partial: 'products/nav_links', locals:{ filter: 'beer', header:'beers' }
+    =render partial: 'products/nav_links', locals:{ filter: 'long_drink', header: 'long_drinks' }
+    =render partial: 'products/nav_links', locals:{ filter: 'cider', header: 'ciders' }
+    =render partial: 'products/nav_links', locals:{ filter: 'drink', header: 'drinks' }
+    =render partial: 'products/nav_links', locals:{ filter: 'shot', header:'shots' }
+    =render partial: 'products/nav_links', locals:{ filter: 'other', header:'other' }

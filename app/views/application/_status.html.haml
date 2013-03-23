@@ -1,0 +1,10 @@
+%alert.alert.alert-success{'ng-show'=>"#{prefix}status == 'create_success'"}
+  = t('.create_success')
+%alert.alert.alert-error{'ng-show'=>"#{prefix}status == 'create_failure'"}
+  = t('.create_failure')
+%alert.alert.alert-success{'ng-show'=>"#{prefix}status == 'update_success'"}
+  = t('.update_success')
+%alert.alert.alert-error{'ng-show'=>"#{prefix}status == 'update_failure'"}
+  = t('.update_failure')
+%alert.alert.alert-info{'ng-show'=>"#{prefix}status == 'nothing_changed'"}
+  = t('.nothing_changed')
