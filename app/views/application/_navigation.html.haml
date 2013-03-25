@@ -4,14 +4,14 @@
       .navbar-inner{'ng-controller'=>'NavigationController'}
         %ul.nav
           %li{'ng-class'=>"{true:'active', false:''}[currentLocation('/buys')]"}
-            %a{:href=>'#/buys'}= t('buy.administration')
+            %a{:href=>'#/buys'}= t('other', scope: 'activerecord.models.buy') 
           %li.divider-vertical
           %li{'ng-class'=>"{true:'active', false:''}[currentLocation('/products')]"}
-            %a{:href=>'#/products'}= t('product.administration')
+            %a{:href=>'#/products'}= t('other', scope: 'activerecord.models.product') 
           %li.divider-vertical.ng-cloak{'ng-show'=>'session.currentUser.admin'}
           %li.ng-cloak{'ng-class'=>"{true:'active', false:''}[currentLocation('/users')]",
             'ng-show'=>'session.currentUser.admin'}
-            %a{:href=>'#/users'}= t('user.administration')
+            %a{:href=>'#/users'}= t('other', scope: 'activerecord.models.user')
         %ul.nav.pull-right
           %li{'ng-init'=>'init()', 'ng-show'=>"authenticated()", 
               'ng-controller'=>"SessionController"}
