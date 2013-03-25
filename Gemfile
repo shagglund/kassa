@@ -13,6 +13,7 @@ gem 'haml-rails'
 gem 'active_model_serializers'
 gem 'strong_parameters'
 gem 'gravtastic'
+gem 'unicorn-rails'
 
 group :test, :development do
 
