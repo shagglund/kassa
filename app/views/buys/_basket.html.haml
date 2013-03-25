@@ -3,7 +3,7 @@
 .modal-body
   .row-fluid
     .span3.offset3
-      %h4=t('buyer', scope: 'active_record.attributes.buy') 
+      %h4=t('buyer', scope: 'activerecord.attributes.buy') 
     .span3
       %h4
         %img{'ng-src'=>'{{basket.buyer.gravatarUrl(24)}}'}
@@ -36,7 +36,7 @@
       %strong.pull-right= t('.balance_after_buy')
     .span2
       %strong{'ng-class'=>'{true:"text-success", false:"text-error"}[balanceAfterBuy() >= 0]'} 
-        {{balanceAfterBuy() | currency}}
+        {{balanceAfterBuy()|currency}}
     .span6
       .btn-group.pull-right
         %button.btn.btn-primary{'ng-click'=>'dialog.close()'}= t('.close')

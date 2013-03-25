@@ -78,6 +78,13 @@ fi:
       products: 'Tuotteet'
       select_from_list: 'Lisää tuotteita ostoskoriin'
       search_by_name: 'Hae tuotteiden nimillä'
+    basket:
+      title: 'Ostoskori'
+      total: 'Yhteensä'
+      balance_after_buy: 'Piikin saldo oston jälkeen'
+      close: 'Sulje'
+      clear: 'Tyhjennä'
+      buy: 'Osta'
   actions:
     buy: "Osta"
     clear: "Tyhjennä"
@@ -87,39 +94,3 @@ fi:
     create: 'Luo'
     cancel: 'Peruuta'
     update: 'Päivitä'
-  search:
-    product:
-      by_name: 'Hae tuotteen nimellä'
-    user:
-      by_username: "Hae piikin nimellä"
-  sort:
-    product:
-      by_name: 'Järjestä nimen mukaan'
-      by_stock: 'Järjestä varaston mukaan'
-      by_price: 'Järjestä hinnan mukaan'
-  basket:
-    product:
-      add_to_list: "Lisää tuotteita ostoskoriin listasta"
-    add:
-      product: "Lisää tuote"
-      product_to_basket: "Lisää tuote ostoskoriin"
-    title: "Ostoskori"
-    buyer:
-      select: "Aseta ostajaksi"
-      not_selected: "Valitse ostaja"
-      select_from_list: 'Valitse ostaja listasta'
-    show_contents: "Näytä sisältö"
-    total: 'Yhteensä:'
-    balance_after_buy: 'Saldo oston jälkeen:'
-  buy:
-    latest: "Viimeisimmät ostot"
-    success: 'Osto onnistui'
-    error: 'Osto epäonnistui'
-    administration: "Ostot"
-  product:
-    administration: "Tuotteiden hallinta"
-    select: "Valitse"
-    details: "Tuotteen tiedot"
-  user:
-    administration: "Piikkien hallinta"
-    sign_in: "Kirjaudu sisään"

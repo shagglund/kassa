@@ -20,7 +20,7 @@ angular.module('kassa.controllers.basket', dependencies)
     BasketDialog.close()
 
   $scope.balanceAfterBuy = ->
-    return 0 unless Basket.isValid()
-    Basket.buyer.balance - Basket.totalPrice()
+    return 0 unless angular.isDefined Basket.buyer
+    Basket.buyer.attributes.balance - Basket.totalPrice()
 
 )
