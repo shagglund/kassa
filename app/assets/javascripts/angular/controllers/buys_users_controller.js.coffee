@@ -9,10 +9,10 @@ angular.module('kassa.controllers.buys.users', dependencies)
   $scope.dialog = BasketDialog
     
   $scope.users = ->
-    if angular.isDefined($scope.filterQuery) and $scope.filterQuery.length > 0
-      exp = new RegExp($scope.filterQuery, 'i')
+    if angular.isDefined($scope.filterQueries) and $scope.filterQueries.length > 0
+      exps = (new RegExp(query,'i') for query in $scope.filterQueries)
       _.select DataService.collection('users'), (u)->
-        exp.test u.attributes.username
+        return true for e in exps when e.test u.attributes.username
     else
       DataService.collection('users')
   

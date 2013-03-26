@@ -7,10 +7,10 @@ angular.module('kassa.controllers.products', dependencies)
   $scope.dialog = MaterialDialog
 
   $scope.entries = ->
-    if angular.isDefined($scope.searchQuery) and $scope.searchQuery.length > 0
-      exp = new RegExp($scope.searchQuery, 'i')
+    if angular.isDefined($scope.filterQueries) and $scope.filterQueries.length > 0
+      exps = (new RegExp(query,'i') for query in $scope.filterQueries)
       _.select DataService.collection('products'), (p)->
-        exp.test p.attributes.name
+        return true for e in exps when e.test p.attributes.name
     else
       DataService.collection 'products'
       

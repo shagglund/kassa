@@ -5,7 +5,7 @@ angular.module('kassa.session', [])
         @pendingUnauthorizedRequests = []
         @currentUser = undefined
 
-      authenticatedUser: ()=>
+      authenticatedUser: =>
         @currentUser
 
       signIn: (credentials)=>
@@ -52,6 +52,7 @@ angular.module('kassa.session', [])
       $location.path('/')
 
     $scope.authenticated = ->
+      console.log Session.authenticatedUser()
       Session.authenticatedUser()
 
     $scope.signIn = (credentials)->
@@ -95,3 +96,4 @@ angular.module('kassa.session', [])
     interceptor = ['$injector','$q', handler]
     $httpProvider.responseInterceptors.push(interceptor)
   )
+

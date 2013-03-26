@@ -1,10 +1,10 @@
 angular.module('kassa.controllers.users', [])
 .controller('UsersController', ($scope, $routeParams, DataService)->
   $scope.users = ->
-    if angular.isDefined($scope.searchQuery) and $scope.searchQuery.length > 0
-      exp = new RegExp($scope.searchQuery, 'i')
+    if angular.isDefined($scope.filterQueries) and $scope.filterQueries.length > 0
+      exps = (new RegExp(query,'i') for query in $scope.filterQueries)
       _.select DataService.collection('users'), (u)->
-        exp.test u.attributes.username
+        return true for e in exps when e.test u.attributes.username
     else
       DataService.collection 'users'
 

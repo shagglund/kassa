@@ -12,7 +12,14 @@
           %li.ng-cloak{'ng-class'=>"{true:'active', false:''}[currentLocation('/users')]",
             'ng-show'=>'session.currentUser.admin'}
             %a{:href=>'#/users'}= t('other', scope: 'activerecord.models.user')
-        %ul.nav.pull-right
-          %li{'ng-init'=>'init()', 'ng-show'=>"authenticated()", 
+        %ul.nav.pull-right{'ng-init'=>'init()', 'ng-show'=>"authenticated()", 
               'ng-controller'=>"SessionController"}
-            %a{'ng-click'=>"signOut()"}= t('actions.sign_out')
+          %li.ng-cloak            
+            %a{'ng-href'=>'#/users/{{authenticated().id}}',
+                'ng-show'=>'authenticated()'} 
+              %i.icon-user
+              {{authenticated().username}}
+          %li
+            %a{'ng-click'=>"signOut()"}
+              %i.icon-
+              = t('actions.sign_out')

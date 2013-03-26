@@ -2,7 +2,7 @@
   .navbar-inner
     %form.navbar-search
       %input.search-query{placeholder: "#{t('.search_by_name')}",
-        type:'text', 'ng-model'=>'searchQuery'}
+        type:'text', 'ng-list'=>',', 'ng-model'=>'filterQueries'}
     %ul.nav
       %li
         %a{href:'#/products/'}
@@ -10,8 +10,8 @@
           = t('.create_new_product')
 .row-fluid
   .span8
-    .span4
+    .span3
       =render 'products/list'
-    .span8
+    .span9
       = render 'products/product_form'
   

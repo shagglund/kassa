@@ -15,7 +15,7 @@ class Basket
       entry.amount += amount
 
   remove: (product)->
-    @products.splice(i,1) for p, i in @products when p.id == product.id
+    @products.splice(i,1) for e, i in @products when e.product.id == product.id
 
   productCount: (product)->
     if angular.isDefined product
@@ -26,7 +26,7 @@ class Basket
         sum+= entry.amount
 
   clear: ->
-    @remove(product) for product in @products
+    @products.length = 0 #lazy remove by just setting the arrays length to 0
     @clearBuyer()
 
   clearBuyer: ->

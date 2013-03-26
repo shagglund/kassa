@@ -26,7 +26,7 @@
           'ng-change'=>'currentUser.clearErrors("email")'}
           =render partial: 'application/error_paragraph',
                   locals: {prefix: 'currentUser.', key: 'email'}
-    .control-group{'ng-show'=>'currentUser.isNew()'}
+    .control-group
       %label.control-label{for:'userPassword'}
         = t('password', scope: 'activerecord.attributes.user')
       .controls
@@ -35,7 +35,7 @@
           'ng-change'=>'currentUser.clearErrors("password")'}
           =render partial: 'application/error_paragraph',
                   locals: {prefix: 'currentUser.', key: 'password'}
-    .control-group{'ng-show'=>'currentUser.isNew()'}
+    .control-group
       %label.control-label{for:'userPasswordConfirmation'}
         = t('password_confirmation', scope: 'activerecord.attributes.user')
       .controls

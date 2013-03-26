@@ -7,7 +7,7 @@ fi:
       updated_failed: 'Tietojen muutos epäonnistui'
   products:
     content:
-      search_by_name: 'Hae tuotteen nimellä'
+      search_by_name: 'Hae tuotteiden nimillä pilkulla eroteltuina'
       create_new_product: 'Luo uusi tuote'
     nav_links:
       beers: 'Oluet'
@@ -51,7 +51,7 @@ fi:
   users:
     content:
       create_new_user: 'Luo uusi piikki'
-      search_by_username: 'Hae piikin nimellä'
+      search_by_username: 'Hae piikkien nimillä pilkulla eroteltuina'
     list:
       users: 'Piikit'
     user_form:
@@ -73,11 +73,11 @@ fi:
     user_list:
       select_from_list: 'Valitse ostaja'
       tabs: 'Piikit'
-      search_by_username: 'Hae piikin nimellä'
+      search_by_username: 'Hae piikkien nimillä pilkulla eroteltuina'
     product_list:
       products: 'Tuotteet'
       select_from_list: 'Lisää tuotteita ostoskoriin'
-      search_by_name: 'Hae tuotteiden nimillä'
+      search_by_name: 'Hae tuotteiden nimillä pilkulla eroteltuina'
     basket:
       title: 'Ostoskori'
       total: 'Yhteensä'

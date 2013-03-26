@@ -6,10 +6,9 @@
   .row-fluid
     %form.form-horizontal.span12
       .input-append.row-fluid
-        %input.span8{:type=>'text', 'ng-change'=>'refilter()',
-                      'ng-model'=>'filterQuery', 'ng-list'=>',','ng-init'=>'filterQuery=""',
-                      :placeholder=>"#{t('.search_by_username')}"}
-        %button.btn.btn-danger{'ng-click'=>'filterQuery = ""'}
+        %input.span8{:type=>'text','ng-model'=>'filterQueries', 
+                      'ng-list'=>',',:placeholder=>"#{t('.search_by_username')}"}
+        %button.btn.btn-danger{'ng-click'=>'filterQueries = ""'}
           %i.icon-remove
   .row-fluid{'ng-repeat'=>'user in users()'}
     .span4

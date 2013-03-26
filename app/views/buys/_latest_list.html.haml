@@ -1,11 +1,13 @@
 .span12{'ng-controller'=>'BuysController', 'ng-init'=>'init()'}
   %h3=t('.latest')
-  .row-fluid{'ng-repeat'=> "buy in latest()|orderBy:'attributes.created_at':true|limitTo:10"}
-    %small.span4.muted
-      {{buy.attributes.created_at | date:'medium'}}
-    .span3
-      %img{'ng-src'=>'{{buy.buyer().gravatarUrl()}}'}
-      {{buy.buyer().attributes.username}}
-    .span5
-      %span{'ng-repeat'=> 'entry in buy.products()'}
-        {{entry.amount}} {{entry.product.attributes.name}}
+  .row-fluid.divider-bottom{'ng-repeat'=> "buy in latest()|orderBy:'attributes.created_at':true|limitTo:10"}
+    .span6
+      .row-fluid
+        %img{'ng-src'=>'{{buy.buyer().gravatarUrl()}}'}
+        {{buy.buyer().attributes.username}}
+      .row-fluid
+        %small.muted
+          {{buy.attributes.created_at | date:'medium'}}
+    .span6
+      %div{'ng-repeat'=> 'entry in buy.products()'}
+        %small {{entry.amount}} * {{entry.product.attributes.name}}
