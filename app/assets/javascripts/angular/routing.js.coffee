@@ -1,8 +1,7 @@
 angular.module('kassa.routes', [])
 .config(($routeProvider)->
   $routeProvider.when '/buys',
-    templateUrl: '/partials/buys.html',
-    controller: 'BuysController'
+    templateUrl: '/partials/buys.html'
   $routeProvider.when '/products',
     templateUrl: '/partials/products.html',
     controller: 'ProductsController'

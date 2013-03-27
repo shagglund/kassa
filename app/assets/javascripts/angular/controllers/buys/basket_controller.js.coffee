@@ -2,7 +2,7 @@ dependencies = [
   'kassa.services.basket'
   'kassa.ui.dialogs.basket'
 ]
-angular.module('kassa.controllers.basket', dependencies)
+angular.module('kassa.controllers.buys.basket', dependencies)
 .controller('BasketController', ($scope, Basket, BasketDialog)->
   $scope.basket = Basket
   $scope.dialog = BasketDialog

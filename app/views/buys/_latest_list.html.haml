@@ -1,4 +1,4 @@
-.span12{'ng-controller'=>'BuysController', 'ng-init'=>'init()'}
+.span12{'ng-controller'=>'LatestBuysController'}
   %h3=t('.latest')
   .row-fluid.divider-bottom{'ng-repeat'=> "buy in latest()|orderBy:'attributes.created_at':true|limitTo:10"}
     .span6

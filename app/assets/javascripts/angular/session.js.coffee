@@ -52,7 +52,6 @@ angular.module('kassa.session', [])
       $location.path('/')
 
     $scope.authenticated = ->
-      console.log Session.authenticatedUser()
       Session.authenticatedUser()
 
     $scope.signIn = (credentials)->

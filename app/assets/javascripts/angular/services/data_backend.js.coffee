@@ -55,93 +55,105 @@ class BaseModel
     @id = attributes.id
     @status =''
 
-class Product extends BaseModel
-  constructor: (productService, attrs={consists_of_materials:[]})->
-    super productService, attrs, 'product'
+class ComboProduct extends BaseModel
+  constructor: (productService, attrs={consists_of_basic_products:[]})->
+    super productService, attrs, 'combo_product'
+    @formTemplateUrl = '/partials/products/combo_product_form'
 
-  materials: ->
+  basic_products: ->
     mats = []
-    for entry in @attributes.consists_of_materials
+    for entry in @attributes.consists_of_basic_products
       do(entry)=>
-        mats.push @dataService.find('material', entry.material_id)
+        mats.push @dataService.find('basic_product', entry.basic_product_id)
     mats
 
-  material: (obj)->
-    id = @_idByEntryMaterialOrId obj
-    @dataService.find('material', id)
+  basic_product: (obj)->
+    id = @_idByEntryBasicProductOrId obj
+    @dataService.find('basic_product', id)
+
+  firstBasicProduct: ->
+    id = @_idByEntryBasicProductOrId @attributes.consists_of_basic_products[0]
+    @dataService.find 'basic_product', id
 
   price: ->
     price = 0.0
-    for entry in @attributes.consists_of_materials
+    for entry in @attributes.consists_of_basic_products
       do(entry)=>
-        material = @dataService.find 'materials', entry.material_id
-        price += material.attributes.price * entry.amount
+        basic_product = @dataService.find 'basic_products', entry.basic_product_id
+        price += basic_product.attributes.price * entry.amount
     price.toFixed 2
 
   stock: ->
     stock = -1
-    for entry in @attributes.consists_of_materials
+    for entry in @attributes.consists_of_basic_products
       do(entry)=>
-        material = @dataService.find 'materials', entry.material_id
-        amount = Math.floor material.attributes.stock/entry.amount
+        basic_product = @dataService.find 'basic_products', entry.basic_product_id
+        amount = Math.floor basic_product.attributes.stock/entry.amount
         stock = amount if stock == -1 or stock > amount
     stock
 
   hasGroup: (group)->
     @attributes.group == group
 
-  addMaterial: (obj, amount=1)->
-    id = @_idByEntryMaterialOrId obj
-    entry = _.find @attributes.consists_of_materials, (e)->
-      e.material_id == id
+  addBasicProduct: (obj, amount=1)->
+    id = @_idByEntryBasicProductOrId obj
+    entry = _.find @attributes.consists_of_basic_products, (e)->
+      e.basic_product_id == id
     return if angular.isDefined entry
-    @attributes.consists_of_materials.push {amount: amount, material_id: id}
+    @attributes.consists_of_basic_products.push {amount: amount, basic_product_id: id}
 
-  removeMaterial: (obj)->
-    id = @_idByEntryMaterialOrId obj
-    _.find @attributes.consists_of_materials, (e,i,col)->
-      if e.material_id == id
+  removeBasicProduct: (obj)->
+    id = @_idByEntryBasicProductOrId obj
+    _.find @attributes.consists_of_basic_products, (e,i,col)->
+      if e.basic_product_id == id
         col.splice(i,1)
       true
 
   toRailsFormat: ->
     p=
       id: @attributes.id
-      product:
+      combo_product:
         id: @attributes.id
         description: @attributes.description
         name: @attributes.name
         group: @attributes.group
-        consists_of_materials_attributes: @_mapMaterialsForRails()
+        consists_of_basic_products_attributes: @_mapBasicProductsForRails()
   
-  _mapMaterialsForRails: ->
-    attrs = angular.copy(@attributes.consists_of_materials)
-    for entry in @_attributes.consists_of_materials
+  _mapBasicProductsForRails: ->
+    attrs = angular.copy(@attributes.consists_of_basic_products)
+    for entry in @_attributes.consists_of_basic_products
       do (entry)->
         unless _.find(attrs, (e)-> e.id == entry.id)
           attrs.push({id: entry.id, _destroy: true})
     attrs
 
-  #return the material ID when either
+  #return the basic_product ID when either
   # 1) the obj is the id
-  # 2) the obj is a product material entry (has a .material_id)
-  # 3) the obj is a material (has an .id)
-  _idByEntryMaterialOrId: (obj)->
+  # 2) the obj is a combo_product basic_product entry (has a .basic_product_id)
+  # 3) the obj is a basic_product (has an .id)
+  _idByEntryBasicProductOrId: (obj)->
     return obj if angular.isNumber obj
-    return obj.material_id if angular.isNumber obj.material_id
+    return obj.basic_product_id if angular.isNumber obj.basic_product_id
     return obj.attributes.id if angular.isNumber obj.attributes.id
-    throw 'Object is not a material, an product material entry or an id'
+    throw 'Object is not a basic_product, an combo_product basic_product entry or an id'
 
-class Material extends BaseModel
+class BasicProduct extends BaseModel
   constructor: (d, a={})->
     if angular.isString a.price
       a.price = parseFloat(a.price)
-    super d, a, 'material'
+    super d, a, 'basic_product'
+    @formTemplateUrl = '/partials/products/basic_product_form'
+
+  price: ->
+    @attributes.price
+
+  stock: ->
+    @attributes.stock
 
   toRailsFormat: ->
     m=
       id: @attributes.id
-      material: @attributes
+      basic_product: @attributes
 
   _updateLocally: (attributes)->
     if angular.isString(attributes.price)
@@ -162,7 +174,7 @@ class Buy extends BaseModel
 
   products: ->
     _.collect @attributes.consists_of_products, (e)=>
-      e.product = @dataService.find('product', e.product_id)
+      e.product = @_findProduct(e.product_id)
       e
 
   add: (product, amount=1)->
@@ -170,7 +182,7 @@ class Buy extends BaseModel
 
   price: ->
     summer = (sum, entry)=>
-      sum += entry.amount * @dataService.find('products', entry.product_id).price()
+      sum += entry.amount * @_findProduct(entry.product_id).price()
     _.inject @attributes.consists_of_products, summer, 0
 
   toRailsFormat: ->
@@ -182,6 +194,12 @@ class Buy extends BaseModel
     if angular.isString(attributes.price)
       attributes.price = parseFloat(attributes.price)
     super attributes
+
+  _findProduct: (id)->
+    p = @dataService.find('basic_product', id)
+    p = @dataService.find('combo_product', id) if angular.isUndefined(p)
+    p
+
 class User extends BaseModel
   constructor: (d, attrs={})->
     if angular.isString attrs.balance
@@ -213,18 +231,18 @@ class User extends BaseModel
       attributes.balance = parseFloat(attributes.balance)
     super attributes
 class DataService
-  constructor: (@$q, @$resource)->
-    materials=
+  constructor: (@$q, @$resource, @$timeout)->
+    basic_products=
       collection: {}
       array: []
-      resource:  @$resource('/materials/:id', {id: '@id'}, @_actions('create','update','show', 'index', 'destroy'))
-      modelConstructor: Material
+      resource:  @$resource('/basic_products/:id', {id: '@id'}, @_actions('create','update','show', 'index', 'destroy'))
+      modelConstructor: BasicProduct
       initialized: false
-    products=
+    combo_products=
       collection: {}
       array: []
-      resource: @$resource('/products/:id', {id: '@id'}, @_actions('create','update','show','index','destroy'))
-      modelConstructor: Product
+      resource: @$resource('/combo_products/:id', {id: '@id'}, @_actions('create','update','show','index','destroy'))
+      modelConstructor: ComboProduct
       initialized: false
     users=
       collection: {}
@@ -241,10 +259,10 @@ class DataService
     @_matchers=
       buy: buys
       buys: buys
-      material: materials
-      materials: materials
-      product: products
-      products: products
+      basic_product: basic_products
+      basic_products: basic_products
+      combo_product: combo_products
+      combo_products: combo_products
       user: users
       users: users
       buyers: users
@@ -258,6 +276,9 @@ class DataService
     matcher.array
 
   find: (type, id)->
+    @_matchers[type].collection[id]
+
+  findOrFetch: (type, id)->
     item = @_matchers[type].collection[id]
     return item if angular.isDefined item
     @execute('show', type, {id: id}).then =>

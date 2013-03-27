@@ -1,16 +1,18 @@
-%script{type:'text/ng-template', id:"/partials/login.html"}
+%script{type:'text/ng-template', id:'/partials/login.html'}
   .row-fluid
     .span12
       = render 'login'
-%script{type:"text/ng-template", id:"/partials/buys.html"}
-  =render 'buys/content'
-%script{type:"text/ng-template", id:"/partials/products.html"}
-  =render 'products/content'
-%script{type:"text/ng-template", id:"/partials/users.html"}
-  =render 'users/content'
-%script{type:"text/ng-template", id:"/partials/history.html"}
+%script{type:'text/ng-template', id:'/partials/buys.html'}
+  = render 'buys/content'
+%script{type:'text/ng-template', id:'/partials/products.html'}
+  = render 'products/content'
+%script{type:'text/ng-template', id:'/partials/users.html'}
+  = render 'users/content'
+%script{type:'text/ng-template', id:'/partials/history.html'}
   
-%script{type:'text/ng-template', id:'/partials/modal_material_form'}
-  =render 'products/modal_material_form'
 %script{type:'text/ng-template', id:'/partials/basket'}
-  =render 'buys/basket'
+  = render 'buys/basket'
+%script{type:'text/ng-template', id:'/partials/products/basic_product_form'}
+  = render 'products/basic_product_form'
+%script{type:'text/ng-template', id:'/partials/products/combo_product_form'}
+  = render 'products/combo_product_form'

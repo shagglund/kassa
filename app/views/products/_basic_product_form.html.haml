@@ -1,0 +1,74 @@
+%form.form-horizontal{'ng-controller'=>'BasicProductFormController'}
+  %fieldset
+    %legend
+      %span{'ng-show'=>'currentBasicProduct.isNew()'}= t('.create_header')
+      %span{'ng-hide'=>'currentBasicProduct.isNew()'}= t('.update_header')
+    .control-group
+      %label.control-label{for:'basicProductName'}
+        = t('name', scope: 'activerecord.attributes.basic_product')
+      .controls
+        %input{type:'text',required:true, placeholder: "#{t('.name')}", 
+          'ng-model'=>'currentBasicProduct.attributes.name',
+          'ng-change'=>'currentBasicProduct.clearErrors("name")'}
+        =render partial: 'application/error_paragraph', 
+                locals:{prefix: 'currentBasicProduct.', key: 'name'}
+    .control-group
+      %label.control-label{for:'productDescription'}
+        = t('description', scope: 'activerecord.attributes.product')
+      .controls
+        %textarea{placeholder: "#{t('.description')}", 
+          'ng-model'=>'currentBasicProduct.attributes.description'}
+    .control-group
+      %label.control-label{for:'basicProductGroup'}
+        =t('group', scope: 'activerecord.attributes.basic_product')
+      .controls
+        %select.chzn-select{id:'basicProductGroup',
+          'ng-model'=>'currentBasicProduct.attributes.group', chosen:'',
+          'data-placeholder'=>"#{t('.group')}", required:true, 
+          'ng-change'=>'currentBasicProduct.clearErrors("group")'}
+          -BasicProduct.localized_groups.each_pair do |group, translation|
+            %option{name:"#{group}", value:"#{group}"}
+              =translation
+        =render partial: 'application/error_paragraph', locals:{prefix: 'currentBasicProduct.', key: 'group'}
+    .control-group
+      %label.control-label{for:'basicProductUnit'}
+        =t('unit', scope: 'activerecord.attributes.basic_product')
+      .controls
+        %select.chzn-select{id:'basicProductUnit',
+          'ng-model'=>'currentBasicProduct.attributes.unit', 
+          chosen:'currentBasicProduct.attributes.unit',
+          'data-placeholder'=>"#{t('.unit')}", required:true, 
+          'ng-change'=>'currentBasicProduct.clearErrors("unit")'}
+          -BasicProduct.localized_units.each_pair do |unit, translation|
+            %option{name:"#{unit}", value:"#{unit}"}
+              =translation
+        =render partial: 'application/error_paragraph', locals:{prefix: 'currentBasicProduct.', key: 'unit'}
+    .control-group
+      %label.control-label{for:'basicProductStock'}
+        = t('stock', scope: 'activerecord.attributes.basic_product')
+      .controls
+        %input{type:'number',required:true,
+              'ng-model'=>'currentBasicProduct.attributes.stock',
+              placeholder: "#{t('.stock')}", step:1, min:0,
+              'ng-change'=>'currentBasicProduct.clearErrors("stock")'}
+        =render partial: 'application/error_paragraph', locals:{prefix: 'currentBasicProduct.', key: 'stock'}
+    .control-group
+      %label.control-label{for:'basicProductPrice'}
+        = t('price', scope: 'activerecord.attributes.basic_product')
+      .controls
+        %input{type:'number',required:true,'ng-model'=>'currentBasicProduct.attributes.price', 
+                step:0.05, min:0, placeholder:"#{t('.price')}", 
+                'ng-change'=>'currentBasicProduct.clearErrors("price")'}
+        %p.text-error{'ng-model'=>'errors.price', 'ng-show'=>'errors.price'}
+        =render partial: 'application/error_paragraph', locals:{prefix: 'currentBasicProduct.', key: 'price'}
+    .control-group
+      .controls
+        =render partial: 'application/status', locals: {prefix: 'currentBasicProduct.'}
+    .control-group
+      .controls
+        .btn-group
+          %button.btn.btn-primary{'ng-click'=>'currentBasicProduct.cancelChanges()'}
+            =t('.cancelChanges')
+          %button.btn.btn-success{'ng-click'=>'currentBasicProduct.save()'}
+            %span{'ng-show'=>'currentBasicProduct.isNew()'}=t('.create')
+            %span{'ng-hide'=>'currentBasicProduct.isNew()'}=t('.update')

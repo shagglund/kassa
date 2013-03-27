@@ -5,13 +5,12 @@
         type:'text', 'ng-list'=>',', 'ng-model'=>'filterQueries'}
     %ul.nav
       %li
-        %a{href:'#/products/'}
+        %a{href:'#/products/?new=basic'}
           %i.icon-plus
           = t('.create_new_product')
 .row-fluid
   .span8
     .span3
       =render 'products/list'
-    .span9
-      = render 'products/product_form'
+    .span9{'ng-include'=>'currentProduct.formTemplateUrl'}
   

@@ -1,4 +1,4 @@
-%form.form-horizontal
+%form.form-horizontal{'ng-controller'=>'ComboProductsController'}
   %fieldset
     %legend
       %span{'ng-hide'=>'currentProduct.isNew()'}
@@ -36,30 +36,27 @@
               %option{name:"#{group}",value:"#{group}"}
                 =translation
         =render partial: 'application/error_paragraph', locals:{prefix: 'currentProduct.', key: 'group'}
-    .control-group{'ng-repeat'=>'consists in currentProduct.attributes.consists_of_materials'}
+    .control-group{'ng-repeat'=>'consists in currentProduct.attributes.consists_of_basic_products'}
       %label.control-label
-        %a{'ng-click'=>'dialog.openWith(currentProduct.material(consists))'} 
-          {{currentProduct.material(consists).attributes.name}}
+        %a{'ng-click'=>'dialog.openWith(currentProduct.basicProduct(consists))'} 
+          {{currentProduct.basicProduct(consists).attributes.name}}
       .controls
         .input-append
           %input{type:'number', 'ng-model'=>'consists.amount', min: 1}
           %button.btn.btn-danger{type:'button',
-            'ng-click'=>'currentProduct.removeMaterial(consists)'}
+            'ng-click'=>'currentProduct.removeBasicProduct(consists)'}
             %i.icon-remove
     .control-group
-      %label.control-label{for:'addMaterial'}
-        =t ('.add_material')
+      %label.control-label{for:'addBasicProduct'}
+        =t ('.add_basic_product')
       .controls
         %span
-          %select.chzn-select{id:'addMaterial', 
-            'data-placeholder'=>"#{t('.select_material_from_list')}",
-            'ng-model'=>'latestAddedMaterialId', 
-            'ng-change'=>'currentProduct.addMaterial(latestAddedMaterialId)',
-            'ng-options'=>'m.attributes.id as m.attributes.name for m in materials()',
-            chosen:"materials().length"}
-        %button.btn.btn-primary.btn-small{type:'button',
-          'ng-click'=>'dialog.openWith(newMaterial())'}
-          = t('.create_material')
+          %select.chzn-select{id:'addBasicProduct', 
+            'data-placeholder'=>"#{t('.select_basic_product_from_list')}",
+            'ng-model'=>'latestAddedBasicProductId', 
+            'ng-change'=>'currentProduct.addBasicProduct(latestAddedBasicProductId)',
+            'ng-options'=>'m.attributes.id as m.attributes.name for m in basicProducts()',
+            chosen:"basicProducts().length"}
     .control-group
       .controls
         =render partial: 'application/status', locals: {prefix: 'currentProduct.'}
