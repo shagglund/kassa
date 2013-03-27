@@ -41,7 +41,7 @@ describe Buy do
       subject.should have(1).error_on first_product_name
     end
     def zero_stock_on_first
-      subject.consists_of_products.first.product.consists_of_materials.first.material.stock = 0
+      subject.consists_of_products.first.product.stock = 0
     end
     def first_product_name
       subject.consists_of_products.first.product.name.to_sym

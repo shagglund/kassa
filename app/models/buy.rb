@@ -6,7 +6,7 @@ class Buy < ActiveRecord::Base
   belongs_to :buyer, class_name: 'User'
   has_many :consists_of_products, class_name: 'BuyEntry'
   has_many :products, through: :consists_of_products
-  accepts_nested_attributes_for :consists_of_products, allow_destroy: true
+  accepts_nested_attributes_for :consists_of_products
 
   validates :buyer_id, presence: true
   validates :consists_of_products, length: {minimum: 1}
@@ -65,9 +65,6 @@ class Buy < ActiveRecord::Base
   end
 
   def update_buy_entry(buy_entry) 
-    buy_entry.product.consists_of_materials.each do |entry|
-      entry.material.stock -= buy_entry.amount * entry.amount
-      return false unless entry.material.save
-    end
+    buy_entry.product.buy buy_entry.amount
   end
 end

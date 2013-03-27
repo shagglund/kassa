@@ -1,13 +1,13 @@
 require "spec_helper"
 require "shared_examples_for_api_controllers"
-describe MaterialsController do
-  let(:resource){FactoryGirl.build :material}
+describe BasicProductsController do
+  let(:resource){FactoryGirl.build :basic_product}
 
   context "with an authenticated user" do
     include_examples "authenticate user"
     describe "GET index" do
       let(:resources){[resource]}
-      before(:each){Material.should_receive(:all).and_return resources}
+      before(:each){BasicProduct.should_receive(:all).and_return resources}
       include_examples "a valid index request"
     end
     describe "GET show" do
@@ -23,7 +23,7 @@ describe MaterialsController do
       context "permitted attributes" do
         include_examples "setup update request before each" 
         it "should allow unit, group, name, price and stock to be set" do
-          fake_params.should_receive(:permit).with(:unit, :group, :name, :price, :stock)
+          fake_params.should_receive(:permit).with(:unit, :group, :name, :price, :stock, :description)
           put :update, format: :json, id: 1
         end
       end
@@ -38,7 +38,7 @@ describe MaterialsController do
       context "permitted attributes" do
         include_examples "setup create request before each" 
         it "should allow unit, group, name, price and stock to be set" do
-          fake_params.should_receive(:permit).with(:unit, :group, :name, :price, :stock)
+          fake_params.should_receive(:permit).with(:unit, :group, :name, :price, :stock, :description)
           post :create, format: :json 
         end
       end

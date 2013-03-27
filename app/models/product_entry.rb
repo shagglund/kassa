@@ -1,15 +1,15 @@
 class ProductEntry < ActiveRecord::Base
-  belongs_to :product, :touch => true
-  belongs_to :material
+  belongs_to :combo_product, :touch => true
+  belongs_to :basic_product
 
-  validates_presence_of :material
+  validates_presence_of :basic_product
   validates :amount, numericality: {only_integer: true}, inclusion: {in: 1..999}
 
   def stock
-    material.stock / amount
+    basic_product.stock / amount
   end
   
   def price
-    material.price * amount
+    basic_product.price * amount
   end
 end

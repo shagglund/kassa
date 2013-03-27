@@ -18,7 +18,7 @@ describe BuyEntry do
       subject.should have(1).error_on(:product)
     end
     def zero_stock_on_first
-      subject.product.consists_of_materials.first.material.stock = 0
+      subject.product.stock = 0
     end
   end
 end

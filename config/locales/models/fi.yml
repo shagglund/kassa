@@ -1,10 +1,10 @@
 fi:
   activerecord:
     models:
-      material:
-        one: 'Raaka-aine'
-        other: 'Raaka-aineet'
-      product:
+      basic_product:
+        one: 'Tuote'
+        other: 'Tuotteet'
+      combo_product:
         one: 'Tuote'
         other: 'Tuotteet'
       user:
@@ -16,7 +16,7 @@ fi:
         latest: 'Viimeisimmät ostot'
 
     attributes:
-      material:
+      basic_product:
         name: 'Nimi'
         stock: 'Varastossa'
         price: 'Hinta'
@@ -75,17 +75,17 @@ fi:
           attributes:
             buyer_id:
               blank: 'Ostaja puuttuu'
-        product:
+        combo_product:
           attributes:
             name:
               taken: "Saman niminen tuote on jo olemassa"
               blank: "Tuotteella on oltava yksilöllinen nimi"
-        material:
+        basic_product:
           attributes:
             name:
-              blank: 'Anna raaka-aineelle nimi'
-              taken: 'Raaka-aine samalla nimellä on jo olemassa'
+              blank: 'Anna tuotteelle nimi'
+              taken: 'Tuote samalla nimellä on jo olemassa'
             group:
               inclusion: 'Valitse tuoteryhmä'
             unit:
-              inclusion: 'Valitse raaka-aineen yksikkö'
+              inclusion: 'Valitse tuotteen yksikkö'

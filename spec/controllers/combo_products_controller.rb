@@ -1,19 +1,19 @@
 require 'spec_helper'
 require 'shared_examples_for_api_controllers'
-describe ProductsController do
-  let(:resource){FactoryGirl.build :product_with_materials}
+describe ComboProductsController do
+  let(:resource){FactoryGirl.build :combo_product}
   context "with an authenticated user" do
     include_examples "authenticate user"
     
     describe "#GET index" do
       let(:resources){ [resource]}
       context "with no query params" do
-        before(:each){Product.should_receive(:all).and_return resources}
+        before(:each){ComboProduct.should_receive(:all).and_return resources}
         include_examples "a valid index request"
       end
       context "with in_stock" do
         let(:options){ {in_stock: true} }
-        before(:each){ Product.should_receive(:in_stock).and_return double(:all => resources) if Product.respond_to? :in_stock}
+        before(:each){ ComboProduct.should_receive(:in_stock).and_return double(:all => resources) if ComboProduct.respond_to? :in_stock}
         include_examples "a valid index request", in_stock: true
       end
     end
@@ -29,8 +29,8 @@ describe ProductsController do
       end
       context "permitted attributes" do
         include_examples "setup create request before each" 
-        it "should allow name, description, group and materials to be set" do
-          fake_params.should_receive(:permit).with(:name, :description, :group, consists_of_materials_attributes: [:id, :amount, :material_id, :_destroy])
+        it "should allow name, description, group and basic products to be set" do
+          fake_params.should_receive(:permit).with(:name, :description, :group, consists_of_basic_products_attributes: [:id, :amount, :basic_product_id, :_destroy])
           post :create, format: :json
         end
       end

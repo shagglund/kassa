@@ -22,31 +22,27 @@ fi:
       update: 'Tallenna muuttuneet tiedot'
       create_header: 'Luo uusi tuote'
       create: 'Luo tuote näillä tiedoilla'
-      product_info: 'Tuotteen tiedot'
       name: 'Tuotteen nimi'
       description: 'Tuotteen vapaamuotoinen kuvaus'
       unit: 'Tuotteen koko'
       group: 'Tuoteryhmä'
-      materials: 'Tuote koostuu..'
       select_material_from_list: 'raaka-aine listasta'
       add_material: 'Lisää'
-      create_material: 'tai luo uusi'
     list:
       new_product: 'Uusi tuote'
       create_new_product: 'Luo uusi tuote'
-    modal_material_form:
-      create_header: 'Uuden raaka-aineen tiedot'
-      update_header: 'Raaka-aineen tiedot'
-      create: 'Luo raaka-aine'
+    basic_product_form:
+      create_header: 'Uuden tuotteen tiedot'
+      update_header: 'Tuotteen tiedot'
+      create: 'Luo tuote'
       update: 'Päivitä muuttuneet tiedot'
-      cancelAndClose: 'Sulje'
       cancelChanges: 'Peruuta muutokset'
-    material_form:
       unsaved_changes: 'Tallentamattomia muutoksia'
-      name: 'Raaka-aineen nimi'
+      description: 'Tuotteen vapaamuotoinen kuvaus'
+      name: 'Tuotteen nimi'
       price: 'Hinta euroissa'
       stock: 'Määrä valitussa yksikössä'
-      unit: 'Yksikkö'
+      unit: 'Missä muodossa tuote on?'
       group: 'Ryhmä'
   users:
     content:

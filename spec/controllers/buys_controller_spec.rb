@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'shared_examples_for_api_controllers'
 describe BuysController do
-  let(:resource){FactoryGirl.build :buy}
+  let(:resource) {FactoryGirl.build :buy}
   context "with an authenticated user" do
     include_examples "authenticate user"
     describe "GET #index" do

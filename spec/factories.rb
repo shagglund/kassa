@@ -13,38 +13,33 @@ FactoryGirl.define do
     group "beer"
     description {Faker::Lorem.paragraph}
     name {Faker::Product.product}
-    
-    factory :product_with_materials do
-      ignore { materials_count 5 }
+   
+  end
+ 
+  factory :combo_product, parent: :product, class: 'ComboProduct' do
+    ignore { products_count 5 }
 
-      after :build do |product, evaluator|
-        list = FactoryGirl.build_list :product_entry, evaluator.materials_count, product: product
-        product.consists_of_materials << list
-      end
-      
-      after :create do |product|
-        product.consists_of_materials.each {|e| e.save!}
-      end
+    after :build do |product, evaluator|
+      list = FactoryGirl.build_list :product_entry, evaluator.products_count, combo_product: product
+      product.consists_of_basic_products << list
     end
+  end
+
+  factory :basic_product, parent: :product, class: 'BasicProduct' do
+    unit "piece"
+    stock 24
+    price 0.7
   end
 
   factory :product_entry do
     amount 2
-    association :material, strategy: :build
-    association :product, strategy: :build
-  end
-
-  factory :material do
-    unit "piece"
-    group "beer"
-    stock 24
-    price 0.7
-    name { Faker::Product.product_name }
+    association :combo_product, strategy: :build
+    association :basic_product, strategy: :build
   end
 
   factory :buy_entry do
     amount 2
-    association :product, factory: :product_with_materials, strategy: :build
+    association :product, factory: :basic_product, strategy: :build
     association :buy, strategy: :build
   end
 
@@ -58,10 +53,6 @@ FactoryGirl.define do
     after :build do |buy, evaluator|
       list = FactoryGirl.build_list :buy_entry, evaluator.product_count, buy: buy 
       buy.consists_of_products << list
-    end
-    
-    after :create do |buy, evaluator|
-      buy.consists_of_products.each {|p| p.save!}
     end
   end
 end
