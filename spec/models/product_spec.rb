@@ -7,6 +7,4 @@ describe Product do
     should validate_uniqueness_of :name
   end
   it {should validate_presence_of :name}
-
-  include_examples 'localized group'
 end

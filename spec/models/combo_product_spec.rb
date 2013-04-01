@@ -5,7 +5,7 @@ describe ComboProduct do
 
   it {should have_many(:basic_products).through :consists_of_basic_products}
 
-  include_examples 'localized group'
+  include_examples 'localized group', %w(drink beer long_drink cider shot other)
 
   subject{FactoryGirl.build :combo_product}
   context "#price" do

@@ -1,5 +1,5 @@
 class ComboProduct < Product
-  groups << %w(drink)
+  @@groups = %w(beer long_drink cider shot other drink)
   cattr_reader :groups
 
   has_many :consists_of_basic_products, :class_name => 'ProductEntry'
@@ -8,8 +8,12 @@ class ComboProduct < Product
   accepts_nested_attributes_for :consists_of_basic_products, :allow_destroy => true
 
   validates :name, presence: true, uniqueness: true
-  validates :group, :inclusion => {:in => @@groups}
+  validates :group, inclusion: {in: groups}
   validates :consists_of_basic_products, length: {minimum: 1}
+
+  def self.localized_groups
+    as_hash_with_internationalization "group", groups
+  end
  
   def self.in_stock
     sub = joins{consists_of_basic_products.basic_product}.where{consists_of_basic_products.amount > basic_product.stock}

@@ -14,13 +14,15 @@ describe BasicProduct do
   it {should validate_numericality_of(:stock).only_integer}
   it {should ensure_inclusion_of(:stock).in_range(0..9999)}
 
-  include_examples 'localized group'
+  include_examples 'localized group', %w(beer long_drink cider shot other)
 
-  it {should ensure_inclusion_of(:unit).in_array BasicProduct.units}
+  it {should ensure_inclusion_of(:unit).in_array %w(piece ml cl dl litre)}
   it "should create a hash with <unit>:<internationalized unit>" do
     BasicProduct.localized_units.should_not be_empty
     BasicProduct.localized_units.each do |k,v|
-      v.should eq I18n.t("activerecord.attributes.basic_product.units.#{k}")
+      expect{
+        v.should eq I18n.translate!("activerecord.attributes.basic_product.units.#{k}", raise: true)
+      }.to_not raise_error
     end
   end
 
