@@ -3,8 +3,7 @@ dependencies =  [
   'kassa.services.data'
   'kassa.ui.dialogs.basket'
 ]
-angular.module('kassa.controllers.buys.products', dependencies)
-.controller('BuysProductsController', ($scope, Basket, DataService, BasketDialog)->
+pController = ($scope, Basket, DataService, BasketDialog)->
   allProducts = ->
     _.merge DataService.collection('basic_products'), DataService.collection('combo_products')
 
@@ -19,4 +18,6 @@ angular.module('kassa.controllers.buys.products', dependencies)
     else
       allProducts()
 
-)
+
+angular.module('kassa.controllers.buys.products', dependencies)
+.controller('BuysProductsController', ['$scope', 'Basket', 'DataService', 'BasketDialog', pController])

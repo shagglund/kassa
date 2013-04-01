@@ -1,8 +1,8 @@
 dependencies=[
   'kassa.services.data'
 ]
-angular.module('kassa.controllers.products.basic_form', dependencies)
-.controller('BasicProductFormController', ($scope, $routeParams, DataService)->
+
+bpfController =  ($scope, $routeParams, DataService)->
   $scope.currentBasicProduct = DataService.new 'basic_product'
 
   $scope.$watch 'currentProduct', (newVal)->
@@ -11,4 +11,6 @@ angular.module('kassa.controllers.products.basic_form', dependencies)
 
   if angular.isDefined $routeParams.id
     $scope.currentBasicProduct = DataService.find 'basic_product', $routeParams.id
-)
+
+angular.module('kassa.controllers.products.basic_form', dependencies)
+.controller('BasicProductFormController',['$scope', '$routeParams', 'DataService', bpfController])

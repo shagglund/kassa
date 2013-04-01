@@ -1,5 +1,4 @@
-angular.module('kassa.common', [])
-.run( ($rootScope)->
+rootScopeSetup = ($rootScope)->
   fieldValue = (item, fields)->
     r = item
     r = item[f] for f in fields when angular.isDefined r
@@ -19,4 +18,6 @@ angular.module('kassa.common', [])
     Gravtastic(email, {default: 'mm', size: size})
   
   return
-)
+
+angular.module('kassa.common', [])
+.run(['$rootScope', rootScopeSetup])

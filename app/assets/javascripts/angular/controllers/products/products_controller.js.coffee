@@ -1,8 +1,7 @@
 dependencies=[
   'kassa.services.data'
 ]
-angular.module('kassa.controllers.products.products', dependencies)
-.controller('ProductsController', ($scope, $routeParams, DataService)->
+pController = ($scope, $routeParams, DataService)->
   allProducts= ->
     _.merge DataService.collection('basic_products'), DataService.collection('combo_products')
 
@@ -36,4 +35,6 @@ angular.module('kassa.controllers.products.products', dependencies)
     $scope.currentProduct = DataService.new 'combo_product'
   else
     $scope.currentProduct = DataService.new 'basic_product'
-)
+
+angular.module('kassa.controllers.products.products', dependencies)
+.controller('ProductsController', ['$scope','$routeParams', 'DataService', pController])

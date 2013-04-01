@@ -1,7 +1,7 @@
 angular.module('kassa.ui.dialogs.basket', ['ui.bootstrap.dialog'])
-.service('BasketDialog', ($dialog)->
+.service('BasketDialog',['$dialog', ($dialog)->
   new BasketDialog($dialog)
-)
+])
 
 class BasketDialog
   constructor: (@dialogService)->

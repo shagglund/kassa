@@ -1,6 +1,9 @@
 fi:
   activerecord:
     models:
+      product:
+        one: 'Tuote'
+        other: 'Tuotteet'
       basic_product:
         one: 'Tuote'
         other: 'Tuotteet'

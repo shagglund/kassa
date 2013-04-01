@@ -343,6 +343,6 @@ class DataService
     delete @collection[type][item.id]
 
 angular.module('kassa.services.data', ['ngResource'])
-.service('DataService', ($q, $resource)->
+.service('DataService', ['$q', '$resource', ($q, $resource)->
   new DataService($q, $resource)
-)
+])

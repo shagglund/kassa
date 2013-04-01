@@ -2,8 +2,7 @@ dependencies = [
   'kassa.services.basket'
   'kassa.ui.dialogs.basket'
 ]
-angular.module('kassa.controllers.buys.basket', dependencies)
-.controller('BasketController', ($scope, Basket, BasketDialog)->
+basketController = ($scope, Basket, BasketDialog)->
   $scope.basket = Basket
   $scope.dialog = BasketDialog
 
@@ -23,4 +22,6 @@ angular.module('kassa.controllers.buys.basket', dependencies)
     return 0 unless angular.isDefined Basket.buyer
     Basket.buyer.attributes.balance - Basket.totalPrice()
 
-)
+
+angular.module('kassa.controllers.buys.basket', dependencies)
+.controller('BasketController', ['$scope','Basket', 'BasketDialog', basketController])

@@ -3,8 +3,7 @@ dependencies= [
   'kassa.services.data'
   'kassa.ui.dialogs.basket'
 ]
-angular.module('kassa.controllers.buys.users', dependencies)
-.controller('BuysUsersController', ($scope, Basket, DataService, BasketDialog)->
+uController = ($scope, Basket, DataService, BasketDialog)->
   $scope.basket = Basket
   $scope.dialog = BasketDialog
     
@@ -36,4 +35,6 @@ angular.module('kassa.controllers.buys.users', dependencies)
       'icon-fire'
     else
       'icon-ban-circle'
-)
+
+angular.module('kassa.controllers.buys.users', dependencies)
+.controller('BuysUsersController', ['$scope', 'Basket', 'DataService', 'BasketDialog', uController])

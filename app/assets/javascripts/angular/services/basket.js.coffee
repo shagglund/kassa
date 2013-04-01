@@ -63,6 +63,6 @@ class Basket
       entry.product.attributes.id == product.attributes.id
 
 angular.module('kassa.services.basket', ['kassa.services.data'])
-.service('Basket', (DataService)->
+.service('Basket', ['DataService', (DataService)->
   new Basket(DataService)
-)
+])
