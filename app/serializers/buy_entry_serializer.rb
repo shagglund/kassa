@@ -1,4 +1,4 @@
 class BuyEntrySerializer < ActiveModel::Serializer
   attributes :id, :amount
-  has_one :product, embed: :ids, include: true
+  has_one :product, embed: :ids, include: true, polymorphic: true
 end
