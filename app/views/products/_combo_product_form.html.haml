@@ -32,7 +32,7 @@
                 'data-placeholder'=>"#{t('.group')}", 
                 chosen:'currentProduct.attributes.group', 
                 'ng-model'=>'currentProduct.attributes.group'}
-            -Product.localized_groups.each_pair do |group, translation|
+            -ComboProduct.localized_groups.each_pair do |group, translation|
               %option{name:"#{group}",value:"#{group}"}
                 =translation
         =render partial: 'application/error_paragraph', locals:{prefix: 'currentProduct.', key: 'group'}
