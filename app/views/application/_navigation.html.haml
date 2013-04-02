@@ -1,7 +1,7 @@
-.row-fluid
+.row-fluid{'ng-controller'=>'NavigationController', 'ng-init'=>'session.checkStatus()'}
   .span12
     .navbar
-      .navbar-inner{'ng-controller'=>'NavigationController'}
+      .navbar-inner
         %ul.nav
           %li{'ng-class'=>"{true:'active', false:''}[currentLocation('/buys')]"}
             %a{:href=>'#/buys'}= t('other', scope: 'activerecord.models.buy') 
@@ -12,14 +12,12 @@
           %li.ng-cloak{'ng-class'=>"{true:'active', false:''}[currentLocation('/users')]",
             'ng-show'=>'session.currentUser.admin'}
             %a{:href=>'#/users'}= t('other', scope: 'activerecord.models.user')
-        %ul.nav.pull-right{'ng-init'=>'init()', 'ng-show'=>"authenticated()", 
-              'ng-controller'=>"SessionController"}
+        %ul.nav.pull-right
           %li.ng-cloak            
-            %a{'ng-href'=>'#/users/{{authenticated().id}}',
-                'ng-show'=>'authenticated()'} 
+            %a{'ng-href'=>'#/users/{{session.currentUser.id}}',
+                'ng-show'=>'session.currentUser'} 
               %i.icon-user
-              {{authenticated().username}}
+              {{session.currentUser.username}}
           %li
-            %a{'ng-click'=>"signOut()"}
-              %i.icon-
+            %a{'ng-click'=>"session.signOut()"}
               = t('actions.sign_out')

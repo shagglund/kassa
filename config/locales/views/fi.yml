@@ -1,10 +1,19 @@
 fi:
+  devise:
+    sessions:
+      new:
+        sign_in: 'Kirjaudu sisään kassaan'
+      login_fields:
+        sign_in: 'Kirjaudu sisään'
   application:
     status:
       create_success: 'Luonti onnistui'
       create_failed: 'Luonti epäonnistui'
       update_success: 'Tietojen muutos onnistui'
       updated_failed: 'Tietojen muutos epäonnistui'
+    not_found:
+      not_found: 'Valitettavasti hakemaasi sivua ei ole olemassa!'
+      return_to_buys: 'Voit palata ostosivulle tästä'
   products:
     content:
       search_by_name: 'Hae tuotteiden nimillä pilkulla eroteltuina'

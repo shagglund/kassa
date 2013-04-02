@@ -1,5 +1,9 @@
 angular.module('kassa.routes', [])
 .config(['$routeProvider', ($routeProvider)->
+  $routeProvider.when '/',
+    redirectTo: '/buys'
+  $routeProvider.when '',
+    redirectTo: '/buys',
   $routeProvider.when '/buys',
     templateUrl: '/partials/buys.html'
   $routeProvider.when '/products',
@@ -14,9 +18,6 @@ angular.module('kassa.routes', [])
   $routeProvider.when '/users/:id',
     templateUrl: '/partials/users.html',
     controller: 'UsersController'
-  $routeProvider.when '/login',
-    templateUrl: '/partials/login.html',
-    controller: 'SessionController'
   $routeProvider.otherwise
-    redirectTo: '/login'
+    templateUrl: '/partials/not_found.html'
 ])

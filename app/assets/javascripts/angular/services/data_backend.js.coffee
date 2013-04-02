@@ -174,7 +174,7 @@ class Buy extends BaseModel
 
   products: ->
     _.collect @attributes.consists_of_products, (e)=>
-      e.product = @_findProduct(e)
+      e.product = @_findProduct(e.product_id)
       e
 
   add: (product, amount=1)->
@@ -182,7 +182,7 @@ class Buy extends BaseModel
 
   price: ->
     summer = (sum, entry)=>
-      sum += entry.amount * @_findProduct(entry).price()
+      sum += entry.amount * @_findProduct(entry.product_id).price()
     _.inject @attributes.consists_of_products, summer, 0
 
   toRailsFormat: ->
@@ -195,11 +195,10 @@ class Buy extends BaseModel
       attributes.price = parseFloat(attributes.price)
     super attributes
 
-  _findProduct: (entry)->
-    if entry.product.type == 'basic_product'
-      @dataService.find('basic_product', id)
-    else if entry.product.type == 'combo_product'
-      @dataService.find('combo_product', id) if angular.isUndefined(p)
+  _findProduct: (id)->
+    p = @dataService.find('basic_product', id)
+    p = @dataService.find('combo_product', id) if angular.isUndefined(p)
+    p
 
 class User extends BaseModel
   constructor: (d, attrs={})->

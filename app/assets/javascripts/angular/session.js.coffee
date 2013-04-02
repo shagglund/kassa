@@ -1,10 +1,7 @@
 class Session
-  constructor: (@$http, @$q)->
+  constructor: (@$http, @$q, @$window)->
     @pendingUnauthorizedRequests = []
     @currentUser = undefined
-
-  authenticatedUser: =>
-    @currentUser
 
   signIn: (credentials)=>
     success = (successResponse, status)=>
@@ -12,11 +9,12 @@ class Session
     deferred = @_defer @$http.post, '/user/sign_in', {user: credentials}
     deferred.then success, @_setUnauthenticated
 
-  signOut: ()=>
+  signOut: =>
     deferred = @_defer @$http.delete ,'/user/sign_out', {}
-    deferred.then @_setUnauthenticated
+    deferred.then =>
+      @$window.location.href = '/user/sign_in'
 
-  checkStatus: ()=>
+  checkStatus: =>
     deferred = @_defer @$http.get, '/users/current', {}
     deferred.then @_setAuthenticated, @_setUnauthenticated
     
@@ -30,46 +28,17 @@ class Session
   _setAuthenticated: (response)=>
     @currentUser = response.user
     @_runPendingRequests()
+    response
 
-  _setUnauthenticated: ()=>
+  _setUnauthenticated: (response)=>
     @currentUser = undefined
+    response
   
   _defer: (httpFunc, url, options)=>
     deferred = @$q.defer()
     httpFunc(url, options).success(deferred.resolve).error(deferred.reject)
     deferred.promise
   
-sessionController = ($scope, $location, Session)->
-  matcher = new RegExp('^/(products|users|buys)', 'i')
-  navigateAuthenticated= ->
-    unless matcher.test $location.path()
-      $location.path('/buys')
-
-  navigateUnauthenticated= ->
-    $location.path('/')
-
-  $scope.authenticated = ->
-    Session.authenticatedUser()
-
-  $scope.signIn = (credentials)->
-    valid = ->
-      navigateAuthenticated
-      $scope.invalid = false
-    invalid = ->
-      $scope.invalid = true
-
-    Session.signIn(credentials).then valid, invalid
-
-  $scope.signOut = ->
-    Session.signOut().then navigateUnauthenticated
-  
-  $scope.checkStatus = ->
-    Session.checkStatus().then navigateAuthenticated
-  
-  $scope.init = =>
-    unless angular.isDefined Session.authenticatedUser()
-      $scope.checkStatus()
-
 httpInterceptor = ($httpProvider)->
   handler = ($injector, $q)->
     success = (response)->
@@ -94,9 +63,8 @@ httpInterceptor = ($httpProvider)->
   $httpProvider.responseInterceptors.push(interceptor)
   
 angular.module('kassa.session', [])
-.service('Session', ['$http','$q',($http, $q)->
-  return new Session($http, $q)
+.service('Session', ['$http','$q','$window',($http, $q, $window)->
+  return new Session($http, $q, $window)
 ])
-.controller('SessionController', ['$scope','$location', 'Session', sessionController])
 .config(['$httpProvider', httpInterceptor])
 
