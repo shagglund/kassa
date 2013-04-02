@@ -95,3 +95,12 @@ fi:
               inclusion: 'Valitse tuoteryhmä'
             unit:
               inclusion: 'Valitse tuotteen yksikkö'
+        user:
+          attributes:
+            password:
+              blank: 'Salasana ei voi olla tyhjä'
+            username:
+              too_short: 'Piikin nimi on liian lyhyt'
+              too_long: 'Piikin nimi on liian pitkä'
+            email:
+              blank: 'Anna sähköposti'
