@@ -8,9 +8,8 @@
           %li.divider-vertical
           %li{'ng-class'=>"{true:'active', false:''}[currentLocation('/products')]"}
             %a{:href=>'#/products'}= t('other', scope: 'activerecord.models.product') 
-          %li.divider-vertical.ng-cloak{'ng-show'=>'session.currentUser.admin'}
-          %li.ng-cloak{'ng-class'=>"{true:'active', false:''}[currentLocation('/users')]",
-            'ng-show'=>'session.currentUser.admin'}
+          %li.divider-vertical.ng-cloak.kassa-admin
+          %li.ng-cloak.kassa-admin{'ng-class'=>"{true:'active', false:''}[currentLocation('/users')]"}
             %a{:href=>'#/users'}= t('other', scope: 'activerecord.models.user')
         %ul.nav.pull-right
           %li.ng-cloak            

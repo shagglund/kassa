@@ -1,4 +1,7 @@
 fi:
+  errors:
+    admin:
+      not_authorized: 'Soosoo! Hanki ylläpitäjän oikeudet ja yritä uudelleen.'
   activerecord:
     models:
       product:

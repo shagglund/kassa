@@ -1,7 +1,8 @@
 class UsersController < ApplicationController
   respond_to :json
-  before_filter :authenticate_admin!, only: :create
   before_filter :find_user, only: [:show, :update]
+  before_filter :authenticate_admin!, only: :create
+  before_filter :authenticate_admin_if_not_self!, only: :update
 
   def index
     @users = User.all
@@ -43,5 +44,9 @@ class UsersController < ApplicationController
     else
       req.permit()
     end
+  end
+
+  def authenticate_admin_if_not_self!
+    authenticate_admin! unless current_user == @user
   end
 end

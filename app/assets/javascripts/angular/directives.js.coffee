@@ -16,3 +16,11 @@ angular.module('kassa.directives', [])
       
   {restrict: 'A', scope:false, terminal:true, link: directive}
 )
+.directive('kassaAdmin', ['Session', (Session)->
+  directive = (scope, element, attrs)->
+    scope.session = Session
+    scope.$watch 'session.currentUser', (user)->
+      display = if angular.isDefined(user) and user.admin then '' else 'none'
+      element.css('display', display)
+  {restrict: 'AC', scope:true, link:directive}
+])

@@ -1,4 +1,4 @@
-.navbar
+.navbar.kassa-admin
   .navbar-inner
     %form.navbar-search
       %input.search-query{placeholder: "#{t('.search_by_username')}",
@@ -10,7 +10,7 @@
           = t('.create_new_user')
 .row-fluid
   .span8
-    .span3.well.well-small
+    .span3.well.well-small.kassa-admin
       =render 'users/list'
     .span9
       =render 'users/user_form'

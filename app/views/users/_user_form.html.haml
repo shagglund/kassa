@@ -30,7 +30,8 @@
       %label.control-label{for:'userPassword'}
         = t('password', scope: 'activerecord.attributes.user')
       .controls
-        %input{type: 'password', required:true, placeholder: "#{t('.password')}",
+        %input{type: 'password', placeholder: "#{t('.password')}",
+          'ng-required'=> 'currentUser.isNew()',
           'ng-model'=>'currentUser.attributes.password', id:'userPassword', 
           'ng-change'=>'currentUser.clearErrors("password")'}
           =render partial: 'application/error_paragraph',
@@ -39,7 +40,8 @@
       %label.control-label{for:'userPasswordConfirmation'}
         = t('password_confirmation', scope: 'activerecord.attributes.user')
       .controls
-        %input{type: 'password', required:true, placeholder: "#{t('.password_confirmation')}",
+        %input{type: 'password', placeholder: "#{t('.password_confirmation')}",
+          'ng-required'=> 'currentUser.isNew()',
           'ng-model'=>'currentUser.attributes.password_confirmation', id:'userPasswordConfirmation', 
           'ng-change'=>'currentUser.clearErrors("password_confirmation")'}
           =render partial: 'application/error_paragraph',
@@ -54,7 +56,7 @@
           'ng-change'=>'currentUser.clearErrors("balance")'}
           =render partial: 'application/error_paragraph',
                   locals: {prefix: 'currentUser.', key: 'balance'}
-    .control-group
+    .control-group.kassa-admin
       .controls
         %label.checkbox{for:'userAdmin'}
           %input{type: 'checkbox', id:'userAdmin',

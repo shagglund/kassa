@@ -12,6 +12,11 @@ uController =  ($scope, $routeParams, DataService)->
 
   if angular.isDefined $routeParams.id
     $scope.currentUser = DataService.find 'user', $routeParams.id
+    if angular.isUndefined $scope.currentUser
+      #hack to wait for users loading and then update the "found" user as current
+      unregister = $scope.$watch 'users().length', ->
+        $scope.currentUser = DataService.find 'user', $routeParams.id
+        unregister() if angular.isDefined($scope.currentUser)
   else
     $scope.currentUser = $scope.newUser
 
