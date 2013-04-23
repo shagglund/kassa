@@ -5,7 +5,8 @@ dependencies =  [
 ]
 pController = ($scope, Basket, DataService, BasketDialog)->
   allProducts = ->
-    _.merge DataService.collection('basic_products'), DataService.collection('combo_products')
+    products = _.merge DataService.collection('basic_products'), DataService.collection('combo_products')
+    _.select products, (p)-> p.stock() > 0
 
   $scope.basket = Basket
   $scope.dialog = BasketDialog
