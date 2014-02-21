@@ -3,6 +3,7 @@ class Product < ActiveRecord::Base
   @@groups = %w(beer long_drink cider shot other)
   cattr_reader :units, :groups
 
+  validates :name, presence: true, uniqueness: true
   validates :price, numericality: {only_integer: false}, inclusion: {in: 0..99}
   validates :stock, numericality: {only_integer: true}, inclusion: {in: 0..9999}
   validates :group, inclusion: {in: groups}

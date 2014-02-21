@@ -20,7 +20,7 @@ FactoryGirl.define do
 
   factory :buy_entry do
     amount 2
-    association :product, factory: :basic_product, strategy: :build
+    association :product, strategy: :build
     association :buy, strategy: :build
   end
 
