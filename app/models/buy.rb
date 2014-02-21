@@ -12,22 +12,18 @@ class Buy < ActiveRecord::Base
   validates :consists_of_products, length: {minimum: 1}
   validate :enough_products_in_stock
 
+  scope :with_buyer_and_products, lambda{
+    joins(:buyer, consists_of_products: :product).includes(:buyer, consists_of_products: :product)
+  }
+  scope :in_create_order, lambda{order('buys.created_at DESC')}
+  scope :latest, lambda{|limit=20| with_buyer_and_products.in_create_order.limit(limit)}
+
   def price
     return super unless product_count_changed?
     consists_of_products.inject(0){|s, e| s + e.amount * e.product.price}
   end
   def product_count
     consists_of_products.length
-  end
-  def self.latest(limit=20)
-    with_buyer_and_products.in_create_order.limit(limit)
-  end
-  def self.in_create_order
-    order('buys.created_at DESC')
-  end
-  protected
-  def self.with_buyer_and_products
-    eager_load{[buyer, consists_of_products.product]}
   end
   private
   def enough_products_in_stock

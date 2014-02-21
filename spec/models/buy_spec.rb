@@ -23,12 +23,6 @@ describe Buy do
       subject.price.should be_within(0.001).of(price + entry.price)
     end
 
-    it "should change the price when removed" do
-      price = subject.price
-      entry = subject.consists_of_products.pop
-      subject.price.should be_within(0.001).of(price-entry.price)
-    end
-
     it "should use the price from database unless a product was added" do
       subject.should_receive(:product_count_changed?).and_return false
       subject.should_not_receive(:consists_of_products)
