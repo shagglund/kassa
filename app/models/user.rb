@@ -1,5 +1,5 @@
 class User < ActiveRecord::Base
-  devise :recoverable, :lockable, :rememberable, :validatable, :trackable, :database_authenticatable
+  devise :recoverable, :rememberable, :validatable, :trackable, :database_authenticatable
 
   has_many :buys, foreign_key: 'buyer_id'
 
