@@ -1,26 +1,26 @@
 development:
-  adapter: postgresql
-  encoding: utf8
-  database: beer
-  pool: 5
-  username: beer
-  password: '!beer4you'
+  adapter:  postgresql
+  host:     localhost
+  encoding: unicode
+  database: kassa_development
+  pool:     5
+  username: <%= Rails.application.secrets.postgres_user %>
+  password: <%= Rails.application.secrets.postgres_password %>
 
-test: &test
-  adapter: postgresql
-  encoding: utf8
-  database: beer_test
-  pool: 5
-  username: beer
-  password: '!beer4you'
+test:
+  adapter:  postgresql
+  host:     localhost
+  encoding: unicode
+  database: kassa_test
+  pool:     5
+  username: <%= Rails.application.secrets.postgres_user %>
+  password: <%= Rails.application.secrets.postgres_password %>
 
 production:
-  adapter: postgresql
-  encoding: utf8
-  database: beer_production
-  pool: 5
-  username: beer
-  password: '!beer4you'
-
-cucumber:
-  <<: *test
+  adapter:  postgresql
+  host:     localhost
+  encoding: unicode
+  database: kassa_production
+  pool:     5
+  username: <%= Rails.application.secrets.postgres_user %>
+  password: <%= Rails.application.secrets.postgres_password %>

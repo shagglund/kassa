@@ -1,52 +1,67 @@
 source 'https://rubygems.org'
 
-gem 'rails'
+# Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
+ruby '2.1.0'
+gem 'rails', '4.1.0.rc1'
 
-# Bundle edge Rails instead:
-# gem 'rails', :git => 'git://github.com/rails/rails.git'
+# Use sqlite3 as the database for Active Record
 
-gem 'audited-activerecord'
-gem 'pg'
+# Use SCSS for stylesheets
+gem 'sass-rails', '~> 4.0.0'
+
+# Use Uglifier as compressor for JavaScript assets
+gem 'uglifier', '>= 1.3.0'
+
+# Use CoffeeScript for .js.coffee assets and views
+gem 'coffee-rails', '~> 4.0.0'
+
+# Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
+gem 'jbuilder', '~> 1.2'
+
+
+  # bundle exec rake doc:rails generates the API under doc/api.
+
+# Use ActiveModel has_secure_password
+# gem 'bcrypt-ruby', '~> 3.1.2'
+
+# Use unicorn as the app server
+# gem 'unicorn'
+
+# Use Capistrano for deployment
+# gem 'capistrano', group: :development
+
+# Use debugger
+# gem 'debugger', group: [:development, :test]
+
+gem 'bootstrap-sass', '>= 3.0.0.0'
+gem 'font-awesome-sass'
+gem 'angularjs-rails'
+gem 'angular-ui-rails'
 gem 'devise'
-gem 'squeel'
-gem 'haml-rails'
-gem 'active_model_serializers'
-gem 'strong_parameters'
-gem 'gravtastic'
-gem 'unicorn-rails'
+gem 'pg'
+gem 'puma'
+gem 'sendgrid'
+gem 'slim-rails'
 
-group :test, :development do
-
-  gem 'jasminerice'
-end
-group :test do
-  gem 'spork-rails'
-  gem 'guard-spork'
-  gem 'guard'
+group :development do
+  gem 'better_errors'
+  gem 'binding_of_caller', :platforms=>[:mri_19, :mri_20, :mri_21, :rbx]
   gem 'guard-rspec'
-  gem 'guard-jasmine'
-  gem 'guard-cucumber'
-  gem 'rb-inotify', :require => false
-  gem 'rb-fsevent', :require => false
-  gem 'rb-fchange', :require => false
-  gem 'capybara'
-  gem 'cucumber-rails'
-  gem 'rspec-rails'
-  gem 'database_cleaner'
-  gem 'factory_girl_rails'
-  gem 'ffaker'
-  gem 'shoulda-matchers'
-  gem 'multi_json'
+  gem 'haml2slim'
+  gem 'html2haml'
+  gem 'rails_layout'
+  gem 'rb-fchange', :require=>false
+  gem 'rb-fsevent', :require=>false
+  gem 'rb-inotify', :require=>false
 end
 
-group :assets do
-  gem 'lodash-rails'
-  gem 'sass-rails'
-  gem 'coffee-rails'
-  gem 'jquery-rails'
-  gem 'chosen-rails'
-  gem 'uglifier'
-  gem 'twitter-bootstrap-rails'
-  gem 'angular-rails'
-  gem 'angular-ui-rails'
+group :development, :test do
+  gem 'factory_girl_rails'
+  gem 'rspec-rails'
 end
+
+group :test do
+  gem 'database_cleaner'
+  gem 'email_spec'
+end
+

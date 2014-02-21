@@ -1,5 +1,0 @@
-%ul.nav.nav-list
-  %li.nav-header=t(".users")
-  %li{'ng-repeat'=>'user in users()',
-      'ng-class'=>'{true:"active", false: ""}[currentUser == user]'}
-    %a{'ng-href'=>'#/users/{{user.id}}'} {{user.attributes.username}}

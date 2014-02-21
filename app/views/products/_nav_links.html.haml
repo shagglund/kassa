@@ -1,4 +1,0 @@
-%li.nav-header=t(".#{header}")
-%li{'ng-repeat'=>"product in entries()|#{filter}",
-    'ng-class'=>'{true:"active", false:""}[currentProduct == product]'}
-  %a{'ng-href'=>'#/products/{{product.id}}'} {{product.attributes.name}}

@@ -1,1 +1,0 @@
-Bootstrap's modal directive.

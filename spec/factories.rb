@@ -13,28 +13,9 @@ FactoryGirl.define do
     group "beer"
     description {Faker::Lorem.paragraph}
     name {Faker::Product.product}
-   
-  end
- 
-  factory :combo_product, parent: :product, class: 'ComboProduct' do
-    ignore { products_count 5 }
-
-    after :build do |product, evaluator|
-      list = FactoryGirl.build_list :product_entry, evaluator.products_count, combo_product: product
-      product.consists_of_basic_products << list
-    end
-  end
-
-  factory :basic_product, parent: :product, class: 'BasicProduct' do
     unit "piece"
     stock 24
     price 0.7
-  end
-
-  factory :product_entry do
-    amount 2
-    association :combo_product, strategy: :build
-    association :basic_product, strategy: :build
   end
 
   factory :buy_entry do
