@@ -9,7 +9,7 @@ class UsersController < ApplicationController
     respond_with @users
   end
   
-  def current
+  def me
     @user = current_user
     respond_with @user
   end
