@@ -1,0 +1,12 @@
+angular.module('kassa').controller('NavigationCtrl', [
+  '$scope'
+  '$location'
+  ($scope, $location)->
+    $scope.routes = <%=
+      %w(buy products users).collect do |r|
+        {href: "/#{r}", name: I18n.t("navigation.title.#{r}")}
+      end.to_json
+    %>
+
+    $scope.isCurrent = (route)-> route == $location.path()
+])

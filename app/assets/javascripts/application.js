@@ -12,4 +12,4 @@
 //
 //= require angular
 //= require angular-ui
-//= require_tree .
+//= require kassa

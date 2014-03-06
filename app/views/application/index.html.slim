@@ -1,0 +1,7 @@
+.row(ng-app="kassa")
+  .col-xs-12
+    .row
+      nav(ng-controller="NavigationCtrl")
+        ul
+          li(ng-repeat="route in routes" ng-class='{active: isCurrent(route)}')
+            a(ng-href="{{route.href}}") {{route.name}}
