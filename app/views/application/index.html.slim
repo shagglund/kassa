@@ -9,3 +9,4 @@
             a(ng-href="/users/{{session.currentUser().id}}" ng-click='session.signOut()') {{session.currentUser().username}}
           li
             a(ng-href="{{routes[0]}}" ng-click='session.signOut()')= t('navigation.title.sign_out')
+    .row(ng-view)

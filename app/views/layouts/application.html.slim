@@ -1,6 +1,7 @@
 doctype
 html
   head
+    base href='/app/'
     title
       | Kassa
     = stylesheet_link_tag "application", media: "all"
@@ -12,5 +13,5 @@ html
 
   javascript:
     angular.module('kassa.templates', []).run(['$templateCache', function($templateCache){
-      //preload angular templates to cache
+      $templateCache.put('/tpl/404.html', "#{escape_javascript render 'common/client404'}")
     }])

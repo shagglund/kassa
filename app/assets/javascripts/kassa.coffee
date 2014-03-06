@@ -3,7 +3,7 @@
 #= require_tree ./services
 #= require_tree ./controllers
 
-angular.module('kassa', ['ngRoute'])
+angular.module('kassa', ['ngRoute', 'kassa.templates'])
 .config([
   '$locationProvider'
   ($locationProvider)->
@@ -18,4 +18,14 @@ angular.module('kassa', ['ngRoute'])
     for tag in document.getElementsByTagName('meta')
       if tag.name == 'csrf-token'
         $httpProvider.defaults.headers.common['X-CSRF-Token'] = tag.content 
+])
+.config([
+  '$routeProvider'
+  ($routeProvider)->
+    $routeProvider
+      .when('', redirectTo: '/buy')
+      .when('/', redirectTo: '/buy')
+      .when('/404', templateUrl: '/tpl/404.html')
+      .otherwise(redirectTo: '/404')
+
 ])

@@ -8,6 +8,6 @@ Kassa::Application.routes.draw do
 
   devise_for :user
   
-  get '/app*path', to: 'application#index'
-  root to: 'application#index'
+  get '/app(*path)', to: 'application#index'
+  root to: redirect('/app')
 end
