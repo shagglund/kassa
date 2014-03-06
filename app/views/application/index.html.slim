@@ -5,3 +5,7 @@
         ul
           li(ng-repeat="route in routes" ng-class='{active: isCurrent(route)}')
             a(ng-href="{{route.href}}") {{route.name}}
+          li
+            a(ng-href="/users/{{session.currentUser().id}}" ng-click='session.signOut()') {{session.currentUser().username}}
+          li
+            a(ng-href="{{routes[0]}}" ng-click='session.signOut()')= t('navigation.title.sign_out')
