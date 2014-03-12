@@ -1,20 +1,21 @@
-.row(ng-app="kassa")
-  .col-xs-12
-    .row
-      nav(ng-controller="NavigationCtrl")
-        ul
-          li(ng-repeat="route in routes" ng-class='{active: isCurrent(route)}')
-            a(ng-href="{{route.href}}")
-              i.fa.fa-lg(class="{{route.iconClass}}")
-              span
-                | {{route.name}}
-          li
-            a(ng-href="/users/{{session.currentUser().id}}" ng-click='session.signOut()') 
-              img.img-rounded(gravatar="session.currentUser().email")
-              span
-                | {{session.currentUser().username}}
-          li
-            a(href="" ng-click='session.signOut()')
-              span= t('navigation.title.sign_out')
-              i.fa.fa-lg.fa-sign-out
-    .row(ng-view)
+.col-xs-12(ng-app="kassa")
+  nav.row.navbar.navbar-default.navbar-inverse(ng-controller="NavigationCtrl")
+    .col-xs-12
+      ul.nav.navbar-nav
+        li(ng-repeat="route in routes" ng-class='{active: isCurrent(route)}')
+          a(ng-href="{{route.href}}")
+            i.fa.fa-lg(class="{{route.iconClass}}")
+            span
+              | {{route.name}}
+      ul.nav.navbar-nav.navbar-right
+        li
+          a(ng-href="/users/{{session.currentUser().id}}" ng-click='session.signOut()') 
+            img.img-rounded(gravatar="session.currentUser().email")
+            span
+              | {{session.currentUser().username}}
+        li
+          a(href="" ng-click='session.signOut()')
+            span= t('navigation.title.sign_out')
+            i.fa.fa-lg.fa-sign-out
+  .row
+    .col-xs-12(ng-view)
