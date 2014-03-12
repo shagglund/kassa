@@ -20,4 +20,9 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  navigation:
+    title:
+      buy: Buys
+      products: Products
+      users: Users
+      sign_out: Sign Out
