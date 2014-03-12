@@ -6,7 +6,9 @@
           li(ng-repeat="route in routes" ng-class='{active: isCurrent(route)}')
             a(ng-href="{{route.href}}") {{route.name}}
           li
-            a(ng-href="/users/{{session.currentUser().id}}" ng-click='session.signOut()') {{session.currentUser().username}}
+            a(ng-href="/users/{{session.currentUser().id}}" ng-click='session.signOut()') 
+              img.img-rounded(gravatar="session.currentUser().email")
+              {{session.currentUser().username}}
           li
             a(href="" ng-click='session.signOut()')= t('navigation.title.sign_out')
     .row(ng-view)
