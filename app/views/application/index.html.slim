@@ -9,7 +9,7 @@
               | {{route.name}}
       ul.nav.navbar-nav.navbar-right
         li
-          a(ng-href="/users/{{session.currentUser().id}}" ng-click='session.signOut()') 
+          a(ng-href="/users/{{session.currentUser().id}}") 
             img.img-rounded(gravatar="session.currentUser().email")
             span
               | {{session.currentUser().username}}
