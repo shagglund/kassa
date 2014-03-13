@@ -1,0 +1,107 @@
+.row(ng-controller="BasketCtrl")
+  .col-xs-12
+    .panel.panel-default
+      .panel-heading
+        .row(ng-hide="isInVisibleState('basket')")
+          .vertical-center.col-xs-4.col-sm-3.col-md-2
+            span=t('basket.buyer')
+            strong
+              | {{basket.buyer.username||"#{t('basket.no_buyer')}"}}
+          .vertical-center.col-xs-4.col-sm-3.col-md-2
+            span=t('basket.product_count_unique')
+            strong
+              | {{basket.products.length}}
+          .vertical-center.col-xs-4.col-sm-3.col-md-2
+            span=t('basket.product_count_total')
+            strong
+              | {{basket.productCount()}}
+          .col-xs-12.col-sm-3.col-md-6
+            .pull-right
+              button.btn-link(kassa-state-toggle="basket")
+                i.fa.fa-arrow-down.fa-fw
+                span=t('basket.show')
+        .row(ng-show="isInVisibleState('basket')")
+          .col-xs-12.text-center
+            h4
+              span= t('basket.title')
+              small.pull-right
+                button.btn-link(kassa-state-toggle="basket")
+                  i.fa.fa-arrow-up.fa-fw
+                  span=t('basket.hide')
+      .panel-body(ng-show="isInVisibleState('basket')")
+        .row
+          .col-md-4
+            .col-md-4
+              .row
+                img.img-rounded(gravatar="basket.buyer.email" gravatar-size="128")
+            .col-md-8
+              ul.list-group
+                li.list-group-item
+                  .row
+                    .col-md-4
+                      strong=t('buyer', scope: 'activerecord.attributes.buy')
+                    .col-md-8
+                      span(ng-if='!basket.buyer')=t('basket.no_buyer')
+                      a(ng-href="/app/users/{{basket.buyer.id}}")
+                        | {{basket.buyer.username}}
+                li.list-group-item(ng-show="basket.buyer")
+                  .row
+                    .col-md-4
+                      strong=t('basket.balance_now')
+                    .col-md-8(ng-class="{'text-danger': basket.buyer.balance < 0, 'text-success': basket.buyer.balance > 20}")
+                      | {{basket.buyer.balance|currency}}
+                li.list-group-item(ng-show="basket.buyer")
+                  .row
+                    .col-md-4
+                      strong=t('basket.balance_after')
+                    .col-md-8(ng-class="{'text-danger': basket.buyer.balance < 0, 'text-success': basket.buyer.balance > 20}")
+                      | {{(basket.buyer.balance-basket.price())|currency}}
+          .col-md-8
+            ul.list-group
+              li.list-group-item
+                .row
+                  .col-md-3.text-center
+                    strong=t('amount', scope: 'activerecord.attributes.buy_entry')
+                  .col-md-3
+                    strong=t('products.one', scope: 'activerecord.attributes.buy')
+                  .col-md-2.text-center
+                    strong=t('price', scope: 'activerecord.attributes.buy')
+                  .col-md-4
+              li.list-group-item(ng-repeat="entry in basket.products")
+                .row
+                  .col-md-3.text-center
+                    .btn-group
+                      button.btn.btn-primary(ng-click="basket.changeAmount(entry, -1)")
+                        i.fa.fa-minus.fa-fw
+                      button.btn.btn-default(disabled=true)
+                        | {{entry.amount|number}}
+                      button.btn.btn-primary(ng-click="basket.changeAmount(entry, 1)")
+                        i.fa.fa-plus.fa-fw
+                  .col-md-3
+                    | {{entry.product.name}}
+                  .col-md-2.text-center
+                    | {{basket.price(entry)|currency}}
+                  .col-md-4
+                    button.btn.btn-danger(ng-click="basket.remove(entry)")
+                      i.fa.fa-times.fa-fw
+                      span=t('basket.remove_product')
+              li.list-group-item
+                .row
+                  .col-md-4.col-md-offset-2
+                    strong.pull-right=t('basket.price_total')
+                  .col-md-2.text-center
+                    | {{basket.price()|currency}}
+                  .col-md-4
+                    button.btn.btn-danger(type="button" ng-click="basket.empty()" ng-disabled="basket.products.length == 0")
+                      i.fa.fa-trash-o.fa-fw
+                      span=t('basket.empty')
+                    button.btn.btn-success(type="button" ng-click="basket.buy()" ng-disabled="!basket.isBuyable()")
+                      span=t('basket.buy')
+                      i.fa.fa-shopping-cart.fa-fw
+                      i.fa.fa-arrow-right
+
+
+.row
+  .col-xs-12.col-sm-6.col-md-4
+  .col-xs-12.col-sm-6.col-md-4
+  .col-md-4.hidden-xs.hidden-sm

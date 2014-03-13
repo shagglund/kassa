@@ -14,4 +14,5 @@ html
   javascript:
     angular.module('kassa.templates', []).run(['$templateCache', function($templateCache){
       $templateCache.put('/tpl/404.html', "#{escape_javascript render 'common/client404'}")
+      $templateCache.put('/tpl/buy.html', "#{escape_javascript render 'buy_page'}")
     }])

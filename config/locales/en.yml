@@ -26,3 +26,28 @@ en:
       products: Products
       users: Users
       sign_out: Sign Out
+  basket:
+    buyer: Buyer
+    no_buyer: No Selected Buyer
+    product_count_unique: Products (unique)
+    product_count_total: Products (total)
+    show: Show
+    title: Shopping Basket
+    hide: Hide
+    balance_now: Balance now
+    balance_after: Balance after
+    price_total: Total
+    empty: Empty
+    buy: Buy
+    remove_product: Remove
+
+  activerecord:
+    attributes:
+      buy:
+        buyer: Buyer
+        products:
+          one: Product
+          other: Products
+        price: Price
+      buy_entry:
+        amount: Amount
