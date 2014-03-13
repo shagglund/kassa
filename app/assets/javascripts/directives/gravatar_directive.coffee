@@ -6,8 +6,8 @@ angular.module('kassa').directive('gravatar', [
     linker = ($scope, $element, $attrs)->
       email = size = null
       setGravatarSrc = (email, size)->
-        if email?
-          $element.attr('src', Gravtastic(email, default: 'mm', size: (size ||= 22)))
+        email = "" unless email?
+        $element.attr('src', Gravtastic(email, default: 'mm', size: (size ||= 22)))
 
       updateEmail = (newEmail)->
         return if newEmail == email
