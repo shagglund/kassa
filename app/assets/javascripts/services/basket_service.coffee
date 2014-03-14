@@ -19,7 +19,7 @@ angular.module('kassa').service('BasketService', [
 
     empty = ->
       products.splice(0, products.length)
-      buyer = undefined
+      $location.search('buyer', null).replace()
 
     entryAmountReducer = (sum, entry)-> sum+entry.amount
     productCount = -> products.reduce entryAmountReducer, 0
