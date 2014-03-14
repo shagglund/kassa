@@ -131,7 +131,7 @@
               btn.btn-link(kassa-state="uso" kassa-state-value="asc" ng-hide="getCurrentState('uso') == 'asc'" title="#{t('sort.order_asc_title')}")
                 i.fa.fa-sort-amount-asc.fa-fw
         tbody
-          tr(ng-repeat="user in users|filter:filterInput:'username'|orderBy:getCurrentState('usf'):getCurrentState('uso') track by user.id")
+          tr(ng-repeat="user in users|fuzzyMatch:filterInput:'username'|orderBy:getCurrentState('usf'):getCurrentState('uso') track by user.id")
             td
               img.img-thumbnail(gravatar="user.email")
             td
@@ -173,7 +173,7 @@
               btn.btn-link(kassa-state="pso" kassa-state-value="asc" ng-hide="getCurrentState('pso') == 'asc'" title="#{t('sort.order_asc_title')}")
                 i.fa.fa-sort-amount-asc.fa-fw
         tbody
-          tr(ng-repeat="product in products|filter:filterInput:'name'|orderBy:getCurrentState('psf'):getCurrentState('pso') track by product.id")
+          tr(ng-repeat="product in products|fuzzyMatch:filterInput:'name'|orderBy:getCurrentState('psf'):getCurrentState('pso') track by product.id")
             td
               button.btn-link(kassa-state="{{product.name}}" kassa-state-value="{{getCurrentState(product.name) || 1}}")
                 | {{product.name}}
