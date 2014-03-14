@@ -11,12 +11,12 @@
               | {{route.name}}
       ul.nav.navbar-nav.navbar-right
         li
-          a(ng-href="/users/{{session.currentUser().id}}") 
+          a(ng-href="/app/users/{{session.currentUser(false).id}}")
             .fa-stack.fa-lg
               i.fa.fa-stack-2x
-              img.img-rounded.center-block(gravatar="session.currentUser().email" gravatar-size="25")
+              img.img-rounded.center-block(gravatar="session.currentUser(false).email" gravatar-size="25")
             span
-              | {{session.currentUser().username}}
+              | {{session.currentUser(false).username}}
         li
           a(href="" ng-click='session.signOut()')
             span= t('navigation.title.sign_out')
