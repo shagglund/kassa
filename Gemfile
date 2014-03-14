@@ -43,6 +43,7 @@ gem 'pg'
 gem 'puma'
 gem 'sendgrid'
 gem 'slim-rails'
+gem 'active_model_serializers'
 
 group :development do
   gem 'better_errors'
