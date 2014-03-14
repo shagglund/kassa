@@ -126,9 +126,9 @@
             th.text-center
               btn.btn-link(kassa-state="usf" kassa-state-value="balance")= t('users.sort.balance')
             th
-              btn.btn-link(kassa-state="uso" kassa-state-value="desc" ng-show="getCurrentState('uso') == 'asc'" title="#{t('users.sort.order_desc_title')}")
+              btn.btn-link(kassa-state="uso" kassa-state-value="desc" ng-show="getCurrentState('uso') == 'asc'" title="#{t('sort.order_desc_title')}")
                 i.fa.fa-sort-amount-desc.fa-fw
-              btn.btn-link(kassa-state="uso" kassa-state-value="asc" ng-hide="getCurrentState('uso') == 'asc'" title="#{t('users.sort.order_asc_title')}")
+              btn.btn-link(kassa-state="uso" kassa-state-value="asc" ng-hide="getCurrentState('uso') == 'asc'" title="#{t('sort.order_asc_title')}")
                 i.fa.fa-sort-amount-asc.fa-fw
         tbody
           tr(ng-repeat="user in users|filter:filterInput:'username'|orderBy:getCurrentState('usf'):getCurrentState('uso') track by user.id")
@@ -145,5 +145,45 @@
               button.btn.btn-success(kassa-state="basket" kassa-state-value="true" ng-show="getCurrentState('buyer') == user.username")
                 i.fa.fa-shopping-cart.fa-fw
                 i.fa.fa-ok
-  .col-xs-12.col-sm-6.col-md-4
+  .col-xs-12.col-sm-6.col-md-4(ng-controller="BuyProductsListController")
+    .panel.panel-default
+      .panel-heading
+        form.form-horizontal
+          .form-group
+            .col-xs-12
+              .input-group
+                span.input-group-addon
+                  i.fa.fa-search.fa-lg.fa-fw
+                input.form-control(type="text" ng-model="filterInput" ng-list="," placeholder="#{t('products.filter_list')}")
+                .input-group-btn
+                  button.btn.btn-danger(ng-click="filterInput.length=0" ng-disabled="!filterInput.length" title="#{t('products.clear_filter_list')}")
+                    i.fa.fa-eraser.fa-lg.fa-fw
+      table.table.table-striped
+        thead
+          tr
+            th
+              btn.btn-link(kassa-state="psf" kassa-state-value="name")= t('products.sort.name')
+            th.text-center
+              btn.btn-link(kassa-state="psf" kassa-state-value="stock")= t('products.sort.stock')
+            th.text-center
+              btn.btn-link(kassa-state="psf" kassa-state-value="price")= t('products.sort.price')
+            th
+              btn.btn-link(kassa-state="pso" kassa-state-value="desc" ng-show="getCurrentState('pso') == 'asc'" title="#{t('sort.order_desc_title')}")
+                i.fa.fa-sort-amount-desc.fa-fw
+              btn.btn-link(kassa-state="pso" kassa-state-value="asc" ng-hide="getCurrentState('pso') == 'asc'" title="#{t('sort.order_asc_title')}")
+                i.fa.fa-sort-amount-asc.fa-fw
+        tbody
+          tr(ng-repeat="product in products|filter:filterInput:'name'|orderBy:getCurrentState('psf'):getCurrentState('pso') track by product.id")
+            td
+              button.btn-link(kassa-state="{{product.name}}" kassa-state-value="{{getCurrentState(product.name) || 1}}")
+                | {{product.name}}
+            td.text-center
+              | {{product.stock|number}}
+            td.text-center(ng-class="{'text-success': product.balance > 20, 'text-danger': product.balance < 0}")
+              | {{product.price|currency}}
+            td
+              button.btn.btn-success(kassa-state="basket" kassa-state-value="true" ng-show="getCurrentState(product.name) > 0")
+                i.fa.fa-shopping-cart.fa-fw
+                i.fa.fa-ok
+
   .col-md-4.hidden-xs.hidden-sm

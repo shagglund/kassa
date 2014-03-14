@@ -48,8 +48,17 @@ en:
       username: Username
       buy_count: Buy count
       balance: Balance
-      order_asc_title: Show in ascending order
-      order_desc_title: Show in descending order
+  products:
+    filter_list: Filter by name
+    clear_filter_list: Clear filters
+    sort:
+      header: Sort by
+      name: Name
+      stock: Stock
+      price: Price
+  sort:
+    order_asc_title: Show in ascending order
+    order_desc_title: Show in descending order
 
   activerecord:
     attributes:
