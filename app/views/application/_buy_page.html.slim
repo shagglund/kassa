@@ -102,6 +102,48 @@
 
 
 .row
-  .col-xs-12.col-sm-6.col-md-4
+  .col-xs-12.col-sm-6.col-md-4(ng-controller="BuyUsersListController")
+    .panel.panel-default
+      .panel-heading
+        form.form-horizontal
+          .form-group
+            .col-xs-12
+              .input-group
+                span.input-group-addon
+                  i.fa.fa-search.fa-lg.fa-fw
+                input.form-control(type="text" ng-model="filterInput" ng-list="," placeholder="#{t('users.filter_list')}")
+                .input-group-btn
+                  button.btn.btn-danger(ng-click="filterInput.length=0" ng-disabled="!filterInput.length" title="#{t('users.clear_filter_list')}")
+                    i.fa.fa-eraser.fa-lg.fa-fw
+      table.table.table-striped
+        thead
+          tr
+            th=t('users.sort.header')
+            th
+              btn.btn-link(kassa-state="usf" kassa-state-value="username")= t('users.sort.username')
+            th.text-center
+              btn.btn-link(kassa-state="usf" kassa-state-value="buyCount")= t('users.sort.buy_count')
+            th.text-center
+              btn.btn-link(kassa-state="usf" kassa-state-value="balance")= t('users.sort.balance')
+            th
+              btn.btn-link(kassa-state="uso" kassa-state-value="desc" ng-show="getCurrentState('uso') == 'asc'" title="#{t('users.sort.order_desc_title')}")
+                i.fa.fa-sort-amount-desc.fa-fw
+              btn.btn-link(kassa-state="uso" kassa-state-value="asc" ng-hide="getCurrentState('uso') == 'asc'" title="#{t('users.sort.order_asc_title')}")
+                i.fa.fa-sort-amount-asc.fa-fw
+        tbody
+          tr(ng-repeat="user in users|filter:filterInput:'username'|orderBy:getCurrentState('usf'):getCurrentState('uso') track by user.id")
+            td
+              img.img-thumbnail(gravatar="user.email")
+            td
+              button.btn-link(kassa-state="buyer" kassa-state-value="{{user.username}}")
+                | {{user.username}}
+            td.text-center
+              | {{user.buyCount|number}}
+            td.text-center(ng-class="{'text-success': user.balance > 20, 'text-danger': user.balance < 0}")
+              | {{user.balance|currency}}
+            td
+              button.btn.btn-success(kassa-state="basket" kassa-state-value="true" ng-show="getCurrentState('buyer') == user.username")
+                i.fa.fa-shopping-cart.fa-fw
+                i.fa.fa-ok
   .col-xs-12.col-sm-6.col-md-4
   .col-md-4.hidden-xs.hidden-sm

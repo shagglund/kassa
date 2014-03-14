@@ -40,6 +40,16 @@ en:
     empty: Empty
     buy: Buy
     remove_product: Remove
+  users:
+    filter_list: Filter by username
+    clear_filter_list: Clear filters
+    sort:
+      header: Sort by
+      username: Username
+      buy_count: Buy count
+      balance: Balance
+      order_asc_title: Show in ascending order
+      order_desc_title: Show in descending order
 
   activerecord:
     attributes:
