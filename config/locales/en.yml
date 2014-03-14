@@ -56,6 +56,11 @@ en:
       name: Name
       stock: Stock
       price: Price
+  buys:
+    latest_list_header: Latest Buys
+    buyer_details: Buyer details
+    bought_products: Bought Products
+    nothing_bought: No recorded buys
   sort:
     order_asc_title: Show in ascending order
     order_desc_title: Show in descending order
