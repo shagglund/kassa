@@ -8,7 +8,7 @@ class UsersController < ApplicationController
     @users = User.all
     respond_with @users
   end
-  
+
   def me
     @user = current_user
     respond_with @user
@@ -30,7 +30,11 @@ class UsersController < ApplicationController
 
   private
   def find_user
-    @user = User.find params[:id]
+    if numeric_id?(params[:id])
+      @user = User.where(id: params[:id].to_i).first
+    else
+      @user = User.where(username: params[:id]).first
+    end
   end
 
   def user_params
