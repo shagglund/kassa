@@ -1,36 +1,36 @@
 class ProductsController < ApplicationController
   respond_to :json
-  before_filter :find_basic_product, only: [:show, :update, :destroy]
+  before_filter :find_product, only: [:show, :update, :destroy]
   def index
-    @basic_products = BasicProduct.all
-    respond_with @basic_products
+    @products = Product.all
+    respond_with @products
   end
 
   def show
-    respond_with @basic_product
+    respond_with @product
   end
 
   def create
-    @basic_product = BasicProduct.create basic_product_params
-    respond_with @basic_product
+    @product = Product.create product_params
+    respond_with @product
   end
 
   def update
-    @basic_product.update_attributes basic_product_params
-    respond_with @basic_product  
+    @product.update_attributes product_params
+    respond_with @product
   end
 
   def destroy
-    @basic_product.destroy
-    respond_with @basic_product
+    @product.destroy
+    respond_with @product
   end
 
   private
-  def find_basic_product
-    @basic_product = BasicProduct.find params[:id]
+  def find_product
+    @product = Product.where(id: params[:id].to_i).first
   end
 
-  def basic_product_params
-    params.require(:basic_product).permit(:unit, :group, :name, :price, :stock, :description) 
+  def product_params
+    params.require(:product).permit(:unit, :group, :name, :price, :stock, :description)
   end
 end
