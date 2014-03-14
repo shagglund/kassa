@@ -1,26 +1,27 @@
 .row(ng-controller="BasketCtrl")
   .col-xs-12
-    .panel.panel-default
+    .navbar.navbar-default(ng-hide="isInVisibleState('basket')")
+      ul.nav.navbar-nav
+        li
+          span.navbar-text=t('basket.buyer')
+          strong.navbar-text
+            | {{basket.buyer().username||"#{t('basket.no_buyer')}"}}
+        li
+          span.navbar-text=t('basket.product_count_unique')
+          strong.navbar-text
+            | {{basket.products().length}}
+        li
+          span.navbar-text=t('basket.product_count_total')
+          strong.navbar-text
+            | {{basket.productCount()}}
+      ul.nav.navbar-right
+        li
+          button.btn.btn-link.navbar-btn(kassa-state-toggle="basket")
+            i.fa.fa-arrow-down.fa-fw
+            span=t('basket.show')
+    .panel.panel-default(ng-show="isInVisibleState('basket')")
       .panel-heading
-        .row(ng-hide="isInVisibleState('basket')")
-          .vertical-center.col-xs-4.col-sm-3.col-md-2
-            span=t('basket.buyer')
-            strong
-              | {{basket.buyer.username||"#{t('basket.no_buyer')}"}}
-          .vertical-center.col-xs-4.col-sm-3.col-md-2
-            span=t('basket.product_count_unique')
-            strong
-              | {{basket.products.length}}
-          .vertical-center.col-xs-4.col-sm-3.col-md-2
-            span=t('basket.product_count_total')
-            strong
-              | {{basket.productCount()}}
-          .col-xs-12.col-sm-3.col-md-6
-            .pull-right
-              button.btn-link(kassa-state-toggle="basket")
-                i.fa.fa-arrow-down.fa-fw
-                span=t('basket.show')
-        .row(ng-show="isInVisibleState('basket')")
+        .row
           .col-xs-12.text-center
             h4
               span= t('basket.title')
@@ -28,12 +29,12 @@
                 button.btn-link(kassa-state-toggle="basket")
                   i.fa.fa-arrow-up.fa-fw
                   span=t('basket.hide')
-      .panel-body(ng-show="isInVisibleState('basket')")
+      .panel-body
         .row
           .col-md-4
             .col-md-4
               .row
-                img.img-rounded(gravatar="basket.buyer.email" gravatar-size="128")
+                img.img-rounded(gravatar="basket.buyer().email" gravatar-size="128")
             .col-md-8
               ul.list-group
                 li.list-group-item
@@ -41,21 +42,21 @@
                     .col-md-4
                       strong=t('buyer', scope: 'activerecord.attributes.buy')
                     .col-md-8
-                      span(ng-if='!basket.buyer')=t('basket.no_buyer')
-                      a(ng-href="/app/users/{{basket.buyer.id}}")
-                        | {{basket.buyer.username}}
-                li.list-group-item(ng-show="basket.buyer")
+                      span(ng-if='!basket.buyer()')=t('basket.no_buyer')
+                      a(ng-href="/app/users/{{basket.buyer().id}}")
+                        | {{basket.buyer().username}}
+                li.list-group-item(ng-show="basket.buyer()")
                   .row
                     .col-md-4
                       strong=t('basket.balance_now')
-                    .col-md-8(ng-class="{'text-danger': basket.buyer.balance < 0, 'text-success': basket.buyer.balance > 20}")
-                      | {{basket.buyer.balance|currency}}
-                li.list-group-item(ng-show="basket.buyer")
+                    .col-md-8(ng-class="{'text-danger': basket.buyer().balance < 0, 'text-success': basket.buyer().balance > 20}")
+                      | {{basket.buyer().balance|currency}}
+                li.list-group-item(ng-show="basket.buyer()")
                   .row
                     .col-md-4
                       strong=t('basket.balance_after')
-                    .col-md-8(ng-class="{'text-danger': basket.buyer.balance < 0, 'text-success': basket.buyer.balance > 20}")
-                      | {{(basket.buyer.balance-basket.price())|currency}}
+                    .col-md-8(ng-class="{'text-danger': basket.buyer().balance < 0, 'text-success': basket.buyer().balance > 20}")
+                      | {{(basket.buyer().balance-basket.price())|currency}}
           .col-md-8
             ul.list-group
               li.list-group-item
@@ -67,7 +68,7 @@
                   .col-md-2.text-center
                     strong=t('price', scope: 'activerecord.attributes.buy')
                   .col-md-4
-              li.list-group-item(ng-repeat="entry in basket.products")
+              li.list-group-item(ng-repeat="entry in basket.products()")
                 .row
                   .col-md-3.text-center
                     .btn-group
@@ -92,7 +93,7 @@
                   .col-md-2.text-center
                     | {{basket.price()|currency}}
                   .col-md-4
-                    button.btn.btn-danger(type="button" ng-click="basket.empty()" ng-disabled="basket.products.length == 0")
+                    button.btn.btn-danger(type="button" ng-click="basket.empty()" ng-disabled="basket.products().length == 0")
                       i.fa.fa-trash-o.fa-fw
                       span=t('basket.empty')
                     button.btn.btn-success(type="button" ng-click="basket.buy()" ng-disabled="!basket.isBuyable()")

@@ -1,7 +1,10 @@
 angular.module('kassa').service('BasketService', [
   '$http'
-  ($http)->
+  '$location'
+  'UserService'
+  ($http, $location, User)->
     products = []
+    buyer = null
 
     changeAmount = (entry, amount)->
       if entry.amount + amount < 1
@@ -16,7 +19,7 @@ angular.module('kassa').service('BasketService', [
 
     empty = ->
       products.splice(0, products.length)
-      delete exports.buyer
+      buyer = undefined
 
     entryAmountReducer = (sum, entry)-> sum+entry.amount
     productCount = -> products.reduce entryAmountReducer, 0
@@ -32,14 +35,25 @@ angular.module('kassa').service('BasketService', [
 
     isBuyable = -> products.length > 0 && exports.buyer
 
+    resolveProducts = ->
+      products
+    resolveBuyer = ->
+      username = $location.search().buyer
+      if buyer?.username == username
+        buyer
+      else if username?
+        #always return the current promise if resolving to prevent multiple requests being run for the same resource
+        return buyer if buyer?.then?
+        buyer = User.find(username).then (user)-> buyer = user
     #return api-object with methods/objects accessible from outside
     exports = {
-      products: products
       changeAmount: changeAmount
       remove: remove
       empty: empty
       productCount: productCount
       price: price
       isBuyable: isBuyable
+      products: resolveProducts
+      buyer: resolveBuyer
     }
 ])
