@@ -9,11 +9,15 @@
         li
           span.navbar-text=t('basket.product_count_unique')
           strong.navbar-text
-            | {{basket.products().length}}
+            | {{basket.products().length|number}}
         li
           span.navbar-text=t('basket.product_count_total')
           strong.navbar-text
-            | {{basket.productCount()}}
+            | {{basket.productCount()|number}}
+        li
+          span.navbar-text=t('basket.price')
+          strong.navbar-text
+            | {{basket.price()|currency}}
       ul.nav.navbar-right
         li
           button.btn.btn-link.navbar-btn(kassa-state-toggle="basket")

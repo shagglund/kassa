@@ -25,7 +25,7 @@ angular.module('kassa').service('BasketService', [
     entryAmountReducer = (sum, entry)-> sum+entry.amount
     productCount = -> products.reduce entryAmountReducer, 0
 
-    entryPrice = (entry)-> (entry.amount * entry.product.price).toFixed(2)
+    entryPrice = (entry)-> (entry.amount * entry.product.price)
     entryPriceReducer = (sum, entry)-> sum + entryPrice(entry)
 
     price = (entry)->
