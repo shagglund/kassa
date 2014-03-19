@@ -8,15 +8,11 @@ angular.module('kassa').service('BasketService', [
     buyer = null
 
     changeAmount = (entry, amount)->
-      if entry.amount + amount < 1
-        entry.amount = 1
-      else if entry.amount + amount > entry.product.stock
-        entry.amount = entry.product.stock
-      else
-        entry.amount += amount
-
-    remove = (entry)->
-      products.splice(products.indexOf(entry), 1)
+      name = entry.product.name
+      currentAmount = parseInt($location.search()[name])
+      unless currentAmount + amount < 1
+        newAmount = currentAmount + amount
+        $location.search(name, newAmount).replace()
 
     empty = ->
       searchObj = $location.search()
@@ -40,8 +36,8 @@ angular.module('kassa').service('BasketService', [
 
     isBuyable = -> products.length > 0 && exports.buyer
 
-    entryByProductName = (name)->
-      return entry for entry in products when entry.product.name == name
+    entryByProductName = (entries, name)->
+      return entry for entry in entries when entry.product.name == name
       null
 
     delayedAddProduct = (name, amount)->
@@ -50,14 +46,20 @@ angular.module('kassa').service('BasketService', [
       (product)-> entry.product = product
 
     resolveProducts = ->
+      oldProducts = products
+      products = []
       for own k, v of $location.search()
         v = parseInt(v)
         continue if isNaN(v)
-        entry = entryByProductName(k)
+
+        #update amount or add a new product if non-existent
+        entry = entryByProductName(oldProducts, k)
         if entry?
           entry.amount = v
+          products.push entry
         else
           Product.find(k).then delayedAddProduct(k, v)
+
       products
 
     resolveBuyer = ->
@@ -68,15 +70,24 @@ angular.module('kassa').service('BasketService', [
         #always return the current promise if resolving to prevent multiple requests being run for the same resource
         return buyer if buyer?.then?
         buyer = User.find(username).then (user)-> buyer = user
+
+    setFromBuy = (buy)->
+      empty()
+      search = $location.search()
+      search.buyer = buy.buyer.username
+      for entry in buy.consistsOfProducts
+        search[entry.product.name] = entry.amount
+      $location.search(search).replace()
+
     #return api-object with methods/objects accessible from outside
     exports = {
       changeAmount: changeAmount
-      remove: remove
       empty: empty
       productCount: productCount
       price: price
       isBuyable: isBuyable
       products: resolveProducts
       buyer: resolveBuyer
+      setFromBuy: setFromBuy
     }
 ])
