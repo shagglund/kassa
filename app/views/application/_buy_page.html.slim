@@ -7,13 +7,9 @@
           strong.navbar-text
             | {{basket.buyer().username||"#{t('basket.no_buyer')}"}}
         li
-          span.navbar-text=t('basket.product_count_unique')
+          span.navbar-text=t('basket.product_count')
           strong.navbar-text
-            | {{basket.products().length|number}}
-        li
-          span.navbar-text=t('basket.product_count_total')
-          strong.navbar-text
-            | {{basket.productCount()|number}}
+            | {{basket.products()|amountNameStringList}}
         li
           span.navbar-text=t('basket.price')
           strong.navbar-text
@@ -220,7 +216,7 @@
             td
               div(ng-repeat="entry in buy.consistsOfProducts")
                 small
-                  | {{entry.amount}} * {{entry.product.name}}
+                  | {{entry.amount}} {{entry.product.name}}
             td
               button.btn.btn-success(ng-click="setToBasket(buy)")
                 i.fa.fa-shopping-cart.fa-fw

@@ -29,8 +29,7 @@ en:
   basket:
     buyer: Buyer
     no_buyer: No Selected Buyer
-    product_count_unique: Products (unique)
-    product_count_total: Products (total)
+    product_count: Products
     show: Show
     title: Shopping Basket
     hide: Hide
