@@ -2,7 +2,8 @@ angular.module('kassa').service('BasketService', [
   '$http'
   '$location'
   'UserService'
-  ($http, $location, User)->
+  'ProductService'
+  ($http, $location, User, Product)->
     products = []
     buyer = null
 
@@ -35,8 +36,26 @@ angular.module('kassa').service('BasketService', [
 
     isBuyable = -> products.length > 0 && exports.buyer
 
+    entryByProductName = (name)->
+      return entry for entry in products when entry.product.name == name
+      null
+
+    delayedAddProduct = (name, amount)->
+      entry = {product: {name: name, id: name}, amount}
+      products.push entry
+      (product)-> entry.product = product
+
     resolveProducts = ->
+      for own k, v of $location.search()
+        v = parseInt(v)
+        continue if isNaN(v)
+        entry = entryByProductName(k)
+        if entry?
+          entry.amount = v
+        else
+          Product.find(k).then delayedAddProduct(k, v)
       products
+
     resolveBuyer = ->
       username = $location.search().buyer
       if buyer?.username == username

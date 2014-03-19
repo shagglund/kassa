@@ -68,7 +68,7 @@
                   .col-md-2.text-center
                     strong=t('price', scope: 'activerecord.attributes.buy')
                   .col-md-4
-              li.list-group-item(ng-repeat="entry in basket.products()")
+              li.list-group-item(ng-repeat="entry in basket.products() track by entry.product.id")
                 .row
                   .col-md-3.text-center
                     .btn-group
@@ -83,7 +83,7 @@
                   .col-md-2.text-center
                     | {{basket.price(entry)|currency}}
                   .col-md-4
-                    button.btn.btn-danger(ng-click="basket.remove(entry)")
+                    button.btn.btn-danger(kassa-state-remove="{{entry.product.name}}")
                       i.fa.fa-times.fa-fw
                       span=t('basket.remove_product')
               li.list-group-item
@@ -165,8 +165,6 @@
             th
               btn.btn-link(kassa-state="psf" kassa-state-value="name")= t('products.sort.name')
             th.text-center
-              btn.btn-link(kassa-state="psf" kassa-state-value="stock")= t('products.sort.stock')
-            th.text-center
               btn.btn-link(kassa-state="psf" kassa-state-value="price")= t('products.sort.price')
             th
               btn.btn-link(kassa-state="pso" kassa-state-value="desc" ng-show="getCurrentState('pso') == 'asc'" title="#{t('sort.order_desc_title')}")
@@ -178,14 +176,11 @@
             td
               button.btn-link(kassa-state="{{product.name}}" kassa-state-value="{{getCurrentState(product.name) || 1}}")
                 | {{product.name}}
-            td.text-center
-              | {{product.stock|number}}
             td.text-center(ng-class="{'text-success': product.balance > 20, 'text-danger': product.balance < 0}")
               | {{product.price|currency}}
             td
               button.btn.btn-success(kassa-state="basket" kassa-state-value="true" ng-show="getCurrentState(product.name) > 0")
                 i.fa.fa-shopping-cart.fa-fw
-                i.fa.fa-ok
 
   .col-md-4.hidden-xs.hidden-sm(ng-controller="BuyLatestListController")
     .panel.panel-default
