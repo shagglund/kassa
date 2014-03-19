@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130315134524) do
+ActiveRecord::Schema.define(version: 20140319122457) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -34,33 +34,30 @@ ActiveRecord::Schema.define(version: 20130315134524) do
   add_index "buys", ["buyer_id"], name: "index_buys_on_buyer_id", using: :btree
 
   create_table "product_entries", force: true do |t|
-    t.integer  "amount",           default: 0
-    t.integer  "basic_product_id",             null: false
-    t.integer  "combo_product_id",             null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.integer  "amount",     default: 0
+    t.integer  "product_id",             null: false
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
   end
 
-  add_index "product_entries", ["basic_product_id"], name: "index_product_entries_on_basic_product_id", using: :btree
-  add_index "product_entries", ["combo_product_id"], name: "index_product_entries_on_combo_product_id", using: :btree
+  add_index "product_entries", ["product_id"], name: "index_product_entries_on_product_id", using: :btree
 
   create_table "products", force: true do |t|
     t.string   "name",                                              null: false
     t.text     "description"
     t.string   "unit"
     t.string   "group",                                             null: false
-    t.string   "type"
     t.decimal  "price",       precision: 6, scale: 2, default: 0.0, null: false
     t.integer  "stock",                               default: 0
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                                        null: false
+    t.datetime "updated_at",                                        null: false
   end
 
   create_table "sessions", force: true do |t|
     t.string   "session_id", null: false
     t.text     "data"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   add_index "sessions", ["session_id"], name: "index_sessions_on_session_id", using: :btree
@@ -87,8 +84,8 @@ ActiveRecord::Schema.define(version: 20130315134524) do
     t.boolean  "admin",                                          default: false
     t.boolean  "staff",                                          default: false
     t.datetime "time_of_last_buy"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                                                     null: false
+    t.datetime "updated_at",                                                     null: false
   end
 
   add_index "users", ["authentication_token"], name: "index_users_on_authentication_token", unique: true, using: :btree
