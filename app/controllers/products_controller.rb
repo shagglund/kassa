@@ -27,7 +27,11 @@ class ProductsController < ApplicationController
 
   private
   def find_product
-    @product = Product.where(id: params[:id].to_i).first
+    if numeric_id?(params[:id])
+      @product = Product.where(id: params[:id].to_i).first
+    else
+      @product = Product.where(name: params[:id]).first
+    end
   end
 
   def product_params
