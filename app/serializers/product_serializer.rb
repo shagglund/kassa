@@ -15,6 +15,6 @@ class ProductSerializer < ActiveModel::Serializer
 
   protected
   def product_buy_scope
-    Buy.includes(:consists_of_products).where(consists_of_products: {product_id: object.id})
+    Buy.includes(:consists_of_products).where(buy_entries: {product_id: object.id})
   end
 end
