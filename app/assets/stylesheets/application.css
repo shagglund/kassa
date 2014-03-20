@@ -13,3 +13,7 @@
  *= require bootstrap
  *= require_tree .
  */
+
+.vertical-center{
+  vertical-align: middle !important;
+}

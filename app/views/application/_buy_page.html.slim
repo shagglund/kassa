@@ -121,7 +121,7 @@
       table.table.table-striped
         thead
           tr
-            th=t('users.sort.header')
+            th
             th
               btn.btn-link(kassa-state="usf" kassa-state-value="username")= t('users.sort.username')
             th.text-center
@@ -140,9 +140,9 @@
             td
               button.btn-link(kassa-state="buyer" kassa-state-value="{{user.username}}")
                 | {{user.username}}
-            td.text-center
+            td.text-center.vertical-center
               | {{user.buyCount|number}}
-            td.text-center(ng-class="{'text-success': user.balance > 20, 'text-danger': user.balance < 0}")
+            td.text-center.vertical-center(ng-class="{'text-success': user.balance > 20, 'text-danger': user.balance < 0}")
               | {{user.balance|currency}}
             td
               button.btn.btn-success(kassa-state="basket" kassa-state-value="true" ng-show="getCurrentState('buyer') == user.username")
@@ -178,7 +178,7 @@
             td
               button.btn-link(kassa-state="{{product.name}}" kassa-state-value="{{getCurrentState(product.name) || 1}}")
                 | {{product.name}}
-            td.text-center(ng-class="{'text-success': product.balance > 20, 'text-danger': product.balance < 0}")
+            td.text-center.vertical-center(ng-class="{'text-success': product.balance > 20, 'text-danger': product.balance < 0}")
               | {{product.price|currency}}
             td
               button.btn.btn-success(kassa-state="basket" kassa-state-value="true" ng-show="getCurrentState(product.name) > 0")
@@ -213,7 +213,7 @@
                   a(ng-href="/app/users/{{buy.buyer.id}}")
                     | {{buy.buyer.username}}
                 .row
-                  small.muted
+                  small.h6.text-muted
                     | {{buy.createdAt|date:'d.M.yyyy HH:mm'}}
             td
               div(ng-repeat="entry in buy.consistsOfProducts")
