@@ -55,6 +55,9 @@ en:
       name: Name
       stock: Stock
       price: Price
+    state:
+      saved: Changes saved successfully
+      failed: Changes could not be saved
   buys:
     latest_list_header: Latest Buys
     buyer_details: Buyer details
@@ -63,6 +66,12 @@ en:
   sort:
     order_asc_title: Show in ascending order
     order_desc_title: Show in descending order
+  placeholder:
+    price_euro: Euros
+    price_cent: Cents
+  action:
+    save: Save
+    cancel: Cancel
 
   activerecord:
     attributes:
