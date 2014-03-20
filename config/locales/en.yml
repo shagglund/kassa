@@ -48,6 +48,7 @@ en:
       buy_count: Buy count
       balance: Balance
   products:
+    title: Products
     filter_list: Filter by name
     clear_filter_list: Clear filters
     sort:
@@ -73,3 +74,10 @@ en:
         price: Price
       buy_entry:
         amount: Amount
+      product:
+        name: Name
+        price: Price
+        buy_count: Buy count
+        last_bought_at: Last bought at
+        created_at: Created at
+        updated_at: Updated at

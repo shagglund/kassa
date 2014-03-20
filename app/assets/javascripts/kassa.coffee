@@ -29,6 +29,7 @@ angular.module('kassa', ['ngRoute', 'kassa.templates'])
       .when('', redirectTo: '/buy')
       .when('/', redirectTo: '/buy')
       .when('/buy', templateUrl: '/tpl/buy.html', reloadOnSearch: false)
+      .when('/products', templateUrl: '/tpl/products.html', reloadOnSearch: false)
       .when('/404', templateUrl: '/tpl/404.html')
       .otherwise(redirectTo: '/404')
 

@@ -1,0 +1,29 @@
+.row(ng-controller="ProductListCtrl")
+  .col-xs-12
+    .panel.panel-default
+      .panel-heading
+        h3.text-center=t('products.title')
+      table.table.table-striped.table-hover
+        thead
+          tr
+            th=t('name', scope: 'activerecord.attributes.product')
+            th.text-center=t('price', scope: 'activerecord.attributes.product')
+            th.text-center=t('buy_count', scope: 'activerecord.attributes.product')
+            th=t('created_at', scope: 'activerecord.attributes.product')
+            th=t('updated_at', scope: 'activerecord.attributes.product')
+            th=t('last_bought_at', scope: 'activerecord.attributes.product')
+        tbody
+          tr(ng-repeat="product in products track by product.id")
+            td
+              a(ng-href="/app/products/{{product.id}}")
+                | {{product.name}}
+            td.text-center
+              | {{product.price|currency}}
+            td.text-center
+              | {{product.buyCount|number}}
+            td
+              | {{product.createdAt|date:'longDate'}}
+            td
+              | {{product.updatedAt|date:'longDate'}}
+            td
+              | {{product.lastBoughtAt|date:'longDate'}}
