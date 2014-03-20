@@ -3,10 +3,15 @@ angular.module('kassa').service('ProductService',[
   '$routeParams'
   ($http, $routeParams)->
     #handle price as a float, not a string
+    convertProduct = (product)->
+      product.price = parseFloat(product.price)
+
     convert = (resp)->
-      products = Array(resp.data.products || resp.data.product)
-      for product in products
-        product.price = parseFloat(product.price)
+      products = resp.data.products
+      if products?
+        convertProduct(product) for product in products
+      else
+        convertProduct(resp.data.product)
       resp
 
     destructure = (resp)-> resp.data.product || resp.data.products
