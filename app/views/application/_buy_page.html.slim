@@ -9,8 +9,10 @@
         li
           span.navbar-text=t('basket.product_count')
           strong.navbar-text
-            | {{basket.products()|amountNameStringList}}
-        li
+            span(ng-show="basket.hasProducts()")
+              | {{basket.products()|amountNameStringList}}
+            span(ng-hide="basket.hasProducts()")=t('basket.no_products')
+        li(ng-show="basket.hasProducts()")
           span.navbar-text=t('basket.price')
           strong.navbar-text
             | {{basket.price()|currency}}

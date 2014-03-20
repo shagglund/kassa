@@ -28,8 +28,9 @@ en:
       sign_out: Sign Out
   basket:
     buyer: Buyer
-    no_buyer: No Selected Buyer
+    no_buyer: No selected buyer
     product_count: Products
+    no_products: No products
     show: Show
     title: Shopping Basket
     hide: Hide

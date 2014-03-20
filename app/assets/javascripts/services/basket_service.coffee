@@ -62,6 +62,8 @@ angular.module('kassa').service('BasketService', [
 
       products
 
+    hasProducts = -> resolveProducts().length > 0
+
     resolveBuyer = ->
       username = $location.search().buyer
       if buyer?.username == username
@@ -87,6 +89,7 @@ angular.module('kassa').service('BasketService', [
       price: price
       isBuyable: isBuyable
       products: resolveProducts
+      hasProducts: hasProducts
       buyer: resolveBuyer
       setFromBuy: setFromBuy
     }
