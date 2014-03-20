@@ -41,6 +41,7 @@ en:
     buy: Buy
     remove_product: Remove
   users:
+    title: Users
     filter_list: Filter by username
     clear_filter_list: Clear filters
     sort:
@@ -92,5 +93,14 @@ en:
         available: Available
         buy_count: Buy count
         last_bought_at: Last bought at
+        created_at: Created at
+        updated_at: Updated at
+      user:
+        username: Username
+        email: Email
+        balance: Balance
+        admin: Admin
+        buy_count: Buy count
+        time_of_last_buy: Time of last buy
         created_at: Created at
         updated_at: Updated at

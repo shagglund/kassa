@@ -1,0 +1,47 @@
+.row(ng-controller="UserListCtrl")
+  .col-xs-12
+    .panel.panel-default
+      .panel-heading
+        h3.text-center=t('users.title')
+      table.table.table-striped.table-hover
+        thead
+          tr
+            th
+              btn.btn-link(kassa-state="psf" kassa-state-value="username")
+                =t('username', scope: 'activerecord.attributes.user')
+            th.text-center
+              btn.btn-link(kassa-state="psf" kassa-state-value="admin")
+                =t('admin', scope: 'activerecord.attributes.user')
+            th.text-center
+              btn.btn-link(kassa-state="psf" kassa-state-value="balance")
+                =t('balance', scope: 'activerecord.attributes.user')
+            th.text-center
+              btn.btn-link(kassa-state="psf" kassa-state-value="buyCount")
+                =t('buy_count', scope: 'activerecord.attributes.user')
+            th
+              btn.btn-link(kassa-state="psf" kassa-state-value="createdAt")
+                =t('created_at', scope: 'activerecord.attributes.user')
+            th
+              btn.btn-link(kassa-state="psf" kassa-state-value="updatedAt")
+                =t('updated_at', scope: 'activerecord.attributes.user')
+            th
+              btn.btn-link(kassa-state="psf" kassa-state-value="timeOfLastBuy")
+                =t('time_of_last_buy', scope: 'activerecord.attributes.user')
+        tbody
+          tr(ng-repeat="user in users|orderBy:getCurrentState('psf'):getCurrentState('pso') track by user.id")
+            td.vertical-center
+              a(ng-href="/app/users/{{user.id}}")
+                | {{user.username}}
+            td.text-center.vertical-center
+              i.fa.fa-check.fa-fw.text-success(ng-if="user.admin")
+              i.fa.fa-times.fa-fw.text-danger(ng-if="!user.admin")
+            td.text-center.vertical-center(ng-class="{'text-success': user.balance > 20, 'text-danger': user.balance < 0}")
+              | {{user.balance|currency}}
+            td.text-center.vertical-center
+              | {{user.buyCount|number}}
+            td.vertical-center
+              | {{user.createdAt|date:'longDate'}}
+            td.vertical-center
+              | {{user.updatedAt|date:'longDate'}}
+            td.vertical-center
+              | {{user.timeOfLastBuy|date:'longDate'}}

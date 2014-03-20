@@ -31,6 +31,7 @@ angular.module('kassa', ['ngRoute', 'kassa.templates'])
       .when('/buy', templateUrl: '/tpl/buy.html', reloadOnSearch: false)
       .when('/products', templateUrl: '/tpl/products.html', reloadOnSearch: false)
       .when('/products/:id', templateUrl: '/tpl/product_details.html', reloadOnSearch: false)
+      .when('/users', templateUrl: '/tpl/users.html', reloadOnSearch: false)
       .when('/404', templateUrl: '/tpl/404.html')
       .otherwise(redirectTo: '/404')
 
