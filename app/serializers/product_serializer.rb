@@ -1,5 +1,5 @@
 class ProductSerializer < ActiveModel::Serializer
-  attributes :id, :stock, :price, :name, :unit, :group, :description, :buy_count, :last_bought_at, :created_at, :updated_at
+  attributes :id, :price, :name, :unit, :group, :description, :buy_count, :last_bought_at, :created_at, :updated_at
 
   def buy_count
     @buy_count ||= product_buy_scope.count
