@@ -9,16 +9,20 @@ angular.module('kassa').service('ProductService',[
         product.price = parseFloat(product.price)
       resp
 
-    index = -> $http.get('/products').then convert
-    get = (id)-> $http.get("/products/#{id}").then convert
+    destructure = (resp)-> resp.data.product || resp.data.products
 
-    all = -> index().then (resp)-> resp.data.products
-    find = (id)-> get(id).then (resp)-> resp.data.product
+    all = -> $http.get('/products').then(convert).then(destructure)
+
+    find = (id)-> $http.get("/products/#{id}").then(convert).then(destructure)
+
     currentByRoute = -> find($routeParams.id)
+
+    update = (product)-> $http.put("/products/#{product.id}", product: product).then(convert).then(destructure)
 
     {
       all: all
       find: find
       currentByRoute: currentByRoute
+      update: update
     }
 ])
