@@ -6,14 +6,26 @@
       table.table.table-striped.table-hover
         thead
           tr
-            th=t('name', scope: 'activerecord.attributes.product')
-            th.text-center=t('price', scope: 'activerecord.attributes.product')
-            th.text-center=t('buy_count', scope: 'activerecord.attributes.product')
-            th=t('created_at', scope: 'activerecord.attributes.product')
-            th=t('updated_at', scope: 'activerecord.attributes.product')
-            th=t('last_bought_at', scope: 'activerecord.attributes.product')
+            th
+              btn.btn-link(kassa-state="psf" kassa-state-value="name")
+                =t('name', scope: 'activerecord.attributes.product')
+            th.text-center
+              btn.btn-link(kassa-state="psf" kassa-state-value="price")
+                =t('price', scope: 'activerecord.attributes.product')
+            th.text-center
+              btn.btn-link(kassa-state="psf" kassa-state-value="buyCount")
+                =t('buy_count', scope: 'activerecord.attributes.product')
+            th
+              btn.btn-link(kassa-state="psf" kassa-state-value="createdAt")
+                =t('created_at', scope: 'activerecord.attributes.product')
+            th
+              btn.btn-link(kassa-state="psf" kassa-state-value="updatedAt")
+                =t('updated_at', scope: 'activerecord.attributes.product')
+            th
+              btn.btn-link(kassa-state="psf" kassa-state-value="lastBoughtAt")
+                =t('last_bought_at', scope: 'activerecord.attributes.product')
         tbody
-          tr(ng-repeat="product in products track by product.id")
+          tr(ng-repeat="product in products|orderBy:getCurrentState('psf'):getCurrentState('pso') track by product.id")
             td
               a(ng-href="/app/products/{{product.id}}")
                 | {{product.name}}
