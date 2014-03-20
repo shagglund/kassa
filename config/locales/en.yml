@@ -72,6 +72,9 @@ en:
   action:
     save: Save
     cancel: Cancel
+  option:
+    yes: Yes
+    no: No
 
   activerecord:
     attributes:
@@ -86,6 +89,7 @@ en:
       product:
         name: Name
         price: Price
+        available: Available
         buy_count: Buy count
         last_bought_at: Last bought at
         created_at: Created at

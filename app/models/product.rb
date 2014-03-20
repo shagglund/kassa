@@ -13,4 +13,8 @@ class Product < ActiveRecord::Base
     self.stock -= amount
     self.save
   end
+
+  #Placeholder methods for now, to be replaced with a real column
+  def available; stock > 0; end
+  def available=(avl); self.stock = (avl ? 1 : 0); end
 end

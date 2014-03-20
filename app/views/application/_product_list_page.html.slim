@@ -10,6 +10,9 @@
               btn.btn-link(kassa-state="psf" kassa-state-value="name")
                 =t('name', scope: 'activerecord.attributes.product')
             th.text-center
+              btn.btn-link(kassa-state="psf" kassa-state-value="available")
+                =t('available', scope: 'activerecord.attributes.product')
+            th.text-center
               btn.btn-link(kassa-state="psf" kassa-state-value="price")
                 =t('price', scope: 'activerecord.attributes.product')
             th.text-center
@@ -26,16 +29,19 @@
                 =t('last_bought_at', scope: 'activerecord.attributes.product')
         tbody
           tr(ng-repeat="product in products|orderBy:getCurrentState('psf'):getCurrentState('pso') track by product.id")
-            td
+            td.vertical-center
               a(ng-href="/app/products/{{product.id}}")
                 | {{product.name}}
-            td.text-center
+            td.text-center.vertical-center
+              i.fa.fa-check.fa-fw.text-success(ng-if="product.available")
+              i.fa.fa-times.fa-fw.text-danger(ng-if="!product.available")
+            td.text-center.vertical-center
               | {{product.price|currency}}
-            td.text-center
+            td.text-center.vertical-center
               | {{product.buyCount|number}}
-            td
+            td.vertical-center
               | {{product.createdAt|date:'longDate'}}
-            td
+            td.vertical-center
               | {{product.updatedAt|date:'longDate'}}
-            td
+            td.vertical-center
               | {{product.lastBoughtAt|date:'longDate'}}

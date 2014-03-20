@@ -1,5 +1,5 @@
 class ProductSerializer < ActiveModel::Serializer
-  attributes :id, :price, :name, :description
+  attributes :id, :price, :name, :description, :available
   attribute :buy_count, key: 'buyCount'
   attribute :last_bought_at, key: 'lastBoughtAt'
   attribute :created_at, key: 'createdAt'
