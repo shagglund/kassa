@@ -28,10 +28,7 @@ angular.module('kassa').controller('ProductDetailCtrl', [
       product
 
     updatePrice = (product, euros, cents)->
-      console.log 'price before', product.price, typeof product.price
       product.price = euros + cents / 100
-      console.log 'price after', product.price, typeof product.price
-
 
     Product.currentByRoute().then setProduct
     $scope.changed = changed
