@@ -5,6 +5,7 @@ angular.module('kassa').controller('ProductDetailCtrl', [
     STATE_FAILED = 0
     STATE_SAVED = 1
     STATE_SAVING = 2
+    STATE_DEFAULT = 3
     originalProduct = null
     equal = angular.equals
 
@@ -38,4 +39,5 @@ angular.module('kassa').controller('ProductDetailCtrl', [
     $scope.SAVED = STATE_SAVED
     $scope.FAILED = STATE_FAILED
     $scope.SAVING = STATE_SAVING
+    $scope.DEFAULT = STATE_DEFAULT
 ])

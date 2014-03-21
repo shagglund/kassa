@@ -36,7 +36,14 @@
                   i.fa.fa-spinner.fa-fw(ng-if="state==SAVING")
                   span=t('action.save')
           .form-group
-            .col-xs-12
-              p.text-success(ng-if="state==SAVED")=t('product.state.saved')
-              p.text-danger(ng-if="state==FAILED")=t('product.state.failed')
+            .col-xs-4
+            .col-xs-8
+              p.alert.alert-success(ng-show="state==SAVED")
+                =t('products.state.saved')
+                button.close(type="button" ng-click="state=DEFAULT")
+                  i.fa.fa-times.fa-fw
+              p.alert.alert-danger(ng-show="state==FAILED")
+                =t('products.state.failed')
+                button.close(type="button" ng-click="state=DEFAULT")
+                  i.fa.fa-times.fa-fw
 

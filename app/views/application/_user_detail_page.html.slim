@@ -32,9 +32,16 @@
                   i.fa.fa-spinner.fa-fw(ng-if="state==SAVING")
                   span=t('action.save')
           .form-group
-            .col-xs-12
-              p.text-success(ng-if="state==SAVED")=t('users.state.saved')
-              p.text-danger(ng-if="state==FAILED")=t('users.state.failed')
+            .col-xs-4
+            .col-xs-8
+              p.alert.alert-success(ng-show="state==SAVED")
+                =t('users.state.saved')
+                button.close(type="button" ng-click="state=DEFAULT")
+                  i.fa.fa-times.fa-fw
+              p.alert.alert-danger(ng-show="state==FAILED")
+                =t('users.state.failed')
+                button.close(type="button" ng-click="state=DEFAULT")
+                  i.fa.fa-times.fa-fw
       .panel-body
         form.form-horizontal
           legend=t('users.balance')
@@ -70,7 +77,14 @@
                   i.fa.fa-spinner.fa-fw(ng-if="balanceState==SAVING")
                   span=t('action.save')
           .form-group
-            .col-xs-12
-              p.text-success(ng-if="balanceState==SAVED")=t('users.state.balance_saved')
-              p.text-danger(ng-if="balanceState==FAILED")=t('users.state.balance_failed')
+            .col-xs-4
+            .col-xs-8
+              p.alert.alert-success(ng-show="balanceState==SAVED")
+                =t('users.state.balance_saved')
+                button.close(type="button" ng-click="balanceState=DEFAULT")
+                  i.fa.fa-times.fa-fw
+              p.alert.alert-danger(ng-show="balanceState==FAILED")
+                =t('users.state.balance_failed')
+                button.close(type="button" ng-click="balanceState=DEFAULT")
+                  i.fa.fa-times.fa-fw
 
