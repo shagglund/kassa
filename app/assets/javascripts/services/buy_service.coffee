@@ -2,16 +2,33 @@ angular.module('kassa').service('BuyService',[
   '$http'
   '$routeParams'
   ($http, $routeParams)->
-    index = (params={})-> $http.get('/buys', {params})
-    get = (id)-> $http.get("/buys/#{id}")
+    convertBuy = (buy)->
+      buy.price = parseFloat(buy.price)
 
-    all = (params)-> index(params).then (resp)-> resp.data.buys
-    find = (id)-> get(id).then (resp)-> resp.data.buy
+    convert = (resp)->
+      buys = resp.data.buys
+      if buys?
+        convertBuy(buy) for buy in buys
+      else
+        convertBuy(resp.data.buy)
+      resp
+
+    getFromResponse= (resp)-> resp.data.buys || resp.data.buy
+
+    all = (params)-> $http.get('/buys', {params}).then(convert).then(getFromResponse)
+
+    find = (id)-> $http.get("/buys/#{id}").then(convert).then(getFromResponse)
+
     currentByRoute = -> find($routeParams.id)
+
+    latestForUser = (user, count)->
+      params = limit: count
+      $http.get("/users/#{user.id}/buys", {params}).then(convert).then(getFromResponse)
 
     {
       all: all
       find: find
       currentByRoute: currentByRoute
+      latestForUser: latestForUser
     }
 ])

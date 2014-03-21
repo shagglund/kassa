@@ -92,4 +92,9 @@
                 =t('users.state.balance_failed')
                 button.close(type="button" ng-click="balanceState=DEFAULT")
                   i.fa.fa-times.fa-fw
+  .col-xs-12.col-md-6
+    .panel.panel-default(ng-controller="UserLatestBuysCtrl")
+      .panel-heading
+        h3.text-center=t('users.latest_buys')
+      =render 'buy_list'
 

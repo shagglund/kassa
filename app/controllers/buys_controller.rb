@@ -1,25 +1,27 @@
 class BuysController < ApplicationController
   respond_to :json
-  before_filter :find_buy, only: :show
+
   def index
     limit = params[:limit] || 20
     offset = params[:offset] || 0
-    @buys = Buy.offset(offset).latest(limit).all
-    respond_with @buys
+    respond_with base_scope.offset(offset).latest(limit).all
   end
 
   def show
-    respond_with @buy
+    respond_with Buy.where(id: params[:id].to_i).first
   end
 
   def create
-    @buy = Buy.create buy_params
-    respond_with @buy
+    respond_with Buy.create(buy_params)
   end
 
   private
-  def find_buy
-    @buy = Buy.find params[:id]
+  def base_scope
+    if params[:user_id].nil?
+      Buy
+    else
+      Buy.where(buyer_id: params[:user_id].to_i)
+    end
   end
 
   def buy_params
