@@ -17,10 +17,12 @@ class BuysController < ApplicationController
 
   private
   def base_scope
-    if params[:user_id].nil?
-      Buy
+    if params[:user_id].present?
+      Buy.with_buyer(params[:user_id])
+    elsif params[:product_id].present?
+      Buy.with_product(params[:product_id])
     else
-      Buy.where(buyer_id: params[:user_id].to_i)
+      Buy
     end
   end
 

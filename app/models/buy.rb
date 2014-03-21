@@ -18,6 +18,9 @@ class Buy < ActiveRecord::Base
   scope :in_create_order, lambda{order('buys.created_at DESC')}
   scope :latest, lambda{|limit=20| with_buyer_and_products.in_create_order.limit(limit)}
 
+  scope :with_buyer, ->(user){where(buyer_id: user)}
+  scope :with_product, ->(product){includes(:consists_of_products).where(buy_entries: {product_id: product})}
+
   def price
     return super unless product_count_changed?
     consists_of_products.inject(0){|s, e| s + e.amount * e.product.price}
@@ -44,7 +47,7 @@ class Buy < ActiveRecord::Base
 
   #ActiveRecord callbacks
   def update_product_count
-    self.last_product_count = consists_of_products.count if product_count_changed? 
+    self.last_product_count = consists_of_products.count if product_count_changed?
   end
 
   def update_buyer
@@ -60,7 +63,7 @@ class Buy < ActiveRecord::Base
     end
   end
 
-  def update_buy_entry(buy_entry) 
+  def update_buy_entry(buy_entry)
     buy_entry.product.buy buy_entry.amount
   end
 end

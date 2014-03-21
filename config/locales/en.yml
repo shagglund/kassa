@@ -61,6 +61,7 @@ en:
     title: Products
     filter_list: Filter by name
     clear_filter_list: Clear filters
+    latest_buys: Latest buys
     sort:
       name: Name
       stock: Stock

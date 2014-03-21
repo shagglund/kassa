@@ -1,6 +1,8 @@
 Kassa::Application.routes.draw do
   resources :buys, only: [:index, :show, :create]
-  resources :products, only: [:index, :show, :create, :update, :destroy]
+  resources :products, only: [:index, :show, :create, :update, :destroy] do
+    resources :buys, only: [:index, :show]
+  end
 
   resources :users, only: [:index, :create, :update, :show] do
     get :me, on: :collection

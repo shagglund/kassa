@@ -25,10 +25,15 @@ angular.module('kassa').service('BuyService',[
       params = limit: count
       $http.get("/users/#{user.id}/buys", {params}).then(convert).then(getFromResponse)
 
+    latestForProduct = (product, count)->
+      params = limit: count
+      $http.get("/products/#{product.id}/buys", {params}).then(convert).then(getFromResponse)
+
     {
       all: all
       find: find
       currentByRoute: currentByRoute
       latestForUser: latestForUser
+      latestForProduct: latestForProduct
     }
 ])

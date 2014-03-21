@@ -46,4 +46,9 @@
                 =t('products.state.failed')
                 button.close(type="button" ng-click="state=DEFAULT")
                   i.fa.fa-times.fa-fw
+  .col-xs-12.col-md-6
+    .panel.panel-default(ng-controller="ProductLatestBuysCtrl")
+      .panel-heading
+        h3.text-center=t('products.latest_buys')
+      =render 'buy_list'
 
