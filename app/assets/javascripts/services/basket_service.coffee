@@ -77,6 +77,7 @@ angular.module('kassa').service('BasketService', [
       empty()
       search = $location.search()
       search.buyer = buy.buyer.username
+      search.basket = "true"
       for entry in buy.consistsOfProducts
         search[entry.product.name] = entry.amount
       $location.search(search).replace()
