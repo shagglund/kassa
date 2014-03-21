@@ -88,6 +88,9 @@ en:
     yes: Yes
     no: No
 
+  gravatar:
+    click_to_add: Click to add a gravatar for yourself
+
   activerecord:
     attributes:
       buy:
