@@ -65,6 +65,7 @@ end
 group :test do
   gem 'database_cleaner'
   gem 'email_spec'
+  gem 'json_spec'
   gem 'shoulda-matchers'
   gem 'ffaker'
 end
