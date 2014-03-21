@@ -6,7 +6,7 @@ angular.module('kassa').directive('kassaStateToggle',[
       defaultValue = $attrs.kassaStateDefault || false
 
       unless $location.search()[stateKey]?
-       $location.search stateKey, defaultValue
+       $location.search(stateKey, defaultValue).replace()
 
       isInVisibleState = (key)->
         stateValue = $location.search()[key]
