@@ -1,5 +1,7 @@
 FactoryGirl.define do
   sequence(:email){|i| "email#{i}@example.com"}
+  sequence(:price)
+  sequence(:available){|i| i % 2 == 0}
   factory :user do
     username {Faker::Internet.user_name.truncate(16)}
     balance {Random.rand(1..100)}
@@ -10,12 +12,11 @@ FactoryGirl.define do
   end
 
   factory :product do
-    group "beer"
     description {Faker::Lorem.paragraph}
     name {Faker::Product.product}
-    unit "piece"
     stock 24
-    price 0.7
+    price
+    available
   end
 
   factory :buy_entry do

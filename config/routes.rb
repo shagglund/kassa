@@ -1,6 +1,6 @@
 Kassa::Application.routes.draw do
   resources :buys, only: [:index, :show, :create]
-  resources :products, only: [:index, :show, :create, :update, :destroy] do
+  resources :products, only: [:index, :show, :create, :update] do
     resources :buys, only: [:index, :show]
   end
 

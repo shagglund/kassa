@@ -1,6 +1,6 @@
 class ProductsController < ApplicationController
   respond_to :json
-  before_filter :find_product, only: [:show, :update, :destroy]
+  before_filter :find_product, only: [:show, :update]
   def index
     @products = Product.all
     respond_with @products
@@ -20,18 +20,9 @@ class ProductsController < ApplicationController
     respond_with @product
   end
 
-  def destroy
-    @product.destroy
-    respond_with @product
-  end
-
   private
   def find_product
-    if numeric_id?(params[:id])
-      @product = Product.where(id: params[:id].to_i).first
-    else
-      @product = Product.where(name: params[:id]).first
-    end
+    @product = Product.with_id_or_name(params[:id]).first
   end
 
   def product_params
