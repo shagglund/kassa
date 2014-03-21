@@ -74,13 +74,16 @@ angular.module('kassa').service('BasketService', [
         buyer = User.find(username).then (user)-> buyer = user
 
     setFromBuy = (buy)->
-      empty()
       search = $location.search()
       search.buyer = buy.buyer.username
       search.basket = "true"
       for entry in buy.consistsOfProducts
         search[entry.product.name] = entry.amount
-      $location.search(search).replace()
+      if $location.path() == '/buy'
+        empty()
+        $location.search(search).replace()
+      else
+        $location.search(search).path('/buy')
 
     #return api-object with methods/objects accessible from outside
     exports = {
