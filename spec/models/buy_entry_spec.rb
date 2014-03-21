@@ -8,17 +8,4 @@ describe BuyEntry do
 
   it {should validate_numericality_of(:amount).only_integer}
   it {should ensure_inclusion_of(:amount).in_range(1..1000)}
-
-  subject { FactoryGirl.build :buy_entry }
-
-  context "#amount" do
-    it "should add an error to product if not enough in stock" do
-      zero_stock_on_first
-      subject.should_not be_valid
-      subject.should have(1).error_on(:product)
-    end
-    def zero_stock_on_first
-      subject.product.stock = 0
-    end
-  end
 end

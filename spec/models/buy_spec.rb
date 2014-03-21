@@ -41,7 +41,7 @@ describe Buy do
       subject.consists_of_products.first.product.name.to_sym
     end
   end
-  
+
   context "custom scopes" do
     context ".latest" do
       let(:obj) {double.as_null_object}
