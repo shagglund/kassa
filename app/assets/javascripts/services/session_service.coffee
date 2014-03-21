@@ -2,19 +2,22 @@ angular.module('kassa').service('SessionService',[
   '$http'
   '$q'
   '$window'
-  ($http, $q, $window)->
+  'UserService'
+  ($http, $q, $window, User)->
     currentUser = null
 
     equal = angular.equals
 
-    setAuthenticated = (promise)-> promise.then (resp)-> currentUser = resp.data.user
+    setUser = (user)-> currentUser = user
 
-    checkStatus = -> setAuthenticated $http.get('/users/me')
+    checkStatus = -> User.find('me').then(setUser)
 
     signIn = (email, password, rememberMe=true)->
-      setAuthenticated $http.post('/user/sign_in', user: {email, password, rememberMe})
+      $http.post('/user/sign_in', user: {email, password, rememberMe}).then checkStatus()
+
     signOut = ->
-      setAuthenticated($http.delete('/user/sign_out')).then ->
+      $http.delete('/user/sign_out').then ->
+        currentUser = null
         #hacky way of redirecting since base-tag supported routing will hijack this via $location
         $window.location.href = '/user/sign_in'
 
