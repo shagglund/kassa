@@ -5,5 +5,7 @@ class User < ActiveRecord::Base
 
   validates :username, presence: true, length: {in: 2..16}, uniqueness: true
   validates :balance, numericality: { only_integer: false}, inclusion: {in: -1000..1000}
-  validates :buy_count, numericality: { only_integer: true}, inclusion: {in:0..100000} 
+  validates :buy_count, numericality: { only_integer: true}, inclusion: {in:0..100000}
+
+  scope :with_id_or_username, ->(id){/^\d+$/.match(id).nil? ? where(username: id) : where(id: id)}
 end

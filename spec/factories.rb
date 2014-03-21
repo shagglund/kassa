@@ -2,7 +2,7 @@ FactoryGirl.define do
   sequence(:email){|i| "email#{i}@example.com"}
   factory :user do
     username {Faker::Internet.user_name.truncate(16)}
-    balance 0
+    balance {Random.rand(1..100)}
     email
     password "password"
     admin false
@@ -32,7 +32,7 @@ FactoryGirl.define do
     end
 
     after :build do |buy, evaluator|
-      list = FactoryGirl.build_list :buy_entry, evaluator.product_count, buy: buy 
+      list = FactoryGirl.build_list :buy_entry, evaluator.product_count, buy: buy
       buy.consists_of_products << list
     end
   end

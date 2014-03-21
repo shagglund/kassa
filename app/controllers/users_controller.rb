@@ -5,13 +5,11 @@ class UsersController < ApplicationController
   before_filter :authenticate_admin_if_not_self!, only: :update
 
   def index
-    @users = User.all
-    respond_with @users
+    respond_with User.all
   end
 
   def me
-    @user = current_user
-    respond_with @user
+    respond_with current_user
   end
 
   def show
@@ -19,8 +17,7 @@ class UsersController < ApplicationController
   end
 
   def create
-    @user = User.create user_params
-    respond_with @user
+    respond_with User.create user_params
   end
 
   def update
@@ -30,21 +27,17 @@ class UsersController < ApplicationController
 
   private
   def find_user
-    if numeric_id?(params[:id])
-      @user = User.where(id: params[:id].to_i).first
-    else
-      @user = User.where(username: params[:id]).first
-    end
+    @user = User.with_id_or_username(params[:id]).first
   end
 
   def user_params
     req = params.require(:user)
     if current_user.admin? and params[:action] == 'create'
-      req.permit(:password, :password_confirmation, :username, :email, :admin, :staff, :balance)
+      req.permit(:password, :password_confirmation, :username, :email, :admin, :balance)
     elsif current_user.admin?
-      req.permit(:username, :email, :admin, :staff, :balance)
+      req.permit(:username, :email, :admin)
     elsif current_user == @user #allow self update of these fields
-      req.permit(:username, :email, :balance)
+      req.permit(:username, :email)
     else
       req.permit()
     end

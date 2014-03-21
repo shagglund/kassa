@@ -1,0 +1,140 @@
+require 'spec_helper'
+
+describe UsersController do
+  context "requests" do
+    let(:user_attribs){FactoryGirl.attributes_for(:user)}
+    let(:user){FactoryGirl.create(:user)}
+
+    context "as an authenticated user" do
+      login_user
+
+      describe 'GET index' do
+        it "should render a list of users" do
+          get :index, format: :json
+          expect(response.body).to have_json_path('users')
+          expect(response.body).to have_json_type(Array).at_path('users')
+        end
+      end
+
+      describe 'GET show' do
+        it "should render a given user by id" do
+          get :show, format: :json, id: user.id
+          expect(response.body).to be_json_eql(serialized(user))
+        end
+        it "should render a given user by username" do
+          get :show, format: :json, id: user.username
+          expect(response.body).to be_json_eql(serialized(user))
+        end
+      end
+
+      describe 'GET me' do
+        it "should render the current logged in user" do
+          get :me, format: :json
+          expect(response.body).to be_json_eql(serialized(current_user))
+        end
+      end
+
+      describe "POST create" do
+        it "should return 403 Forbidden" do
+          expect{
+            post :create, format: :json, user: user_attribs
+            expect(response.status).to eq 403
+          }.to_not change(User, :count)
+        end
+      end
+
+      describe "PUT update" do
+        it "should return 403 Forbidden unless updating current user" do
+          expect{
+            put :update, format: :json, id: user.id, user: user_attribs
+            expect(response.status).to eq 403
+          }.to_not change{user}
+        end
+
+        it "should allow update to username and email if updating current user" do
+          expect{
+            expect{
+              expect{
+                put :update, format: :json, id: current_user.id, user: user_attribs
+                expect(response.status).to eq 200
+                expect(response.body).to be_json_eql(serialized(current_user.reload))
+              }.to_not change{current_user.balance}
+            }.to change{current_user.username}
+          }.to change{current_user.email}
+        end
+      end
+    end
+
+    context "as an authenticated admin" do
+      login_admin
+
+      describe 'POST create' do
+        it "should create a new user" do
+          expect{
+            user_attribs[:password] = 'password'
+            user_attribs[:password_confirmation] = 'password'
+            post :create, format: :json, user: user_attribs
+            new_user = User.last
+            expect(response.body).to be_json_eql(serialized(new_user))
+            expect(new_user.username).to eq(user_attribs[:username])
+            expect(new_user.email).to eq(user_attribs[:email])
+            expect(new_user.balance).to eq(user_attribs[:balance])
+            expect(new_user.admin).to eq(user_attribs[:admin])
+            expect(new_user.valid_password?(user_attribs[:password])).to be_true
+            expect(new_user.valid_password?(user_attribs[:password] + '123')).to be_false
+          }.to change(User, :count).by(1)
+        end
+      end
+
+      describe 'PUT update' do
+        it "should allow changes to username, email and admin flag but not balance" do
+          expect{
+            expect{
+              expect{
+                expect{
+                  user_attribs[:admin] = !user.admin
+                  put :update, format: :json, id: user.id, user: user_attribs
+                  expect(response.status).to eq 200
+                  expect(response.body).to be_json_eql(serialized(user.reload))
+                }.to_not change{user.balance}
+              }.to change{user.admin}
+            }.to change{user.username}
+          }.to change{user.email}
+        end
+      end
+    end
+
+    context "unauthenticated" do
+      describe "GET index" do
+        it "should return 401 Unauthorized" do
+          get :index, format: :json
+          expect(response.status).to eq 401
+        end
+      end
+      describe "GET show" do
+        it "should return 401 Unauthorized" do
+          get :show, format: :json, id: user.id
+          expect(response.status).to eq 401
+        end
+      end
+      describe "GET me" do
+        it "should return 401 Unauthorized" do
+          get :me, format: :json
+          expect(response.status).to eq 401
+        end
+      end
+      describe "POST create" do
+        it "should return 401 Unauthorized" do
+          post :create, format: :json, user: user_attribs
+          expect(response.status).to eq 401
+        end
+      end
+      describe "PUT update" do
+        it "should return 401 Unauthorized" do
+          put :update, format: :json, id: user.id, user: user_attribs
+          expect(response.status).to eq 401
+        end
+      end
+    end
+  end
+end
