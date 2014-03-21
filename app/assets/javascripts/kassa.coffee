@@ -37,3 +37,10 @@ angular.module('kassa', ['ngRoute', 'kassa.templates'])
       .otherwise(redirectTo: '/404')
 
 ])
+.run([
+  '$rootScope'
+  'SessionService'
+  ($rootScope, Session)->
+    #Make session available to every inherited controller
+    $rootScope.session = Session
+])

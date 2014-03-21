@@ -1,8 +1,7 @@
 angular.module('kassa').controller('NavigationCtrl', [
   '$scope'
   '$location'
-  'SessionService'
-  ($scope, $location, Session)->
+  ($scope, $location)->
     $scope.routes = <%=
       %w(buy products users).collect do |r|
         icon_class = case r
@@ -13,8 +12,6 @@ angular.module('kassa').controller('NavigationCtrl', [
         {href: "/app/#{r}", name: I18n.t("navigation.title.#{r}"), iconClass: icon_class}
       end.to_json
     %>
-
-    $scope.session = Session
 
     $scope.isCurrent = (route)-> route == $location.path()
 ])
