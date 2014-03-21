@@ -15,7 +15,7 @@
             label.control-label.col-xs-4=t('email', scope: 'activerecord.attributes.user')
             .col-xs-8
               input.form-control(ng-model="user.email" type="email")
-          .form-group
+          .form-group(ng-show="!session.isCurrentUser(user)")
             label.control-label.col-xs-4=t('admin', scope: 'activerecord.attributes.user')
             .btn-group.col-xs-8
               button.btn(ng-click="user.admin=true" ng-class="{'btn-success active': user.admin, 'btn-default': !user.admin}")=t('option.yes')
