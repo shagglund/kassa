@@ -164,36 +164,4 @@
 
   .col-md-4.hidden-xs.hidden-sm(ng-controller="BuyLatestListController")
     .panel.panel-default
-      table.table.table-striped
-        thead
-          tr(ng-if="buys.length")
-            th=t('buys.buyer_details')
-            th=t('buys.bought_products')
-            th
-          tr(ng-if="!buys.length")
-            td.text-center(colspan="3")
-              .row
-                .col-xs-12
-                  p=t('buys.nothing_bought')
-        tbody
-          tr(ng-repeat="buy in buys|limitTo:20|orderBy:'createdAt':true")
-            td
-              .col-xs-3
-                .row
-                  img.img-thumbnail(gravatar="buy.buyer.email")
-              .col-xs-9
-                .row
-                  a(ng-href="/app/users/{{buy.buyer.id}}")
-                    | {{buy.buyer.username}}
-                .row
-                  small.h6.text-muted
-                    | {{buy.createdAt|date:'d.M.yyyy HH:mm'}}
-            td
-              div(ng-repeat="entry in buy.consistsOfProducts")
-                small
-                  | {{entry.amount}} {{entry.product.name}}
-            td
-              button.btn.btn-success(ng-click="setToBasket(buy)")
-                i.fa.fa-shopping-cart.fa-fw
-              button.btn.btn-danger(ng-click="delete(buy)" ng-if="canBeDeleted(buy)")
-                i.fa.fa-trash.fa-fw
+      =render 'buy_list'
