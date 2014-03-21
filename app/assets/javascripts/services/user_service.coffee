@@ -20,9 +20,18 @@ angular.module('kassa').service('UserService',[
 
     currentByRoute = -> find($routeParams.id)
 
+    update = (user)->
+      $http.put("/users/#{user.id}", {user}).then(convert).then(getFromResponse)
+
+    updateBalance = (user, newBalance, changeNote)->
+      data = balance: newBalance, description: changeNote
+      $http.put("/users/#{user.id}/update_balance", data).then(convert).then(getFromResponse)
+
     {
       all: all
       find: find
       currentByRoute: currentByRoute
+      update: update
+      updateBalance: updateBalance
     }
 ])

@@ -44,10 +44,18 @@ en:
     title: Users
     filter_list: Filter by username
     clear_filter_list: Clear filters
+    change_balance: Change balance
+    new_balance: New balance
+    balance_change_note: Description of change
     sort:
       username: Username
       buy_count: Buy count
       balance: Balance
+    state:
+      saved: Changes saved successfully
+      failed: Changes could not be saved
+      balance_saved: Balance changes saved successfully
+      balance_failed: Balance changes could not be saved
   products:
     title: Products
     filter_list: Filter by name
@@ -70,6 +78,9 @@ en:
   placeholder:
     price_euro: Euros
     price_cent: Cents
+    balance_euro: Euros
+    balance_cent: Cents
+    balance_change_note: Why are you changing the balance?
   action:
     save: Save
     cancel: Cancel

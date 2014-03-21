@@ -1,0 +1,76 @@
+.row(ng-controller="UserDetailCtrl")
+  .col-xs-12.col-md-6
+    .panel.panel-default
+      .panel-heading
+        h3.text-center
+          | {{user.username}}
+      .panel-body
+        form.form-horizontal
+          legend=t('users.basic_info')
+          .form-group
+            label.control-label.col-xs-4=t('username', scope: 'activerecord.attributes.user')
+            .col-xs-8
+              input.form-control(ng-model="user.username" type="text")
+          .form-group
+            label.control-label.col-xs-4=t('email', scope: 'activerecord.attributes.user')
+            .col-xs-8
+              input.form-control(ng-model="user.email" type="email")
+          .form-group
+            label.control-label.col-xs-4=t('admin', scope: 'activerecord.attributes.user')
+            .btn-group.col-xs-8
+              button.btn(ng-click="user.admin=true" ng-class="{'btn-success active': user.admin, 'btn-default': !user.admin}")=t('option.yes')
+              button.btn(ng-click="user.admin=false" ng-class="{'btn-danger active': !user.admin, 'btn-default': user.admin}")=t('option.no')
+          .form-group
+            .col-xs-4
+            .col-xs-8
+              .pull-right
+                button.btn.btn-danger(ng-click="cancel()" ng-disabled="state==SAVING || !changed(user)")
+                  i.fa.fa-undo.fa-fw
+                  span=t('action.cancel')
+                button.btn.btn-success(ng-click="save(user)" ng-disabled="state==SAVING || !changed(user)")
+                  i.fa.fa-save.fa-fw(ng-if="state!=SAVING")
+                  i.fa.fa-spinner.fa-fw(ng-if="state==SAVING")
+                  span=t('action.save')
+          .form-group
+            .col-xs-12
+              p.text-success(ng-if="state==SAVED")=t('users.state.saved')
+              p.text-danger(ng-if="state==FAILED")=t('users.state.failed')
+      .panel-body
+        form.form-horizontal
+          legend=t('users.balance')
+          .form-group
+            label.control-label.col-xs-4=t('balance', scope: 'activerecord.attributes.user')
+            .col-xs-8
+              p.form-control-static
+                | {{user.balance|currency}}
+          .form-group
+            label.control-label.col-xs-4=t('users.change_balance')
+            .col-xs-8
+              .input-group
+                input.form-control(ng-model="balanceEuro" type="number" step=1 placeholder="#{t('placeholder.balance_euro')}")
+                span.input-group-addon .
+                input.form-control(ng-model="balanceCent" type="number" step=5 min="-99" max="99" placeholder="#{t('placeholder.balance_cent')}")
+                span.input-group-addon
+                  i.fa.fa-eur
+          .form-group(ng-show="balanceEuro || balanceCent")
+            label.control-label.col-xs-4=t('users.new_balance')
+            .col-xs-8
+              p.form-control-static
+                | {{newBalance(balanceEuro, balanceCent)|currency}}
+          .form-group(ng-show="balanceEuro || balanceCent")
+            label.control-label.col-xs-4=t('users.balance_change_note')
+            .col-xs-8
+              textarea.form-control(ng-model="balanceChangeNote" placeholder="#{t('placeholder.balance_change_note')}")
+          .form-group
+            .col-xs-4
+            .col-xs-8
+              .pull-right
+                button.btn.btn-success(ng-click="saveBalance(user, newBalance(balanceEuro, balanceCent))" ng-disabled="balanceState==SAVING || !balanceCanBeSaved(balanceEuro, balanceCent, balanceChangeNote)")
+                  i.fa.fa-save.fa-fw(ng-if="balanceState!=SAVING")
+                  i.fa.fa-spinner.fa-fw(ng-if="balanceState==SAVING")
+                  span=t('action.save')
+          .form-group
+            .col-xs-12
+              p.text-success(ng-if="balanceState==SAVED")=t('users.state.balance_saved')
+              p.text-danger(ng-if="balanceState==FAILED")=t('users.state.balance_failed')
+
