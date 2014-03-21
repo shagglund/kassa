@@ -1,3 +1,9 @@
+GIT
+  remote: git@github.com:bmabey/database_cleaner.git
+  revision: 35bd646903fc56af185a9fa9e360c568bb56756e
+  specs:
+    database_cleaner (1.2.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -56,7 +62,6 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.7.0)
-    database_cleaner (1.2.0)
     debug_inspector (0.0.2)
     devise (3.2.4)
       bcrypt (~> 3.0)
@@ -240,7 +245,7 @@ DEPENDENCIES
   binding_of_caller
   bootstrap-sass (>= 3.0.0.0)
   coffee-rails (~> 4.0.0)
-  database_cleaner
+  database_cleaner!
   devise
   email_spec
   factory_girl_rails
