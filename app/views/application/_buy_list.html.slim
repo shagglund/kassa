@@ -1,9 +1,8 @@
 table.table.table-striped
   thead
     tr(ng-if="buys.length")
-      th=t('buys.buyer_details')
-      th=t('buys.bought_products')
-      th
+      th.col-xs-6(colspan=2)=t('buys.buyer_details')
+      th(colspan=2)=t('buys.bought_products')
     tr(ng-if="!buys.length")
       td.text-center(colspan="3")
         .row
@@ -12,16 +11,14 @@ table.table.table-striped
   tbody
     tr(ng-repeat="buy in buys|orderBy:'createdAt':true")
       td
-        .col-xs-3
-          .row
-            img.img-thumbnail(gravatar="buy.buyer.email")
-        .col-xs-9
-          .row
-            a(ng-href="/app/users/{{buy.buyer.id}}")
-              | {{buy.buyer.username}}
-          .row
-            small.h6.text-muted
-              | {{buy.createdAt|date:'d.M.yyyy HH:mm'}}
+        img.img-thumbnail(gravatar="buy.buyer.email")
+      td
+        .row
+          a(ng-href="/app/users/{{buy.buyer.id}}")
+            | {{buy.buyer.username}}
+        .row
+          small.h6.text-muted
+            | {{buy.createdAt|date:'d.M.yyyy HH:mm'}}
       td
         div(ng-repeat="entry in buy.consistsOfProducts")
           small
