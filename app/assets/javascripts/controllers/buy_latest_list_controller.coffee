@@ -4,5 +4,18 @@ angular.module('kassa').controller 'BuyLatestListController', [
   'BuyService'
   'BasketService'
   ($scope, $location, Buy, Basket)->
-    Buy.all(limit: 20).then (buys)-> $scope.buys = buys
+    LIMIT = 20
+    moreAvailable = null
+
+    Buy.latest(limit: LIMIT).then (buys)-> $scope.buys = buys
+
+    loadMore = (buys)->
+      Buy.latest(offset: buys.length, limit: LIMIT).then (loadedBuys)->
+        moreAvailable = loadedBuys.length == LIMIT
+        buys.push buy for buy in loadedBuys
+
+    moreAvailable = -> moreAvailable
+
+    $scope.loadMore = loadMore
+    $scope.moreAvailable = moreAvailable
 ]

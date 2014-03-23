@@ -74,6 +74,7 @@ en:
     buyer_details: Buyer details
     bought_products: Bought Products
     nothing_bought: No recorded buys
+    no_more_loadable: No more buys available
   sort:
     order_asc_title: Show in ascending order
     order_desc_title: Show in descending order
@@ -86,6 +87,7 @@ en:
   action:
     save: Save
     cancel: Cancel
+    load_more: Load more
   option:
     yes: Yes
     no: No
