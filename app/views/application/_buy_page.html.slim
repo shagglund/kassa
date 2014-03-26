@@ -105,53 +105,53 @@
 
 
 .row
-  .col-xs-12.col-sm-6.col-md-4(ng-controller="BuyUsersListController")
+  .col-xs-12.col-sm-6.col-md-4(ng-controller="BuyUsersListController" kassa-state-checker)
     .panel.panel-default
       table.table.table-striped
         thead
           tr
             th
             th
-              btn.btn-link(kassa-state="usf" kassa-state-value="username")= t('users.sort.username')
+              btn.btn-link(kassa-order-state="usf" kassa-value="username")= t('users.sort.username')
             th.text-center
-              btn.btn-link(kassa-state="usf" kassa-state-value="buyCount")= t('users.sort.buy_count')
+              btn.btn-link(kassa-order-state="usf" kassa-value="buyCount")= t('users.sort.buy_count')
             th.text-center
-              btn.btn-link(kassa-state="usf" kassa-state-value="balance")= t('users.sort.balance')
+              btn.btn-link(kassa-order-state="usf" kassa-value="balance")= t('users.sort.balance')
             th
         tbody
-          tr(ng-repeat="user in users|orderBy:getCurrentState('usf') track by user.id")
+          tr(ng-repeat="user in users|orderByState:'usf' track by user.id")
             td
               img.img-thumbnail(gravatar="user.email")
             td
-              button.btn-link(kassa-state="buyer" kassa-state-value="{{user.username}}")
+              button.btn-link(kassa-set-state="buyer" kassa-value="{{user.username}}")
                 | {{user.username}}
             td.text-center.vertical-center
               | {{user.buyCount|number}}
             td.text-center.vertical-center(ng-class="{'text-success': user.balance > 20, 'text-danger': user.balance < 0}")
               | {{user.balance|currency}}
             td
-              button.btn.btn-success(kassa-state="basket" kassa-state-value="true" ng-show="getCurrentState('buyer') == user.username")
+              button.btn.btn-success(kassa-set-state="basket" kassa-value="true" ng-show="getCurrentState('buyer') == user.username")
                 i.fa.fa-shopping-cart.fa-fw
                 i.fa.fa-ok
-  .col-xs-12.col-sm-6.col-md-4(ng-controller="BuyProductsListController")
+  .col-xs-12.col-sm-6.col-md-4(ng-controller="BuyProductsListController" kassa-state-checker)
     .panel.panel-default
       table.table.table-striped
         thead
           tr
             th
-              btn.btn-link(kassa-state="psf" kassa-state-value="name")= t('products.sort.name')
+              btn.btn-link(kassa-order-state="psf" kassa-value="name")= t('products.sort.name')
             th.text-center
-              btn.btn-link(kassa-state="psf" kassa-state-value="price")= t('products.sort.price')
+              btn.btn-link(kassa-order-state="psf" kassa-value="price")= t('products.sort.price')
             th
         tbody
-          tr(ng-repeat="product in products|available|orderBy:getCurrentState('psf') track by product.id")
+          tr(ng-repeat="product in products|available|orderByState:'psf' track by product.id")
             td
-              button.btn-link(kassa-state="{{product.name}}" kassa-state-value="{{getCurrentState(product.name) || 1}}")
+              button.btn-link(kassa-set-state="{{product.name}}" kassa-value="{{getCurrentState(product.name) || 1}}")
                 | {{product.name}}
             td.text-center.vertical-center(ng-class="{'text-success': product.balance > 20, 'text-danger': product.balance < 0}")
               | {{product.price|currency}}
             td
-              button.btn.btn-success(kassa-state="basket" kassa-state-value="true" ng-show="getCurrentState(product.name) > 0")
+              button.btn.btn-success(kassa-set-state="basket" kassa-value="true" ng-show="getCurrentState(product.name) > 0")
                 i.fa.fa-shopping-cart.fa-fw
 
   .col-md-4.hidden-xs.hidden-sm(ng-controller="BuyLatestListController")

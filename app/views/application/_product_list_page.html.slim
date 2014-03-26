@@ -7,28 +7,28 @@
         thead
           tr
             th
-              btn.btn-link(kassa-state="psf" kassa-state-value="name")
+              btn.btn-link(kassa-order-state="psf" kassa-value="name")
                 =t('name', scope: 'activerecord.attributes.product')
             th.text-center
-              btn.btn-link(kassa-state="psf" kassa-state-value="available")
+              btn.btn-link(kassa-order-state="psf" kassa-value="available")
                 =t('available', scope: 'activerecord.attributes.product')
             th.text-center
-              btn.btn-link(kassa-state="psf" kassa-state-value="price")
+              btn.btn-link(kassa-order-state="psf" kassa-value="price")
                 =t('price', scope: 'activerecord.attributes.product')
             th.text-center
-              btn.btn-link(kassa-state="psf" kassa-state-value="buyCount")
+              btn.btn-link(kassa-order-state="psf" kassa-value="buyCount")
                 =t('buy_count', scope: 'activerecord.attributes.product')
             th
-              btn.btn-link(kassa-state="psf" kassa-state-value="createdAt")
+              btn.btn-link(kassa-order-state="psf" kassa-value="createdAt")
                 =t('created_at', scope: 'activerecord.attributes.product')
             th
-              btn.btn-link(kassa-state="psf" kassa-state-value="updatedAt")
+              btn.btn-link(kassa-order-state="psf" kassa-value="updatedAt")
                 =t('updated_at', scope: 'activerecord.attributes.product')
             th
-              btn.btn-link(kassa-state="psf" kassa-state-value="lastBoughtAt")
+              btn.btn-link(kassa-order-state="psf" kassa-value="lastBoughtAt")
                 =t('last_bought_at', scope: 'activerecord.attributes.product')
         tbody
-          tr(ng-repeat="product in products|orderBy:getCurrentState('psf'):getCurrentState('pso') track by product.id")
+          tr(ng-repeat="product in products|orderByState:'psf' track by product.id")
             td.vertical-center
               a(ng-href="/app/products/{{product.id}}")
                 | {{product.name}}
