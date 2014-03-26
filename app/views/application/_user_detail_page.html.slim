@@ -59,25 +59,25 @@
             label.control-label.col-xs-4=t('users.change_balance')
             .col-xs-8
               .input-group
-                input.form-control(ng-model="balanceEuro" type="number" step=1 placeholder="#{t('placeholder.balance_euro')}")
+                input.form-control(ng-model="balance.euro" type="number" step=1 placeholder="#{t('placeholder.balance_euro')}")
                 span.input-group-addon .
-                input.form-control(ng-model="balanceCent" type="number" step=5 min="-99" max="99" placeholder="#{t('placeholder.balance_cent')}")
+                input.form-control(ng-model="balance.cent" type="number" step=5 min="-99" max="99" placeholder="#{t('placeholder.balance_cent')}")
                 span.input-group-addon
                   i.fa.fa-eur
-          .form-group(ng-show="balanceEuro || balanceCent")
+          .form-group(ng-show="balance.euro || balance.cent")
             label.control-label.col-xs-4=t('users.new_balance')
             .col-xs-8
               p.form-control-static
-                | {{newBalance(balanceEuro, balanceCent)|currency}}
-          .form-group(ng-show="balanceEuro || balanceCent")
+                | {{newBalance(balance.euro, balance.cent)|currency}}
+          .form-group(ng-show="balance.euro || balance.cent")
             label.control-label.col-xs-4=t('users.balance_change_note')
             .col-xs-8
-              textarea.form-control(ng-model="balanceChangeNote" placeholder="#{t('placeholder.balance_change_note')}")
+              textarea.form-control(ng-model="balance.changeNote" placeholder="#{t('placeholder.balance_change_note')}")
           .form-group
             .col-xs-4
             .col-xs-8
               .pull-right
-                button.btn.btn-success(ng-click="saveBalance(user, newBalance(balanceEuro, balanceCent))" ng-disabled="balanceState==SAVING || !balanceCanBeSaved(balanceEuro, balanceCent, balanceChangeNote)")
+                button.btn.btn-success(ng-click="saveBalance(user, newBalance(balance.euro, balance.cent), balance.changeNote)" ng-disabled="balanceState==SAVING || !balanceCanBeSaved(balance.euro, balance.cent, balance.changeNote)")
                   i.fa.fa-save.fa-fw(ng-if="balanceState!=SAVING")
                   i.fa.fa-spinner.fa-fw(ng-if="balanceState==SAVING")
                   span=t('action.save')

@@ -15,6 +15,7 @@ angular.module('kassa').controller('UserDetailCtrl', [
     cancel = ->
       #copy to prevent any unsaved edits from leaking to server object state
       $scope.user = angular.copy(originalUser)
+      $scope.balance = {}
 
     save = (user)->
       saveSuccess = -> $scope.state = STATE_SAVED

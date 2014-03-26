@@ -25,7 +25,7 @@ angular.module('kassa').service('UserService',[
 
     updateBalance = (user, newBalance, changeNote)->
       data = balance: newBalance, description: changeNote
-      $http.put("/users/#{user.id}/update_balance", data).then(convert).then(getFromResponse)
+      $http.put("/users/#{user.id}/update_balance", user: data).then(convert).then(getFromResponse)
 
     {
       all: all
