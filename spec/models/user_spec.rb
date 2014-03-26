@@ -16,4 +16,81 @@ describe User do
   it {should validate_presence_of :password}
 
   it {should have_many :buys}
+
+  let(:user){FactoryGirl.create(:user)}
+  let(:new_balance){user.balance + 100}
+  let(:change_note){'Testing changes to user balance'}
+  let(:doer){FactoryGirl.create(:user)}
+
+  describe "#change_balance" do
+    it "should not update the balance if old balance == new balance" do
+      expect{
+        expect(user.change_balance(user.balance, change_note, doer)).to be_nil
+      }.to_not change(BalanceChange, :count)
+    end
+
+    context "creating BalanceChange-record" do
+      it "should add a new record on updated balance" do
+        expect{
+          user.change_balance new_balance, change_note, doer
+        }.to change(BalanceChange, :count).by(1)
+      end
+
+      it "should remove the added record if the user could not be saved" do
+        user.stub(:save).and_return false
+        expect{
+          user.change_balance new_balance, change_note, doer
+        }.to_not change(BalanceChange, :count)
+      end
+    end
+
+    context "valid change" do
+      it "should update the users balance" do
+        expect{
+          user.change_balance new_balance, change_note, doer
+        }.to change(user, :balance).from(user.balance).to(new_balance)
+      end
+      it "should not save the user" do
+        expect(user).to receive(:save).and_return true
+        user.change_balance new_balance, change_note, doer
+      end
+      it "should return false" do
+        expect(user.change_balance new_balance, change_note, doer).to be_true
+      end
+    end
+
+    context "invalid change note" do
+      it "should not update the users balance" do
+        expect{
+          user.change_balance new_balance, nil, doer
+        }.to_not change(user, :balance)
+      end
+      it "should not save the user" do
+        expect(user).to_not receive(:save)
+        user.change_balance new_balance, nil, doer
+      end
+      it "should return false" do
+        expect(user.change_balance new_balance, nil, doer).to be_false
+      end
+    end
+
+    context "invalid balance" do
+      let(:invalid_balance){User::MIN_BALANCE - 1}
+      it "should not update the users balance" do
+        expect{
+          user.change_balance invalid_balance, change_note, doer
+          expect(user).to have(1).error_on(:balance)
+        }.to_not change(BalanceChange, :count)
+      end
+      it "should not save the user" do
+        old_balance = user.balance
+        user.change_balance invalid_balance, change_note, doer
+        expect(user).to be_invalid
+        expect(user.balance_change).to eq([old_balance, invalid_balance])
+      end
+      it "should return false" do
+        expect(user.change_balance invalid_balance, change_note, doer).to be_false
+      end
+    end
+  end
 end

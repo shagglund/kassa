@@ -1,0 +1,3 @@
+class BalanceChange < Change
+
+end

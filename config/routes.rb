@@ -6,6 +6,7 @@ Kassa::Application.routes.draw do
 
   resources :users, only: [:index, :create, :update, :show] do
     get :me, on: :collection
+    put :update_balance, on: :member
     resources :buys, only: :index
   end
 

@@ -3,6 +3,7 @@ require 'spec_helper'
 describe UsersController do
   context "requests" do
     let(:user_attribs){FactoryGirl.attributes_for(:user)}
+    let(:user_balance_attribs){{balance: user.balance + 100, description: 'Testing balance change on request level'}}
     let(:user){FactoryGirl.create(:user)}
 
     context "as an authenticated user" do
@@ -63,6 +64,15 @@ describe UsersController do
           }.to change{current_user.email}
         end
       end
+
+      describe "PUT update_balance" do
+        it "should return 403 Forbidden unless updating current user" do
+          expect{
+            put :update_balance, format: :json, id: user.id, user: user_balance_attribs
+            expect(response.status).to eq 403
+          }.to_not change{user}
+        end
+      end
     end
 
     context "as an authenticated admin" do
@@ -102,6 +112,30 @@ describe UsersController do
           }.to change{user.email}
         end
       end
+
+      describe 'PUT update_balance' do
+        it "should change the balance" do
+          expect{
+            expect{
+              put :update_balance, format: :json, id: user.id, user: user_balance_attribs
+              expect(response.status).to eq 200
+              expect(response.body).to be_json_eql(serialized(user.reload))
+              expect(user.balance_changes.last.change_note).to eq(user_balance_attribs[:description])
+            }.to change{user.balance}.from(user.balance).to(user_balance_attribs[:balance])
+          }.to change(BalanceChange, :count).by(1)
+        end
+
+        it "should not change balance without balance and description" do
+          expect{
+            expect{
+              put :update_balance, format: :json, id: user.id, user: user_balance_attribs.slice(:balance)
+              expect(response.status).to eq 422
+              put :update_balance, format: :json, id: user.id, user: user_balance_attribs.slice(:description)
+              expect(response.status).to eq 422
+            }.to_not change{user.balance}
+          }.to_not change(BalanceChange, :count)
+        end
+      end
     end
 
     context "unauthenticated" do
@@ -132,6 +166,12 @@ describe UsersController do
       describe "PUT update" do
         it "should return 401 Unauthorized" do
           put :update, format: :json, id: user.id, user: user_attribs
+          expect(response.status).to eq 401
+        end
+      end
+      describe "PUT update_balance" do
+        it "should return 401 Unauthorized" do
+          put :update_balance, format: :json, id: user.id, user: user_balance_attribs
           expect(response.status).to eq 401
         end
       end

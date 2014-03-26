@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
   respond_to :json
-  before_filter :authenticate_admin!, only: :create
-  before_filter :find_user, only: [:show, :update]
+  before_filter :authenticate_admin!, only: [:create, :update_balance]
+  before_filter :find_user, only: [:show, :update, :update_balance]
   before_filter :authenticate_admin_if_not_self!, only: :update
 
   def index
@@ -25,6 +25,12 @@ class UsersController < ApplicationController
     respond_with @user
   end
 
+  def update_balance
+    balance, description = balance_params.values_at(:balance, :description)
+    @user.change_balance(balance, description, current_user)
+    respond_with @user
+  end
+
   private
   def find_user
     @user = User.with_id_or_username(params[:id]).first
@@ -41,6 +47,10 @@ class UsersController < ApplicationController
     else
       req.permit(:username, :email)
     end
+  end
+
+  def balance_params
+    params.require(:user).permit(:balance, :description)
   end
 
   def authenticate_admin_if_not_self!
