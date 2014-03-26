@@ -14,7 +14,7 @@ angular.module('kassa').service('BasketService', [
         newAmount = currentAmount + amount
         $location.search(name, newAmount).replace()
 
-    empty = ->
+    emptyBasketAndRemoveBuyer = ->
       searchObj = $location.search()
       delete searchObj.buyer
       delete searchObj[entry.product.name] for entry in products
@@ -73,22 +73,26 @@ angular.module('kassa').service('BasketService', [
         return buyer if buyer?.then?
         buyer = User.find(username).then (user)-> buyer = user
 
-    setFromBuy = (buy)->
+
+    setSearch = (buy)->
       search = $location.search()
       search.buyer = buy.buyer.username
       search.basket = "true"
       for entry in buy.consistsOfProducts
         search[entry.product.name] = entry.amount
+      search
+
+    setFromBuy = (buy)->
       if $location.path() == '/buy'
-        empty()
-        $location.search(search).replace()
+        emptyBasketAndRemoveBuyer()
+        $location.search(setSearch(buy)).replace()
       else
-        $location.search(search).path('/buy')
+        $location.search(setSearch(buy)).path('/buy')
 
     #return api-object with methods/objects accessible from outside
     exports = {
       changeAmount: changeAmount
-      empty: empty
+      empty: emptyBasketAndRemoveBuyer
       productCount: productCount
       price: price
       isBuyable: isBuyable
