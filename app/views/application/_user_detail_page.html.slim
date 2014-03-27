@@ -9,7 +9,7 @@
           .col-xs-8
             h3
               | {{user.username}}
-      .panel-body
+      .panel-body(ng-show="session.isAdmin()")
         form.form-horizontal
           legend=t('users.basic_info')
           .form-group
@@ -47,7 +47,7 @@
                 =t('users.state.failed')
                 button.close(type="button" ng-click="state=DEFAULT")
                   i.fa.fa-times.fa-fw
-      .panel-body
+      .panel-body(ng-show="session.isAdmin()")
         form.form-horizontal
           legend=t('users.balance')
           .form-group
@@ -92,6 +92,28 @@
                 =t('users.state.balance_failed')
                 button.close(type="button" ng-click="balanceState=DEFAULT")
                   i.fa.fa-times.fa-fw
+      .panel-body(ng-hide="session.isAdmin()")
+        form.form-horizontal
+          .form-group
+            label.control-label.col-xs-4=t('username', scope: 'activerecord.attributes.user')
+            .col-xs-8
+              p.form-control-static
+                | {{user.username}}
+          .form-group
+            label.control-label.col-xs-4=t('email', scope: 'activerecord.attributes.user')
+            .col-xs-8
+              p.form-control-static
+                | {{user.email}}
+          .form-group
+            label.control-label.col-xs-4=t('balance', scope: 'activerecord.attributes.user')
+            .col-xs-8
+              p.form-control-static
+                | {{user.balance|currency}}
+          .form-group
+            label.control-label.col-xs-4=t('admin', scope: 'activerecord.attributes.user')
+            .col-xs-8
+              p.text-success.form-control-static(ng-if="user.admin")=t('option.yes')
+              p.text-danger.form-control-static(ng-if="!user.admin")=t('option.no')
   .col-xs-12.col-md-6
     .panel.panel-default(ng-controller="UserLatestBuysCtrl")
       .panel-heading
