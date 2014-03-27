@@ -1,7 +1,8 @@
 angular.module('kassa').service('ProductService',[
   '$http'
   '$routeParams'
-  ($http, $routeParams)->
+  '$rootScope'
+  ($http, $routeParams, $rootScope)->
     #handle price as a float, not a string
     convertProduct = (product)->
       product.price = parseFloat(product.price)
@@ -14,20 +15,21 @@ angular.module('kassa').service('ProductService',[
         convertProduct(resp.data.product)
       resp
 
-    destructure = (resp)-> resp.data.product || resp.data.products
+    getFromResponse = (resp)-> resp.data.product || resp.data.products
 
-    all = -> $http.get('/products').then(convert).then(destructure)
+    broadcastNewProduct = (product)->
+      $rootScope.$broadcast 'product:new', product
+      product
 
-    find = (id)-> $http.get("/products/#{id}").then(convert).then(destructure)
+    all = -> $http.get('/products').then(convert).then(getFromResponse)
+
+    find = (id)-> $http.get("/products/#{id}").then(convert).then(getFromResponse)
 
     currentByRoute = -> find($routeParams.id)
 
-    update = (product)-> $http.put("/products/#{product.id}", product: product).then(convert).then(destructure)
+    update = (product)-> $http.put("/products/#{product.id}", product: product).then(convert).then(getFromResponse)
 
-    {
-      all: all
-      find: find
-      currentByRoute: currentByRoute
-      update: update
-    }
+    create = (product)-> $http.post('/products', {product}).then(convert).then(getFromResponse).then(broadcastNewProduct)
+
+    {all, find, currentByRoute, update, create}
 ])

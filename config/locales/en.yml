@@ -65,6 +65,8 @@ en:
     filter_list: Filter by name
     clear_filter_list: Clear filters
     latest_buys: Latest buys
+    new: New product
+    new_header: New product information
     sort:
       name: Name
       stock: Stock

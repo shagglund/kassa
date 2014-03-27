@@ -2,7 +2,12 @@
   .col-xs-12
     .panel.panel-default
       .panel-heading
-        h3.text-center=t('products.title')
+        h3.text-center
+          .small.pull-left
+            a.btn.btn-primary(href="/app/products/new")
+              i.fa.fa-plus.fa-fw
+              span=t('products.new')
+          =t('products.title')
       table.table.table-striped.table-hover
         thead
           tr
