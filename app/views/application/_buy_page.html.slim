@@ -99,6 +99,12 @@
                         span=t('basket.buy')
                         i.fa.fa-shopping-cart.fa-fw
                         i.fa.fa-arrow-right
+                  tr(ng-show="basket.hasErrors()")
+                    td(colspan=4)
+                      p.alert.alert-danger.text-center
+                        =t('basket.state.buy_failed')
+                        button.close(type="button" ng-click="basket.clearErrors()")
+                          i.fa.fa-times.fa-fw
 
 
 .row

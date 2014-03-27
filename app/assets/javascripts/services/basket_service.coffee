@@ -1,10 +1,11 @@
 angular.module('kassa').service('BasketService', [
   '$http'
   '$location'
+  '$q'
   'UserService'
   'ProductService'
   'BuyService'
-  ($http, $location, User, Product, Buy)->
+  ($http, $location, $q, User, Product, Buy)->
     products = []
     buyer = null
 
@@ -37,7 +38,7 @@ angular.module('kassa').service('BasketService', [
       else
         products.reduce(entryPriceReducer, 0.0)
 
-    isBuyable = -> products.length > 0 && exports.buyer
+    isBuyable = -> products.length > 0 && buyer
 
     entryByProductName = (entries, name)->
       return entry for entry in entries when entry.product.name == name
@@ -92,21 +93,40 @@ angular.module('kassa').service('BasketService', [
       else
         $location.search(setSearch(buy)).path('/buy')
 
+    STATE_ERROR = 0
+    STATE_SUCCESS = 1
+    state = STATE_DEFAULT = 2
+
+    handleSuccess = (buy)->
+      emptyBasketAndRemoveBuyer(false)
+      state = STATE_SUCCESS
+      buy
+
+    handleError = (resp)->
+      state = STATE_ERROR
+      $q.reject(resp)
+
     buy = ->
       return unless buyer? && products?.length > 0
-      Buy.create(buyer, products).then -> emptyBasketAndRemoveBuyer(false)
+      Buy.create(buyer, products).then(handleSuccess, handleError)
+
+    hasErrors = -> state == STATE_ERROR
+
+    clearErrors = -> state = STATE_DEFAULT
 
     #return api-object with methods/objects accessible from outside
-    exports = {
-      changeAmount: changeAmount
+    {
+      changeAmount
+      productCount
+      price
+      isBuyable
+      hasProducts
+      setFromBuy
+      buy
+      hasErrors
+      clearErrors
       empty: emptyBasketAndRemoveBuyer
-      productCount: productCount
-      price: price
-      isBuyable: isBuyable
       products: resolveProducts
-      hasProducts: hasProducts
       buyer: resolveBuyer
-      setFromBuy: setFromBuy
-      buy: buy
     }
 ])

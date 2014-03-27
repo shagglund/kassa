@@ -40,6 +40,8 @@ en:
     empty: Empty
     buy: Buy
     remove_product: Remove
+    state:
+      buy_failed: Performing buy on server failed
   users:
     title: Users
     filter_list: Filter by username
