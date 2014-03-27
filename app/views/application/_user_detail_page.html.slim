@@ -61,7 +61,7 @@
               .input-group
                 input.form-control(ng-model="balance.euro" type="number" step=1 placeholder="#{t('placeholder.balance_euro')}")
                 span.input-group-addon .
-                input.form-control(ng-model="balance.cent" type="number" step=5 min="-99" max="99" placeholder="#{t('placeholder.balance_cent')}")
+                input.form-control(ng-model="balance.cent" type="number" step=5 min="-95" max="95" placeholder="#{t('placeholder.balance_cent')}")
                 span.input-group-addon
                   i.fa.fa-eur
           .form-group(ng-show="balance.euro || balance.cent")
