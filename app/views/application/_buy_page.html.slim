@@ -33,75 +33,72 @@
                   span=t('basket.hide')
       .panel-body
         .row
-          .col-md-4
-            .col-md-4
-              .row
-                img.img-rounded(gravatar="basket.buyer().email" gravatar-size="128")
-            .col-md-8
-              ul.list-group
-                li.list-group-item
-                  .row
-                    .col-md-4
+          .col-xs-12.col-md-4
+            .panel.panel-default
+              table.table
+                tbody
+                  tr
+                    td(rowspan=3)
+                      img.img-rounded(gravatar="basket.buyer().email" gravatar-size="128")
+                    td
                       strong=t('buyer', scope: 'activerecord.attributes.buy')
-                    .col-md-8
+                    td
                       span(ng-if='!basket.buyer()')=t('basket.no_buyer')
                       a(ng-href="/app/users/{{basket.buyer().id}}")
                         | {{basket.buyer().username}}
-                li.list-group-item(ng-show="basket.buyer()")
-                  .row
-                    .col-md-4
+                  tr
+                    td
                       strong=t('basket.balance_now')
-                    .col-md-8(ng-class="{'text-danger': basket.buyer().balance < 0, 'text-success': basket.buyer().balance > 20}")
-                      | {{basket.buyer().balance|currency}}
-                li.list-group-item(ng-show="basket.buyer()")
-                  .row
-                    .col-md-4
+                    td(ng-class="{'text-danger': basket.buyer().balance < 0, 'text-success': basket.buyer().balance > 20}")
+                      | {{(basket.buyer().balance || 0)|currency}}
+                  tr
+                    td
                       strong=t('basket.balance_after')
-                    .col-md-8(ng-class="{'text-danger': basket.buyer().balance < 0, 'text-success': basket.buyer().balance > 20}")
+                    td(ng-class="{'text-danger': basket.buyer().balance < 0, 'text-success': basket.buyer().balance > 20}")
                       | {{(basket.buyer().balance-basket.price())|currency}}
-          .col-md-8
-            ul.list-group
-              li.list-group-item
-                .row
-                  .col-md-3.text-center
-                    strong=t('amount', scope: 'activerecord.attributes.buy_entry')
-                  .col-md-3
-                    strong=t('products.one', scope: 'activerecord.attributes.buy')
-                  .col-md-2.text-center
-                    strong=t('price', scope: 'activerecord.attributes.buy')
-                  .col-md-4
-              li.list-group-item(ng-repeat="entry in basket.products() track by entry.product.id")
-                .row
-                  .col-md-3.text-center
-                    .btn-group
-                      button.btn.btn-primary(ng-click="basket.changeAmount(entry, -1)")
-                        i.fa.fa-minus.fa-fw
-                      button.btn.btn-default(disabled=true)
-                        | {{entry.amount|number}}
-                      button.btn.btn-primary(ng-click="basket.changeAmount(entry, 1)")
-                        i.fa.fa-plus.fa-fw
-                  .col-md-3
-                    | {{entry.product.name}}
-                  .col-md-2.text-center
-                    | {{basket.price(entry)|currency}}
-                  .col-md-4
-                    button.btn.btn-danger(kassa-state-remove="{{entry.product.name}}")
-                      i.fa.fa-times.fa-fw
-                      span=t('basket.remove_product')
-              li.list-group-item
-                .row
-                  .col-md-4.col-md-offset-2
-                    strong.pull-right=t('basket.price_total')
-                  .col-md-2.text-center
-                    | {{basket.price()|currency}}
-                  .col-md-4
-                    button.btn.btn-danger(type="button" ng-click="basket.empty()" ng-disabled="basket.products().length == 0")
-                      i.fa.fa-trash-o.fa-fw
-                      span=t('basket.empty')
-                    button.btn.btn-success(type="button" ng-click="basket.buy()" ng-disabled="!basket.isBuyable()")
-                      span=t('basket.buy')
-                      i.fa.fa-shopping-cart.fa-fw
-                      i.fa.fa-arrow-right
+          .col-xs-12.col-md-8
+            .panel.panel-default
+              table.table
+                tbody
+                  tr
+                    td.text-center
+                      strong=t('amount', scope: 'activerecord.attributes.buy_entry')
+                    td
+                      strong=t('products.one', scope: 'activerecord.attributes.buy')
+                    td.text-center
+                      strong=t('price', scope: 'activerecord.attributes.buy')
+                    td
+                  tr(ng-repeat="entry in basket.products() track by entry.product.id")
+                    td.text-center
+                      .btn-group
+                        button.btn.btn-primary(ng-click="basket.changeAmount(entry, -1)")
+                          i.fa.fa-minus.fa-fw
+                        button.btn.btn-default(disabled=true)
+                          | {{entry.amount|number}}
+                        button.btn.btn-primary(ng-click="basket.changeAmount(entry, 1)")
+                          i.fa.fa-plus.fa-fw
+                    td
+                      | {{entry.product.name}}
+                    td.text-center
+                      | {{basket.price(entry)|currency}}
+                    td
+                      button.btn.btn-danger(kassa-state-remove="{{entry.product.name}}")
+                        i.fa.fa-times.fa-fw
+                        span=t('basket.remove_product')
+                  tr
+                    td
+                    td
+                      strong.pull-right=t('basket.price_total')
+                    td.text-center
+                      | {{basket.price()|currency}}
+                    td
+                      button.btn.btn-danger(type="button" ng-click="basket.empty()" ng-disabled="basket.products().length == 0")
+                        i.fa.fa-trash-o.fa-fw
+                        span=t('basket.empty')
+                      button.btn.btn-success(type="button" ng-click="basket.buy()" ng-disabled="!basket.isBuyable()")
+                        span=t('basket.buy')
+                        i.fa.fa-shopping-cart.fa-fw
+                        i.fa.fa-arrow-right
 
 
 .row
@@ -154,6 +151,6 @@
               button.btn.btn-success(kassa-set-state="basket" kassa-value="true" ng-show="getCurrentState(product.name) > 0")
                 i.fa.fa-shopping-cart.fa-fw
 
-  .col-md-4.hidden-xs.hidden-sm(ng-controller="BuyLatestListController")
+  .col-xs-12.col-md-4(ng-controller="BuyLatestListController")
     .panel.panel-default
       =render 'buy_list'
