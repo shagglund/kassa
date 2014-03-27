@@ -13,7 +13,7 @@ class User < ActiveRecord::Base
   validates :balance, numericality: { only_integer: false}, inclusion: {in: MIN_BALANCE..MAX_BALANCE}
   validates :buy_count, numericality: { only_integer: true}, inclusion: {in: MIN_BUY_COUNT..MAX_BUY_COUNT}
 
-  scope :with_id_or_username, ->(id){/^\d+$/.match(id).nil? ? where(username: id) : where(id: id)}
+  scope :with_id_or_username, ->(id){id.to_s =~ /\A\d+\z/ ? where(id: id) : where(username: id)}
 
   def change_balance(new_balance, change_note, doer)
     return if balance == new_balance

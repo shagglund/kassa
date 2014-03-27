@@ -5,7 +5,7 @@ class Product < ActiveRecord::Base
   validates :name, presence: true, uniqueness: true
   validates :price, numericality: {only_integer: false}, inclusion: {in: 0..99}
 
-  scope :with_id_or_name, ->(id){/^\d+$/.match(id).nil? ? where(name: id) : where(id: id)}
+  scope :with_id_or_name, ->(id){id.to_s =~ /\A\d+\z/ ? where(id: id) : where(name: id)}
 
   #Placeholder methods for now, to be replaced with a real column
   def available; stock > 0; end

@@ -12,9 +12,9 @@ class BuysController < ApplicationController
   end
 
   def create
-    ensure_user_exists do
-      ensure_products_exist do
-        return respond_with Buy.create(buy_params)
+    ensure_user_exists(buy_params) do |resolved_params|
+      ensure_products_exist(resolved_params) do |resolved_params|
+        return respond_with Buy.create(resolved_params)
       end
     end
   end
@@ -36,19 +36,25 @@ class BuysController < ApplicationController
     end
   end
 
-  def ensure_user_exists
-    unless User.with_id_or_username(buy_params[:buyer_id]).exists?
+  def ensure_user_exists(resolved_params)
+    user = User.with_id_or_username(resolved_params.delete(:buyer_id)).first
+    if user.nil?
       return head :unprocessable_entity
+    else
+      resolved_params[:buyer] = user
+      yield resolved_params
     end
-    yield
   end
 
-  def ensure_products_exist
-    buy_params[:consists_of_products_attributes].each do |entry_attribs|
-      unless Product.with_id_or_name(entry_attribs[:product_id]).exists?
+  def ensure_products_exist(resolved_params)
+    resolved_params[:consists_of_products_attributes].each do |entry_attribs|
+      product = Product.with_id_or_name(entry_attribs.delete(:product_id)).first
+      if product.nil?
         return head :unprocessable_entity
+      else
+        entry_attribs[:product] = product
       end
     end
-    yield
+    yield resolved_params
   end
 end
