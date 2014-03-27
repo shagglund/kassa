@@ -3,7 +3,8 @@ angular.module('kassa').service('BasketService', [
   '$location'
   'UserService'
   'ProductService'
-  ($http, $location, User, Product)->
+  'BuyService'
+  ($http, $location, User, Product, Buy)->
     products = []
     buyer = null
 
@@ -14,12 +15,14 @@ angular.module('kassa').service('BasketService', [
         newAmount = currentAmount + amount
         $location.search(name, newAmount).replace()
 
-    emptyBasketAndRemoveBuyer = ->
+    emptyBasketAndRemoveBuyer = (showBasket=true)->
       searchObj = $location.search()
       delete searchObj.buyer
-      delete searchObj[entry.product.name] for entry in products
 
+      delete searchObj[entry.product.name] for entry in products
       products.splice(0, products.length)
+
+      searchObj.basket = showBasket
       $location.search(searchObj).replace()
 
     entryAmountReducer = (sum, entry)-> sum+entry.amount
@@ -89,6 +92,10 @@ angular.module('kassa').service('BasketService', [
       else
         $location.search(setSearch(buy)).path('/buy')
 
+    buy = ->
+      return unless buyer? && products?.length > 0
+      Buy.create(buyer, products).then -> emptyBasketAndRemoveBuyer(false)
+
     #return api-object with methods/objects accessible from outside
     exports = {
       changeAmount: changeAmount
@@ -100,5 +107,6 @@ angular.module('kassa').service('BasketService', [
       hasProducts: hasProducts
       buyer: resolveBuyer
       setFromBuy: setFromBuy
+      buy: buy
     }
 ])

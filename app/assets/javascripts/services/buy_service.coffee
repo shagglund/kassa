@@ -29,6 +29,10 @@ angular.module('kassa').service('BuyService',[
     latestForProduct = (product, params)->
       $http.get("/products/#{product.id}/buys", {params}).then(convert).then(getFromResponse)
 
+    create = (buyer, entries)->
+      products = entries.map (entry)-> amount: entry.amount, product_id: entry.product.id
+      $http.post('/buys', buy: {buyer_id: buyer.id, products}).then(convert).then(getFromResponse)
+
     {
       all: all
       latest: latest
@@ -36,5 +40,6 @@ angular.module('kassa').service('BuyService',[
       currentByRoute: currentByRoute
       latestForUser: latestForUser
       latestForProduct: latestForProduct
+      create: create
     }
 ])
