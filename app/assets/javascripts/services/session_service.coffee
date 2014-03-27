@@ -4,11 +4,11 @@ angular.module('kassa').service('SessionService',[
   '$window'
   'UserService'
   ($http, $q, $window, User)->
-    currentUser = null
+    authenticatedUser = null
 
     equal = angular.equals
 
-    setUser = (user)-> currentUser = user
+    setUser = (user)-> authenticatedUser = user
 
     checkStatus = -> User.find('me').then(setUser)
 
@@ -17,21 +17,19 @@ angular.module('kassa').service('SessionService',[
 
     signOut = ->
       $http.delete('/user/sign_out').then ->
-        currentUser = null
+        authenticatedUser = null
         #hacky way of redirecting since base-tag supported routing will hijack this via $location
         $window.location.href = '/user/sign_in'
 
+    isCurrentUser = (user)-> equal(authenticatedUser, user)
+
+    currentUser = (ensurePromise=true)->
+      if ensurePromise then $q.when(authenticatedUser) else authenticatedUser
+
+    isAdmin = -> authenticatedUser.admin
+
     #load the current user if signed in and set to promise that will be resolved and watched automatically
-    currentUser = checkStatus()
+    authenticatedUser = checkStatus()
 
-    isCurrentUser = (user)-> equal(currentUser, user)
-
-    {
-      checkStatus: checkStatus
-      signIn: signIn
-      signOut: signOut
-      currentUser: (ensurePromise=true)->
-        if ensurePromise then $q.when(currentUser) else currentUser
-      isCurrentUser: isCurrentUser
-    }
+    {checkStatus, signIn, signOut, isCurrentUser, currentUser, isAdmin}
 ])
