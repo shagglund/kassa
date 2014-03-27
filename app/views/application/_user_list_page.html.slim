@@ -2,7 +2,12 @@
   .col-xs-12
     .panel.panel-default
       .panel-heading
-        h3.text-center=t('users.title')
+        h3.text-center
+          .small.pull-left
+            a.btn.btn-primary(href="/app/users/new")
+              i.fa.fa-plus.fa-fw
+              span=t('users.new')
+          =t('users.title')
       table.table.table-striped.table-hover
         thead
           tr

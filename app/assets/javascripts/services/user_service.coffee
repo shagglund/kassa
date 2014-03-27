@@ -1,9 +1,11 @@
 angular.module('kassa').service('UserService',[
   '$http'
   '$routeParams'
-  ($http, $routeParams)->
+  '$rootScope'
+  ($http, $routeParams, $rootScope)->
     convertUser = (user)->
       user.balance = parseFloat(user.balance)
+
     convert = (resp)->
       users = resp.data.users
       if users?
@@ -13,6 +15,10 @@ angular.module('kassa').service('UserService',[
       resp
 
     getFromResponse = (resp)-> resp.data.user || resp.data.users
+
+    broadcastNewUser = (user)->
+      $rootScope.$broadcast 'user:new', user
+      user
 
     all = -> $http.get("/users").then(convert).then(getFromResponse)
 
@@ -27,11 +33,9 @@ angular.module('kassa').service('UserService',[
       data = balance: newBalance, description: changeNote
       $http.put("/users/#{user.id}/update_balance", user: data).then(convert).then(getFromResponse)
 
-    {
-      all: all
-      find: find
-      currentByRoute: currentByRoute
-      update: update
-      updateBalance: updateBalance
-    }
+    create = (user)->
+      $http.post("/users", {user}).then(convert).then(getFromResponse).then(broadcastNewUser)
+
+    #exposed methods
+    {all, find, currentByRoute, update, updateBalance, create}
 ])

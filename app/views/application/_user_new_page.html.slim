@@ -1,0 +1,64 @@
+.row(ng-controller="UserNewCtrl")
+  .col-xs-12.col-md-6
+    .panel.panel-default
+      .panel-heading
+        .row
+          .col-xs-4
+            a(href="http://www.gravatar.com" target="_blank" title="#{t('gravatar.click_to_add')}")
+              img.img-rounded(gravatar="user.email" gravatar-size=62)
+          .col-xs-8
+            h3=t('users.new_info')
+      .panel-body
+        form.form-horizontal(name="newUserForm")
+          .form-group
+            label.control-label.col-xs-4=t('username', scope: 'activerecord.attributes.user')
+            .col-xs-8
+              input.form-control(ng-model="user.username" type="text" required=true)
+          .form-group
+            label.control-label.col-xs-4=t('email', scope: 'activerecord.attributes.user')
+            .col-xs-8
+              input.form-control(ng-model="user.email" type="email" required=true)
+          .form-group
+            label.control-label.col-xs-4=t('balance', scope: 'activerecord.attributes.user')
+            .col-xs-8
+              .input-group
+                input.form-control(ng-model="euros" ng-change="setBalance(user, euros, cents)" type="number" step=1 placeholder="#{t('placeholder.balance_euro')}")
+                span.input-group-addon .
+                input.form-control(ng-model="cents" ng-change="setBalance(user, euros, cents)" type="number" step=5 min="-95" max="95" placeholder="#{t('placeholder.balance_cent')}")
+                span.input-group-addon
+                  i.fa.fa-eur
+          .form-group(ng-class="{'has-error': !passwordsMatch(user.password, user.password_confirmation)}")
+            label.control-label.col-xs-4=t('password', scope: 'activerecord.attributes.user')
+            .col-xs-8
+              input.form-control(ng-model="user.password"type="password" required=true)
+          .form-group(ng-class="{'has-error': !passwordsMatch(user.password, user.password_confirmation)}")
+            label.control-label.col-xs-4=t('password_confirmation', scope: 'activerecord.attributes.user')
+            .col-xs-8
+              input.form-control(ng-model="user.password_confirmation" type="password" required=true)
+          .form-group(ng-show="!passwordsMatch(user.password, user.password_confirmation)")
+            .col-xs-4
+            .col-xs-8
+              p.help-block=t('users.passwords_not_matching')
+          .form-group
+            label.control-label.col-xs-4=t('admin', scope: 'activerecord.attributes.user')
+            .btn-group.col-xs-8
+              button.btn(ng-click="user.admin=true" ng-class="{'btn-success active': user.admin, 'btn-default': !user.admin}")=t('option.yes')
+              button.btn(ng-click="user.admin=false" ng-class="{'btn-danger active': !user.admin, 'btn-default': user.admin}")=t('option.no')
+          .form-group
+            .col-xs-4
+            .col-xs-8
+              .pull-right
+                button.btn.btn-danger(ng-click="cancel()" ng-disabled="state==SAVING || newUserForm.$pristine")
+                  i.fa.fa-undo.fa-fw
+                  span=t('action.cancel')
+                button.btn.btn-success(ng-click="save(user)" ng-disabled="state==SAVING || newUserForm.$pristine || !newUserForm.$valid")
+                  i.fa.fa-save.fa-fw(ng-if="state!=SAVING")
+                  i.fa.fa-spinner.fa-fw(ng-if="state==SAVING")
+                  span=t('action.create')
+          .form-group
+            .col-xs-4
+            .col-xs-8
+              p.alert.alert-danger(ng-show="state==FAILED")
+                =t('users.state.failed')
+                button.close(type="button" ng-click="state=DEFAULT")
+                  i.fa.fa-times.fa-fw
