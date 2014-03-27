@@ -16,7 +16,9 @@ angular.module('kassa').service('BuyService',[
 
     getFromResponse= (resp)-> resp.data.buys || resp.data.buy
 
-    broadcastNewBuy = (buy)-> $rootScope.$broadcast 'buys:new', buy
+    broadcastNewBuy = (buy)->
+      $rootScope.$broadcast 'buys:new', buy
+      buy
 
     latest = (params)-> $http.get('/buys', {params}).then(convert).then(getFromResponse)
 
