@@ -1,13 +1,14 @@
 angular.module('kassa').controller 'BuyLatestListController', [
   '$scope'
   '$location'
+  '$q'
   'BuyService'
   'BasketService'
-  ($scope, $location, Buy, Basket)->
+  ($scope, $location, $q, Buy, Basket)->
     LIMIT = 20
     moreAvailable = null
 
-    Buy.latest(limit: LIMIT).then (buys)-> $scope.buys = buys
+    buys = Buy.latest(limit: LIMIT).then (loadedBuys)-> $scope.buys = buys = loadedBuys
 
     loadMore = (buys)->
       Buy.latest(offset: buys.length, limit: LIMIT).then (loadedBuys)->
@@ -16,6 +17,11 @@ angular.module('kassa').controller 'BuyLatestListController', [
 
     moreAvailable = -> moreAvailable
 
+    addNewBuy = (buy)->
+      $q.when(buys).then (resolvedBuys)-> resolvedBuys.unshift(buy)
+
     $scope.loadMore = loadMore
     $scope.moreAvailable = moreAvailable
+
+    $scope.$on 'buys:new', (event, buy)-> addNewBuy(buy)
 ]

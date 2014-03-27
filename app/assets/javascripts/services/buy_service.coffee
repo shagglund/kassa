@@ -1,7 +1,8 @@
 angular.module('kassa').service('BuyService',[
   '$http'
   '$routeParams'
-  ($http, $routeParams)->
+  '$rootScope'
+  ($http, $routeParams, $rootScope)->
     convertBuy = (buy)->
       buy.price = parseFloat(buy.price)
 
@@ -14,6 +15,8 @@ angular.module('kassa').service('BuyService',[
       resp
 
     getFromResponse= (resp)-> resp.data.buys || resp.data.buy
+
+    broadcastNewBuy = (buy)-> $rootScope.$broadcast 'buys:new', buy
 
     latest = (params)-> $http.get('/buys', {params}).then(convert).then(getFromResponse)
 
@@ -31,7 +34,7 @@ angular.module('kassa').service('BuyService',[
 
     create = (buyer, entries)->
       products = entries.map (entry)-> amount: entry.amount, product_id: entry.product.id
-      $http.post('/buys', buy: {buyer_id: buyer.id, products}).then(convert).then(getFromResponse)
+      $http.post('/buys', buy: {buyer_id: buyer.id, products}).then(convert).then(getFromResponse).then(broadcastNewBuy)
 
     {
       all: all
