@@ -47,23 +47,18 @@ describe Buy do
       let(:obj) {double.as_null_object}
 
       it "should order by created at in descending order" do
-        Buy.stub(:with_buyer_and_products).and_return obj
-        obj.should_receive(:in_create_order).and_return obj
+        Buy.should_receive(:in_create_order).and_return obj
         Buy.latest
       end
       it "should limit the results to 20 by default" do
-        Buy.stub_chain(:with_buyer_and_products, :in_create_order).and_return obj
+        Buy.stub(:in_create_order).and_return obj
         obj.should_receive(:limit).with(20)
         Buy.latest
       end
       it "should limit the results to <limit>" do
-        Buy.stub_chain(:with_buyer_and_products, :in_create_order).and_return obj
+        Buy.stub(:in_create_order).and_return obj
         obj.should_receive(:limit).with(15)
         Buy.latest(15)
-      end
-      it "should eager load the buyer and products" do
-        Buy.should_receive(:with_buyer_and_products).and_call_original
-        Buy.latest
       end
     end
     context ".in_create_order" do

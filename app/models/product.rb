@@ -10,12 +10,4 @@ class Product < ActiveRecord::Base
   #Placeholder methods for now, to be replaced with a real column
   def available; stock > 0; end
   def available=(avl); self.stock = (avl ? 1 : 0); end
-
-  def buy_count
-    @buy_count ||= BuyEntry.where(product_id: id).pluck(:amount).sum
-  end
-
-  def last_bought_at
-    @last_bought_at ||= Buy.includes(:consists_of_products).where(buy_entries: {product_id: id}).maximum(:created_at)
-  end
 end
