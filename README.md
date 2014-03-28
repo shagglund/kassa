@@ -5,5 +5,5 @@
 
 ## License
 
-Copyright (c) 2012-2014 Sten Hägglund. See the [LICENSE](https://travis-ci.org/flipflops/kassa/blob/master/LICENSE) file for license rights and
+Copyright (c) 2012-2014 Sten Hägglund. See the [LICENSE](https://github.com/flipflops/kassa/blob/master/LICENSE) file for license rights and
 limitations (MIT).
