@@ -47,13 +47,15 @@ angular.module('kassa').service('BasketService', [
       products.push entry
       (product)-> entry.product = product
 
+    INTEGER_REGEXP = /^\d+$/m
+    validateAndParseInteger = (value)->
+      parseInt(value) if INTEGER_REGEXP.test(value)
+
     resolveProducts = ->
       oldProducts = products
       products = []
       for own k, v of $location.search()
-        v = parseInt(v)
-        continue if isNaN(v)
-
+        continue unless (v = validateAndParseInteger(v))?
         #update amount or add a new product if non-existent
         entry = entryByProductName(oldProducts, k)
         if entry?

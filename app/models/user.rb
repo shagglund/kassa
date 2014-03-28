@@ -9,7 +9,7 @@ class User < ActiveRecord::Base
   has_many :buys, foreign_key: 'buyer_id'
   has_many :balance_changes, as: :trackable
 
-  validates :username, presence: true, length: {in: 2..16}, uniqueness: true
+  validates :username, presence: true, length: {in: 2..16}, uniqueness: true, format: {with: /\D/}
   validates :balance, numericality: { only_integer: false}, inclusion: {in: MIN_BALANCE..MAX_BALANCE}
   validates :buy_count, numericality: { only_integer: true}, inclusion: {in: MIN_BUY_COUNT..MAX_BUY_COUNT}
 

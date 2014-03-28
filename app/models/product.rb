@@ -2,7 +2,7 @@ class Product < ActiveRecord::Base
   has_many :buy_entries
   has_many :buys, through: :buy_entries
 
-  validates :name, presence: true, uniqueness: true
+  validates :name, presence: true, uniqueness: true, format: {with: /\D/}
   validates :price, numericality: {only_integer: false}, inclusion: {in: 0..99}
 
   scope :with_id_or_name, ->(id){id.to_s =~ /\A\d+\z/ ? where(id: id) : where(name: id)}
