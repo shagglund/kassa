@@ -2,7 +2,7 @@ class ProductsController < ApplicationController
   respond_to :json
   before_filter :find_product, only: [:show, :update]
   def index
-    @products = Product.all
+    @products = Product.all.order(:name)
     respond_with @products
   end
 

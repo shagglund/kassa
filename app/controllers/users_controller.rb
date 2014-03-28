@@ -5,7 +5,7 @@ class UsersController < ApplicationController
   before_filter :authenticate_admin_if_not_self!, only: :update
 
   def index
-    respond_with User.all
+    respond_with User.all.order(:username)
   end
 
   def me
