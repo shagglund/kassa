@@ -1,11 +1,9 @@
 angular.module('kassa').service('BasketService', [
   '$http'
   '$location'
-  '$q'
   'UserService'
   'ProductService'
-  'BuyService'
-  ($http, $location, $q, User, Product, Buy)->
+  ($http, $location, User, Product)->
     products = []
     buyer = null
 
@@ -93,27 +91,6 @@ angular.module('kassa').service('BasketService', [
       else
         $location.search(setSearch(buy)).path('/buy')
 
-    STATE_ERROR = 0
-    STATE_SUCCESS = 1
-    state = STATE_DEFAULT = 2
-
-    handleSuccess = (buy)->
-      emptyBasketAndRemoveBuyer(false)
-      state = STATE_SUCCESS
-      buy
-
-    handleError = (resp)->
-      state = STATE_ERROR
-      $q.reject(resp)
-
-    buy = ->
-      return unless buyer? && products?.length > 0
-      Buy.create(buyer, products).then(handleSuccess, handleError)
-
-    hasErrors = -> state == STATE_ERROR
-
-    clearErrors = -> state = STATE_DEFAULT
-
     #return api-object with methods/objects accessible from outside
     {
       changeAmount
@@ -122,9 +99,6 @@ angular.module('kassa').service('BasketService', [
       isBuyable
       hasProducts
       setFromBuy
-      buy
-      hasErrors
-      clearErrors
       empty: emptyBasketAndRemoveBuyer
       products: resolveProducts
       buyer: resolveBuyer

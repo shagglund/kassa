@@ -95,15 +95,15 @@
                       button.btn.btn-danger(type="button" ng-click="basket.empty()" ng-disabled="basket.products().length == 0")
                         i.fa.fa-trash-o.fa-fw
                         span=t('basket.empty')
-                      button.btn.btn-success(type="button" ng-click="basket.buy()" ng-disabled="!basket.isBuyable()")
+                      button.btn.btn-success(type="button" ng-click="buy()" ng-disabled="!basket.isBuyable()")
                         span=t('basket.buy')
                         i.fa.fa-shopping-cart.fa-fw
                         i.fa.fa-arrow-right
-                  tr(ng-show="basket.hasErrors()")
+                  tr(ng-show="state==ERROR")
                     td(colspan=4)
                       p.alert.alert-danger.text-center
                         =t('basket.state.buy_failed')
-                        button.close(type="button" ng-click="basket.clearErrors()")
+                        button.close(type="button" ng-click="state=DEFAULT")
                           i.fa.fa-times.fa-fw
 
 
