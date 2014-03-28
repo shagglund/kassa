@@ -2,21 +2,20 @@ source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 ruby '2.1.0'
-gem 'rails', '4.1.0.rc1'
+gem 'rails', '~> 4.1.0.rc2'
 
 # Use sqlite3 as the database for Active Record
 
 # Use SCSS for stylesheets
-gem 'sass-rails', '~> 4.0.0'
+gem 'sass-rails'
 
 # Use Uglifier as compressor for JavaScript assets
-gem 'uglifier', '>= 1.3.0'
+gem 'uglifier'
 
 # Use CoffeeScript for .js.coffee assets and views
-gem 'coffee-rails', '~> 4.0.0'
-
+gem 'coffee-rails'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-gem 'jbuilder', '~> 1.2'
+gem 'jbuilder'
 
 
   # bundle exec rake doc:rails generates the API under doc/api.
@@ -33,7 +32,7 @@ gem 'jbuilder', '~> 1.2'
 # Use debugger
 # gem 'debugger', group: [:development, :test]
 
-gem 'bootstrap-sass', '>= 3.0.0.0'
+gem 'bootstrap-sass'
 gem 'font-awesome-sass'
 gem 'angularjs-rails'
 gem 'angular-ui-rails'
