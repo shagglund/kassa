@@ -54,5 +54,4 @@ RSpec.configure do |config|
 
   config.include Devise::TestHelpers, :type => :controller
   config.extend AuthenticationHelpers, :type => :controller
-  config.include SerializerHelpers, :type => :controller
 end

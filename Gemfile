@@ -42,7 +42,6 @@ gem 'pg'
 gem 'puma'
 gem 'sendgrid'
 gem 'slim-rails'
-gem 'active_model_serializers'
 gem 'newrelic_rpm'
 
 group :development do
