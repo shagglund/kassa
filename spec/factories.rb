@@ -1,6 +1,6 @@
 FactoryGirl.define do
   sequence(:email){|i| "email#{i}@example.com"}
-  sequence(:price)
+  sequence(:price){|i| (i + i / 100) % 100}
   sequence(:available){|i| i % 2 == 0}
 
   factory :user do
