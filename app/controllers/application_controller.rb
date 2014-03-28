@@ -7,9 +7,6 @@ class ApplicationController < ActionController::Base
   end
 
   protected
-
-  def numeric_id?(id); /^\d+$/.match(id).present?; end
-
   def authenticate_admin!
     authenticate_user! if current_user.nil?
     unless current_user.admin?
