@@ -11,19 +11,18 @@ describe ProductsController do
       describe 'GET index' do
         it "should render a list of products" do
           get :index, format: :json
-          expect(response.body).to have_json_path('products')
-          expect(response.body).to have_json_type(Array).at_path('products')
+          expect(response.body).to render_template('index')
         end
       end
 
       describe 'GET show' do
         it "should render a given product by id" do
           get :show, format: :json, id: product.id
-          expect(response.body).to be_json_eql(serialized(product))
+          expect(response).to render_template('show')
         end
         it "should render a given product by name" do
           get :show, format: :json, id: product.name
-          expect(response.body).to be_json_eql(serialized(product))
+          expect(response).to render_template('show')
         end
       end
 
@@ -31,11 +30,10 @@ describe ProductsController do
         it "should create a new product" do
           expect{
             post :create, format: :json, product: product_attribs
-            expect(response.status).to eq 201
+            expect(response.status).to eq 200
+            expect(response).to render_template('create')
 
             new_product = Product.last
-            expect(response.body).to eq(serialized(new_product))
-            expect(response.body).to be_json_eql(serialized(new_product))
             expect(new_product.name).to eq(product_attribs[:name])
             expect(new_product.price).to eq(product_attribs[:price])
             expect(new_product.description).to eq(product_attribs[:description])
@@ -52,7 +50,8 @@ describe ProductsController do
                 expect{
                   put :update, format: :json, id: product.id, product: product_attribs
                   expect(response.status).to eq 200
-                  expect(response.body).to be_json_eql(serialized(product.reload))
+                  expect(response).to render_template('update')
+                  product.reload
                 }.to change{product.name}
               }.to change{product.price}
             }.to change{product.description}

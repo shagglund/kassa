@@ -3,11 +3,9 @@ class ProductsController < ApplicationController
   before_filter :find_product, only: [:show, :update]
   def index
     @products = Product.all.order(:name)
-    respond_with @products
   end
 
   def show
-    respond_with @product
   end
 
   def create
