@@ -4,11 +4,11 @@ class BuysController < ApplicationController
   def index
     limit = params[:limit] || 20
     offset = params[:offset] || 0
-    respond_with base_scope.offset(offset).latest(limit).all
+    respond_with base_scope.offset(offset).with_buyer_and_products.latest(limit).all
   end
 
   def show
-    respond_with Buy.where(id: params[:id].to_i).first
+    respond_with Buy.with_buyer_and_products.where(id: params[:id].to_i).first
   end
 
   def create
