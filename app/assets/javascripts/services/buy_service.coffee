@@ -3,15 +3,26 @@ angular.module('kassa').service('BuyService',[
   '$routeParams'
   '$rootScope'
   ($http, $routeParams, $rootScope)->
-    convertBuy = (buy)->
+    isArray = angular.isArray
+    findResource = (itemOrItems, id)->
+      if isArray(itemOrItems)
+        return item for item in itemOrItems when item.id == id
+      else if itemOrItems.id == id
+        return itemOrItems
+
+    convertBuy = (buy, buyers, products)->
       buy.price = parseFloat(buy.price)
+      buy.buyer = findResource(buyers, buy.buyerId)
+      entry.product = findResource(products, entry.productId) for entry in buy.consistsOfProducts
+      buy
 
     convert = (resp)->
-      buys = resp.data.buys
-      if buys?
-        convertBuy(buy) for buy in buys
+      data = resp.data
+      buys = data.buys
+      if isArray(buys)
+        convertBuy(buy, data.buyers, data.products) for buy in buys
       else
-        convertBuy(resp.data.buy)
+        convertBuy(data.buy, data.buyer, data.products)
       resp
 
     getFromResponse= (resp)-> resp.data.buys || resp.data.buy

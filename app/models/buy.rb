@@ -11,7 +11,7 @@ class Buy < ActiveRecord::Base
   validates :consists_of_products, length: {minimum: 1}
   validate :products_available
 
-  scope :with_buyer_and_products, lambda{ includes(:buyer, consists_of_products: :product)}
+  scope :with_buyer_and_products, lambda{ includes(:buyer, :products)}
   scope :in_create_order, lambda{order('buys.created_at DESC')}
   scope :latest, lambda{|limit=20| in_create_order.limit(limit)}
 

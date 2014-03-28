@@ -2,9 +2,9 @@ class BuysController < ApplicationController
   respond_to :json
 
   def index
-    @limit = params[:limit] || 20
-    @offset = params[:offset] || 0
-    @buys = base_scope.with_buyer_and_products.offset(@offset).latest(@limit).all
+    limit = params[:limit] || 20
+    offset = params[:offset] || 0
+    @buys = base_scope.with_buyer_and_products.offset(offset).latest(limit).all
   end
 
   def show
