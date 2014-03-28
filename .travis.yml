@@ -1,6 +1,8 @@
 language: ruby
 rvm:
   - 2.1.0
+addons:
+  postgresql: "9.3"
 before_script:
   - cp "config/secrets.yml.example" "config/secrets.yml"
   - bundle exec rake db:setup
