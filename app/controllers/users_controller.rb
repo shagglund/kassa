@@ -5,19 +5,17 @@ class UsersController < ApplicationController
   before_filter :authenticate_admin_if_not_self!, only: :update
 
   def index
-    respond_with User.all.order(:username)
+    @users = User.all.order(:username)
   end
 
   def me
-    respond_with current_user
   end
 
   def show
-    respond_with @user
   end
 
   def create
-    respond_with User.create user_create_params
+    respond_with(@user = User.create(user_create_params))
   end
 
   def update

@@ -12,26 +12,25 @@ describe UsersController do
       describe 'GET index' do
         it "should render a list of users" do
           get :index, format: :json
-          expect(response.body).to have_json_path('users')
-          expect(response.body).to have_json_type(Array).at_path('users')
+          expect(response).to render_template('index')
         end
       end
 
       describe 'GET show' do
         it "should render a given user by id" do
           get :show, format: :json, id: user.id
-          expect(response.body).to be_json_eql(serialized(user))
+          expect(response).to render_template('show')
         end
         it "should render a given user by username" do
           get :show, format: :json, id: user.username
-          expect(response.body).to be_json_eql(serialized(user))
+          expect(response).to render_template('show')
         end
       end
 
       describe 'GET me' do
         it "should render the current logged in user" do
           get :me, format: :json
-          expect(response.body).to be_json_eql(serialized(current_user))
+          expect(response).to render_template('me')
         end
       end
 
@@ -57,8 +56,9 @@ describe UsersController do
             expect{
               expect{
                 put :update, format: :json, id: current_user.id, user: user_attribs
+                current_user.reload
                 expect(response.status).to eq 200
-                expect(response.body).to be_json_eql(serialized(current_user.reload))
+                expect(response).to render_template('update')
               }.to_not change{current_user.balance}
             }.to change{current_user.username}
           }.to change{current_user.email}
@@ -84,8 +84,9 @@ describe UsersController do
             user_attribs[:password] = 'password'
             user_attribs[:password_confirmation] = 'password'
             post :create, format: :json, user: user_attribs
+            expect(response.status).to eq 200
+            expect(response).to render_template('create')
             new_user = User.last
-            expect(response.body).to be_json_eql(serialized(new_user))
             expect(new_user.username).to eq(user_attribs[:username])
             expect(new_user.email).to eq(user_attribs[:email])
             expect(new_user.balance).to eq(user_attribs[:balance])
@@ -104,8 +105,9 @@ describe UsersController do
                 expect{
                   user_attribs[:admin] = !user.admin
                   put :update, format: :json, id: user.id, user: user_attribs
+                  user.reload
                   expect(response.status).to eq 200
-                  expect(response.body).to be_json_eql(serialized(user.reload))
+                  expect(response).to render_template('update')
                 }.to_not change{user.balance}
               }.to change{user.admin}
             }.to change{user.username}
@@ -118,8 +120,9 @@ describe UsersController do
           expect{
             expect{
               put :update_balance, format: :json, id: user.id, user: user_balance_attribs
+              user.reload
               expect(response.status).to eq 200
-              expect(response.body).to be_json_eql(serialized(user.reload))
+              expect(response).to render_template('update_balance')
               expect(user.balance_changes.last.change_note).to eq(user_balance_attribs[:description])
             }.to change{user.balance}.from(user.balance).to(user_balance_attribs[:balance])
           }.to change(BalanceChange, :count).by(1)

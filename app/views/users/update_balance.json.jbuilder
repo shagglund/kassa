@@ -1,0 +1,1 @@
+json.partial! 'users/user_with_root', user: @user
