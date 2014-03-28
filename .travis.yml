@@ -1,6 +1,8 @@
 language: ruby
 rvm:
   - 2.1.0
+env:
+  - CODECLIMATE_REPO_TOKEN=4e08381cbcc1a1b6b984e14e119d71ef1734c0bb513e92d47703e69b92b3e3de
 addons:
   postgresql: "9.3"
 before_script:

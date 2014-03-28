@@ -68,5 +68,6 @@ group :test do
   gem 'json_spec'
   gem 'shoulda-matchers'
   gem 'ffaker'
+  gem "codeclimate-test-reporter", :require => nil
 end
 
