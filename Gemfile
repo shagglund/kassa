@@ -63,7 +63,7 @@ group :development, :test do
 end
 
 group :test do
-  gem 'database_cleaner', git: 'git@github.com:bmabey/database_cleaner.git'
+  gem 'database_cleaner'
   gem 'email_spec'
   gem 'json_spec'
   gem 'shoulda-matchers'

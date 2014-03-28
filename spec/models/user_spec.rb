@@ -39,7 +39,8 @@ describe User do
       it "should remove the added record if the user could not be saved" do
         user.stub(:save).and_return false
         expect{
-          user.change_balance new_balance, change_note, doer
+          puts user.change_balance new_balance, change_note, doer
+          puts user.balance_changes
         }.to_not change(BalanceChange, :count)
       end
     end

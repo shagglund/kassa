@@ -17,7 +17,7 @@ class User < ActiveRecord::Base
 
   def change_balance(new_balance, change_note, doer)
     return if balance == new_balance
-    self.transaction do
+    transaction(requires_new: true) do
       balance_change = balance_changes.create(doer: doer, change: {from: balance, to: new_balance}, change_note: change_note)
       if balance_change.new_record?
         self.errors.add :balance, balance_change.errors
