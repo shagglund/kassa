@@ -7,7 +7,10 @@ angular.module('kassa').directive('gravatar', [
       email = size = null
       setGravatarSrc = (email, size)->
         email = "" unless email?
-        $element.attr('src', Gravtastic(email, default: 'mm', size: (size ||= 22)))
+        size ||= 22
+        $element.attr('src', Gravtastic(email, default: 'mm', size: size))
+        $element.css('min-width', size + 10)
+        $element.css('min-height', size + 10)
 
       updateEmail = (newEmail)->
         return if newEmail == email
