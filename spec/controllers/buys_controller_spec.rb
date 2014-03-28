@@ -10,21 +10,23 @@ describe BuysController do
       login_user
 
       describe 'GET index' do
+        render_views
         it "should render a list of buys" do
           buy
           get :index, format: :json
-          expect(response.body).to have_json_path('buys')
-          expect(response.body).to have_json_type(Array).at_path('buys')
+          expect(response).to render_template('index')
           expect(JSON.parse(response.body)['buys'].collect{|b| b['id']}).to include(buy.id)
         end
         it "should render buys only for user if requested" do
           buy #create a buy that's not for this user
           get :index, format: :json, user_id: current_user.id
+          expect(response).to render_template('index')
           expect(JSON.parse(response.body)['buys'].collect{|b| b['id']}).to_not include(buy.id)
         end
         it "should render buys only for product if requested" do
           buy #create a buy that's not for this product
           get :index, format: :json, product_id: product.id
+          expect(response).to render_template('index')
           expect(JSON.parse(response.body)['buys'].collect{|b| b['id']}).to_not include(buy.id)
         end
       end
@@ -32,7 +34,7 @@ describe BuysController do
       describe 'GET show' do
         it "should render a given buy by id" do
           get :show, format: :json, id: buy.id
-          expect(response.body).to be_json_eql(serialized(buy))
+          expect(response).to render_template('show')
         end
       end
 
@@ -42,11 +44,8 @@ describe BuysController do
             buy_attribs['products'] = [{amount: 1, product_id: product.id.to_s}]
             buy_attribs['buyer_id'] = current_user.id.to_s
             post :create, format: :json, buy: buy_attribs
-            expect(response.status).to eq 201
-
-            new_buy = Buy.last
-            expect(response.body).to eq(serialized(new_buy))
-            expect(response.body).to be_json_eql(serialized(new_buy))
+            expect(response.status).to eq 200
+            expect(response).to render_template('create')
           }.to change(Buy, :count).by(1)
         end
         it "should not create a new buy with non-existent user" do

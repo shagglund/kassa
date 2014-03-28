@@ -2,19 +2,19 @@ class BuysController < ApplicationController
   respond_to :json
 
   def index
-    limit = params[:limit] || 20
-    offset = params[:offset] || 0
-    respond_with base_scope.offset(offset).with_buyer_and_products.latest(limit).all
+    @limit = params[:limit] || 20
+    @offset = params[:offset] || 0
+    @buys = base_scope.with_buyer_and_products.offset(@offset).latest(@limit).all
   end
 
   def show
-    respond_with Buy.with_buyer_and_products.where(id: params[:id].to_i).first
+    @buy = Buy.with_buyer_and_products.where(id: params[:id].to_i).first
   end
 
   def create
     ensure_user_exists(buy_params) do |resolved_params|
       ensure_products_exist(resolved_params) do |resolved_params|
-        return respond_with Buy.create(resolved_params)
+        return respond_with(@buy = Buy.create(resolved_params))
       end
     end
   end
