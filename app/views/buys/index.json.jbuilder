@@ -6,10 +6,8 @@ json.buys do
   end
 end
 json.buyers do
-  buyers = @buys.map(&:buyer).uniq
-  json.partial! 'users/list', users: buyers
+  json.partial! 'users/list', users: @buyers
 end
 json.products do
-  products = @buys.map(&:products).flatten.uniq
-  json.partial! 'products/list', products: products
+  json.partial! 'products/list', products: @products
 end

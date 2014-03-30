@@ -5,6 +5,8 @@ class BuysController < ApplicationController
     limit = params[:limit] || 20
     offset = params[:offset] || 0
     @buys = base_scope.with_buyer_and_products.offset(offset).latest(limit).all
+    @buyers =  @buys.map(&:buyer).uniq
+    @products = @buys.map(&:products).flatten.uniq
   end
 
   def show

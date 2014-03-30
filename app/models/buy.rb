@@ -11,12 +11,12 @@ class Buy < ActiveRecord::Base
   validates :consists_of_products, length: {minimum: 1}
   validate :products_available
 
-  scope :with_buyer_and_products, lambda{ includes(:buyer, :products)}
+  scope :with_buyer_and_products, lambda{includes(:buyer, :products)}
   scope :in_create_order, lambda{order('buys.created_at DESC')}
   scope :latest, lambda{|limit=20| in_create_order.limit(limit)}
 
   scope :with_buyer, ->(user){where(buyer_id: user)}
-  scope :with_product, ->(product){includes(:consists_of_products).where(buy_entries: {product_id: product})}
+  scope :with_product, ->(product){includes(:products).where(products: {id: product})}
 
   def price
     return super unless product_count_changed?
