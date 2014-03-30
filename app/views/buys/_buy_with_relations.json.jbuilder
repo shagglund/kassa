@@ -1,10 +1,9 @@
 json.buy do
-  json.partial! 'buys/buy_with_root', buy: buy
+  json.partial! 'buys/buy', buy: buy
 end
 json.buyer do
-  json.partial! 'users/user', user: buy.user
+  json.partial! 'users/user', user: buy.buyer
 end
 json.products do
-  products = buy.consists_of_products.map(&:product).uniq
-  json.partial! 'products/list', products: products
+  json.partial! 'products/list', products: buy.products
 end

@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe UsersController do
+  render_views
   context "requests" do
     let(:user_attribs){FactoryGirl.attributes_for(:user)}
     let(:user_balance_attribs){{balance: user.balance + 100, description: 'Testing balance change on request level'}}

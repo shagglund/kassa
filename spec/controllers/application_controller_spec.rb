@@ -1,10 +1,10 @@
 require 'spec_helper'
 
 describe ApplicationController do
+  render_views
   context "authenticated" do
     login_user
     describe "GET index" do
-      render_views
       it "renders the application" do
         get :index
         expect(response.status).to eq 200
@@ -17,7 +17,6 @@ describe ApplicationController do
 
   context "unauthenticated" do
     describe "GET index" do
-      render_views
       it "renders the application" do
         get :index
         expect(response.status).to redirect_to(new_user_session_path)

@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe ProductsController do
+  render_views
   context "requests" do
     let(:product_attribs){FactoryGirl.attributes_for(:product)}
     let(:product){FactoryGirl.create(:product)}

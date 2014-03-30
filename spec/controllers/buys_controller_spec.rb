@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe BuysController do
+  render_views
   context "requests" do
     let(:buy_attribs){FactoryGirl.attributes_for(:buy)}
     let(:buy){FactoryGirl.create(:buy)}
