@@ -15,8 +15,8 @@ class Buy < ActiveRecord::Base
   scope :in_create_order, lambda{order(created_at: :desc)}
   scope :latest, lambda{|limit=20| in_create_order.limit(limit)}
 
-  scope :with_buyer, ->(user){where(buyer_id: user)}
-  scope :with_product, ->(product){includes(:products).where(products: {id: product})}
+  scope :for_buyer, ->(user){where(buyer_id: user)}
+  scope :for_product, ->(product){includes(:consists_of_products).where(buy_entries: {product_id: product})}
 
   def product_count
     consists_of_products.length

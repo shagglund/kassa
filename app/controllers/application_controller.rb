@@ -1,15 +1,19 @@
 class ApplicationController < ActionController::Base
   class << self
     protected
-    def integer_param_method(param, opts={})
+    def integer_param_method(param_name, opts={})
       max, min, default = opts.values_at(:max, :min, :default)
-      define_method(param) do
-        value = params.has_key?(param) ? params[param].to_i : default
+      define_method(param_name) do
+        value = params.has_key?(param_name) ? params[param_name].to_i : default
         return if value.nil?
         return max if max && value > max
         return min if min && value < min
         value
       end
+    end
+
+    def param_method(param_name, opts={})
+      define_method(param_name) { params[param_name] }
     end
   end
 
