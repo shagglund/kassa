@@ -16,19 +16,6 @@ describe Buy do
       subject.should have(1).error_on(:consists_of_products)
     end
 
-    it "should change the price when added" do
-      price = subject.price
-      entry = FactoryGirl.build(:buy_entry)
-      subject.consists_of_products << entry
-      subject.price.should be_within(0.001).of(price + entry.price)
-    end
-
-    it "should use the price from database unless a product was added" do
-      subject.should_receive(:product_count_changed?).and_return false
-      subject.should_not_receive(:consists_of_products)
-      subject.price
-    end
-
     it "should have all the products in stock" do
       zero_stock_on_first
       subject.should_not be_valid
@@ -63,7 +50,7 @@ describe Buy do
     end
     context ".in_create_order" do
       it "should sort the results by created_at in descending order" do
-        Buy.should_receive(:order).with 'buys.created_at DESC'
+        Buy.should_receive(:order).with({created_at: :desc})
         Buy.in_create_order
       end
     end

@@ -5,8 +5,8 @@ class BuysController < ApplicationController
 
   def index
     @buys = buy_scope.offset(offset).latest(limit).all
-    @buyers =  @buys.map(&:buyer).uniq
-    @products = @buys.map(&:products).flatten.uniq
+    @buyers =  buyers(@buys)
+    @products = products(@buys)
   end
 
   def show
@@ -30,7 +30,7 @@ class BuysController < ApplicationController
     else
       Buy
     end
-    scope.with_buyer_and_products
+    scope.includes(:consists_of_products)
   end
 
   def buy_params
@@ -59,5 +59,13 @@ class BuysController < ApplicationController
       end
     end
     yield resolved_params
+  end
+
+  def products(buys)
+    Product.where(id: buys.map(&:consists_of_products).flatten.map(&:product_id).uniq).all
+  end
+
+  def buyers(buys)
+    User.where(id: buys.map(&:buyer_id).uniq).all
   end
 end

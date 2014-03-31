@@ -1,5 +1,5 @@
 class Buy < ActiveRecord::Base
-  before_save :update_product_count
+  before_create :calculate_price
   after_create :update_buyer
 
   belongs_to :buyer, class_name: 'User'
@@ -12,16 +12,11 @@ class Buy < ActiveRecord::Base
   validate :products_available
 
   scope :with_buyer_and_products, lambda{includes(:buyer, :products)}
-  scope :in_create_order, lambda{order('buys.created_at DESC')}
+  scope :in_create_order, lambda{order(created_at: :desc)}
   scope :latest, lambda{|limit=20| in_create_order.limit(limit)}
 
   scope :with_buyer, ->(user){where(buyer_id: user)}
   scope :with_product, ->(product){includes(:products).where(products: {id: product})}
-
-  def price
-    return super unless product_count_changed?
-    consists_of_products.reduce(0){|s, e| s + e.amount * e.product.price}
-  end
 
   def product_count
     consists_of_products.length
@@ -39,13 +34,9 @@ class Buy < ActiveRecord::Base
     errors.add product.name.to_sym, error_msg
   end
 
-  def product_count_changed?
-    last_product_count != product_count
-  end
-
   #ActiveRecord callbacks
-  def update_product_count
-    self.last_product_count = consists_of_products.count if product_count_changed?
+  def calculate_price
+    self.price = consists_of_products.reduce(0){|s, e| s + e.amount * e.product.price}
   end
 
   def update_buyer
