@@ -1,10 +1,10 @@
 class BuysController < ApplicationController
   respond_to :json
+  integer_param_method :limit, default: 20, min: 10, max: 500
+  integer_param_method :offset, default: 0
 
   def index
-    limit = params[:limit] || 20
-    offset = params[:offset] || 0
-    @buys = base_scope.with_buyer_and_products.offset(offset).latest(limit).all
+    @buys = buy_scope.offset(offset).latest(limit).all
     @buyers =  @buys.map(&:buyer).uniq
     @products = @buys.map(&:products).flatten.uniq
   end
@@ -22,14 +22,15 @@ class BuysController < ApplicationController
   end
 
   private
-  def base_scope
-    if params[:user_id].present?
+  def buy_scope
+    scope = if params[:user_id].present?
       Buy.with_buyer(params[:user_id])
     elsif params[:product_id].present?
       Buy.with_product(params[:product_id])
     else
       Buy
     end
+    scope.with_buyer_and_products
   end
 
   def buy_params

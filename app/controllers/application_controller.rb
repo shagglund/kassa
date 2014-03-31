@@ -1,4 +1,18 @@
 class ApplicationController < ActionController::Base
+  class << self
+    protected
+    def integer_param_method(param, opts={})
+      max, min, default = opts.values_at(:max, :min, :default)
+      define_method(param) do
+        value = params.has_key?(param) ? params[param].to_i : default
+        return if value.nil?
+        return max if max && value > max
+        return min if min && value < min
+        value
+      end
+    end
+  end
+
   self.responder = PutPatchResponder
   protect_from_forgery with: :exception
   before_filter :authenticate_user!
