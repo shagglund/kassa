@@ -82,6 +82,8 @@ en:
     bought_products: Bought Products
     nothing_bought: No recorded buys
     no_more_loadable: No more buys available
+    select_buyer_from_list: Select buyer
+    select_products_from_list: Select products
   sort:
     order_asc_title: Show in ascending order
     order_desc_title: Show in descending order

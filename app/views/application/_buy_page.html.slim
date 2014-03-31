@@ -110,6 +110,10 @@
 .row
   .col-xs-12.col-sm-6.col-md-4(ng-controller="BuyUsersListController" kassa-state-checker)
     .panel.panel-default
+      .panel-heading
+        h3
+          =t('users.title')
+          small=t('buys.select_buyer_from_list')
       table.table.table-striped
         thead
           tr
@@ -138,6 +142,10 @@
                 i.fa.fa-ok
   .col-xs-12.col-sm-6.col-md-4(ng-controller="BuyProductsListController" kassa-state-checker)
     .panel.panel-default
+      .panel-heading
+        h3
+          =t('products.title')
+          small=t('buys.select_products_from_list')
       table.table.table-striped
         thead
           tr
@@ -159,4 +167,7 @@
 
   .col-xs-12.col-md-4(ng-controller="BuyLatestListController")
     .panel.panel-default
+      .panel-heading
+        h3
+          =t('buys.latest_list_header')
       =render 'buy_list'
