@@ -4,44 +4,37 @@ source 'https://rubygems.org'
 ruby '2.1.0'
 gem 'rails', '~> 4.1.0.rc2'
 
-# Use sqlite3 as the database for Active Record
+#Database
+gem 'pg'
 
-# Use SCSS for stylesheets
-gem 'sass-rails', '~> 4.0.2'
+#Server
+gem 'puma'
 
-# Use Uglifier as compressor for JavaScript assets
-gem 'uglifier'
+#Authentication
+gem 'devise'
 
-# Use CoffeeScript for .js.coffee assets and views
-gem 'coffee-rails'
-# Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
+#Emails
+gem 'sendgrid'
+
+#Views
+gem 'slim-rails'
+
+#JSON API
 gem 'jbuilder'
+gem 'multi_json'
+gem 'yajl-ruby'
 
-
-  # bundle exec rake doc:rails generates the API under doc/api.
-
-# Use ActiveModel has_secure_password
-# gem 'bcrypt-ruby', '~> 3.1.2'
-
-# Use unicorn as the app server
-# gem 'unicorn'
-
-# Use Capistrano for deployment
-# gem 'capistrano', group: :development
-
-# Use debugger
-# gem 'debugger', group: [:development, :test]
-
+#Assets
+gem 'sass-rails', '~> 4.0.2'
+gem 'uglifier'
+gem 'coffee-rails'
 gem 'bootstrap-sass'
 gem 'font-awesome-sass'
 gem 'angularjs-rails'
 gem 'angular-ui-rails'
 gem 'gravtastic'
-gem 'devise'
-gem 'pg'
-gem 'puma'
-gem 'sendgrid'
-gem 'slim-rails'
+
+#Monitoring
 gem 'newrelic_rpm'
 
 group :development do

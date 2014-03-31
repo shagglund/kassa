@@ -235,6 +235,7 @@ GEM
       json (>= 1.8.0)
     warden (1.2.3)
       rack (>= 1.0)
+    yajl-ruby (1.2.0)
 
 PLATFORMS
   ruby
@@ -259,6 +260,7 @@ DEPENDENCIES
   html2haml
   jbuilder
   json_spec
+  multi_json
   newrelic_rpm
   pg
   puma
@@ -273,3 +275,4 @@ DEPENDENCIES
   shoulda-matchers
   slim-rails
   uglifier
+  yajl-ruby
