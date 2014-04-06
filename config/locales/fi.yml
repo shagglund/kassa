@@ -1,0 +1,113 @@
+en:
+  navigation:
+    title:
+      buy: Ostot
+      products: Tuotteet
+      users: Piikit
+      sign_out: Kirjaudu ulos
+  basket:
+    buyer: Ostaja
+    no_buyer: Ei valittua ostajaa
+    product_count: Tuotteet
+    no_products: Ei tuotteita
+    show: Näytä
+    title: Ostoskori
+    hide: Piilota
+    balance_now: Saldo nyt
+    balance_after: Saldo jälkeen
+    price_total: Yhteensä
+    empty: Tyhjennä
+    buy: Osta
+    remove_product: Poista
+    state:
+      buy_failed: Osto epäonnistui palvelimella
+  users:
+    title: Piikit
+    filter_list: Hae piikin nimellä
+    clear_filter_list: Tyhjennä
+    change_balance: Muuta saldoa
+    new_balance: Uusi saldo
+    balance_change_note: Muutoskommentti
+    latest_buys: Viimeisimmät ostot
+    new: Uusi piikki
+    new_info: Uuden piikin tiedot
+    passwords_not_matching: Salasanat eivät täsmää
+    sort:
+      username: Piikin nimi
+      buy_count: Ostot
+      balance: Saldo
+    state:
+      saved: Muutokset tallennettu
+      failed: Muutoksien tallennus epäonnistui
+      balance_saved: Saldon muutokset tallennettu
+      balance_failed: Saldon muutoksien tallennus epäonnistui
+  products:
+    title: Tuotteet
+    filter_list: Hae tuotteen nimellä
+    clear_filter_list: Tyhjennä haku
+    latest_buys: Viimeisimmät ostot
+    new: Uusi tuote
+    new_header: Uuden tuotteen tiedot
+    sort:
+      name: Nimi
+      stock: Varastossa
+      price: Hinta
+    state:
+      saved: Muutokset tallennettu
+      failed: Muutoksien tallennus epäonnistui
+  buys:
+    latest_list_header: Viimeisimmät ostot
+    buyer_details: Piikin tiedot
+    bought_products: Ostetut tuotteet
+    nothing_bought: Ei ostoja
+    no_more_loadable: Ei enempää ostoja
+    select_buyer_from_list: Valitse ostaja
+    select_products_from_list: Valitse tuotteet
+  sort:
+    order_asc_title: Näytä nousevassa järjestyksessä
+    order_desc_title: Näytä laskevassa järjestyksessä
+  placeholder:
+    price_euro: Eurot
+    price_cent: Sentit
+    balance_euro: Eurot
+    balance_cent: Sentit
+    balance_change_note: Saldon muutoksen viesti
+  action:
+    save: Tallenna
+    cancel: Peruuta
+    load_more: Lataa lisää
+    create: Luo
+  option:
+    yes: Kyllä
+    no: Ei
+
+  gravatar:
+    click_to_add: Lisää Gravatar
+
+  activerecord:
+    attributes:
+      buy:
+        buyer: Ostaja
+        products:
+          one: Tuote
+          other: Tuotteet
+        price: Hinta
+      buy_entry:
+        amount: Määrä
+      product:
+        name: Nimi
+        price: Hinta
+        available: Ostettavissa
+        buy_count: Ostettu
+        last_bought_at: Viimeksi ostettu
+        created_at: Luotu
+        updated_at: Päivitetty
+      user:
+        username: Nimi
+        email: Email
+        balance: Saldo
+        admin: Admin
+        buy_count: Ostojen määrä
+        time_of_last_buy: Viimeksi ostettu
+        created_at: Luotu
+        updated_at: Päivitetty
