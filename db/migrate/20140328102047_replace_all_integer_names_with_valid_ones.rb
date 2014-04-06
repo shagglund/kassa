@@ -9,7 +9,7 @@ class ReplaceAllIntegerNamesWithValidOnes < ActiveRecord::Migration
     end
     User.all.each do |p|
       if p.username =~ test_regexp
-        p.username = "#{p.name} ForceChanged"
+        p.username = "#{p.username} ForceChanged"
         p.save!
       end
     end
