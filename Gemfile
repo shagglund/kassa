@@ -33,6 +33,7 @@ gem 'font-awesome-sass'
 gem 'angularjs-rails'
 gem 'angular-ui-rails'
 gem 'gravtastic'
+gem 'lodash-rails'
 
 #Monitoring
 gem 'newrelic_rpm'

@@ -119,6 +119,8 @@ GEM
       celluloid-io (>= 0.15.0)
       rb-fsevent (>= 0.9.3)
       rb-inotify (>= 0.9)
+    lodash-rails (2.4.1)
+      railties (>= 3.1)
     lumberjack (1.0.5)
     mail (2.5.4)
       mime-types (~> 1.16)
@@ -260,6 +262,7 @@ DEPENDENCIES
   html2haml
   jbuilder
   json_spec
+  lodash-rails
   multi_json
   newrelic_rpm
   pg

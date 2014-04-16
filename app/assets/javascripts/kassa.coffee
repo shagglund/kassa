@@ -1,5 +1,6 @@
 #= require angular-route
 #= require angular-locale-fi.min
+#= require lodash
 #= require_self
 #= require_tree ./services
 #= require_tree ./controllers
