@@ -45,20 +45,18 @@ angular.module('kassa').service('BasketService', [
     hasProducts = -> products.length > 0
 
     setFromBuy = (buy)->
-      search = $location.search()
+      entryToProductNameHash = (result, entry)->
+        result[entry.product.name] = entry.amount
+
+      search = _.chain($location.search())
+        .assign buyer: buy.buyer.username, basket: true
+        .assign _.reduce(buy.consistsOfProducts, entryToProductNameHash, {})
+        .value()
+
       if $location.path() == '/buy'
-        emptyBasketAndRemoveBuyer()
-        search.replace()
+        $location.search(search).replace()
       else
-        search.path('/buy')
-
-      search.buyer = buy.buyer.username
-      search.basket = "true"
-
-      for entry in buy.consistsOfProducts
-        search[entry.product.name] = entry.amount
-
-      $location.search(search)
+        $location.search(search).path('/buy')
 
     ##### Update basket state based on route changes #####
     resolveProducts = ->
@@ -92,6 +90,7 @@ angular.module('kassa').service('BasketService', [
       resolveBuyer()
 
     $rootScope.$on '$routeUpdate', updateStateFromSearch
+    $rootScope.$on '$routeChangeSuccess', updateStateFromSearch
     updateStateFromSearch()
 
     #return api-object with methods/objects accessible from outside
