@@ -3,13 +3,14 @@ class User < ActiveRecord::Base
   MAX_BALANCE = 1000
   MIN_BUY_COUNT = 0
   MAX_BUY_COUNT = 100000
+  AT_LEAST_ONE_NON_DIGIT_AND_NO_SLASHES = /\A\d*[^\d\\\/]+\d*\z/
 
   devise :recoverable, :rememberable, :validatable, :trackable, :database_authenticatable
 
   has_many :buys, foreign_key: 'buyer_id'
   has_many :balance_changes, as: :trackable
 
-  validates :username, presence: true, length: {in: 2..16}, uniqueness: true, format: {with: /\D/}
+  validates :username, presence: true, length: {in: 2..16}, uniqueness: true, format: {with: AT_LEAST_ONE_NON_DIGIT_AND_NO_SLASHES}
   validates :balance, numericality: { only_integer: false}, inclusion: {in: MIN_BALANCE..MAX_BALANCE}
   validates :buy_count, numericality: { only_integer: true}, inclusion: {in: MIN_BUY_COUNT..MAX_BUY_COUNT}
 
