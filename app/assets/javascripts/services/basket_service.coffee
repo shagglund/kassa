@@ -58,40 +58,29 @@ angular.module('kassa').service('BasketService', [
 
     ##### Update basket state based on route changes #####
 
-    entryByProductName = (entries, name)->
-      return entry for entry in entries when entry.product.name == name
-      null
-
     INTEGER_REGEXP = /^\d+$/m
-    validateAndParseInteger = (value)->
-      parseInt(value) if INTEGER_REGEXP.test(value)
-
-    createEntryAndFindProduct = (name, amount)->
-      entry = {product: {name: name, id: name}, amount}
-      Product.find(name).then (product)-> entry.product = product
-      entry
-
     resolveProducts = ->
-      oldProducts = products
-      products = []
-      for own name, amount of $location.search()
-        continue unless (amount = validateAndParseInteger(amount))?
-        #update amount or add a new product if non-existent
-        entry = entryByProductName(oldProducts, name)
+      productMapper = (newProducts, amount, name)->
+        amount = _.parseInt(amount)
+        entry = _.find(products, (e)-> e.product.name == name)
         if entry?
           entry.amount = amount
         else
-          entry = createEntryAndFindProduct(name, amount)
-        products.push entry
-      products
+          #fake the id with name as both should be unique
+          entry = {product: {name: name, id: name}, amount}
+          Product.find(name).then (product)-> entry.product = product
+        newProducts.push entry
+
+      products = _.chain($location.search())
+        .pick (value)-> INTEGER_REGEXP.test(value)
+        .transform(productMapper, [])
+        .value()
 
     resolveBuyer = ->
       username = $location.search().buyer
       if buyer?.username == username
         buyer
       else if username?
-        #always return the current promise if resolving to prevent multiple requests being run for the same resource
-        return buyer if buyer?.then?
         buyer = User.find(username).then (user)-> buyer = user
       else
         buyer = undefined
