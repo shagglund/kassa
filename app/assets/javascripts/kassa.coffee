@@ -19,9 +19,8 @@ angular.module('kassa', ['ngRoute', 'kassa.templates'])
     $httpProvider.defaults.headers.common.Accept = 'application/json'
 
     #Set the CSRF protection token from the meta tag in html
-    for tag in document.getElementsByTagName('meta')
-      if tag.name == 'csrf-token'
-        $httpProvider.defaults.headers.common['X-CSRF-Token'] = tag.content
+    tag = _.find document.getElementsByTagName('meta'), (tag)-> tag.name == 'csrf-token'
+    if tag then $httpProvider.defaults.headers.common['X-CSRF-Token'] = tag.content
 ])
 .config([
   '$routeProvider'

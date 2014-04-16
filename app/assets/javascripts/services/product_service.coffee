@@ -10,7 +10,7 @@ angular.module('kassa').service('ProductService',[
     convert = (resp)->
       products = resp.data.products
       if products?
-        convertProduct(product) for product in products
+        _.forEach products, convertProduct
       else
         convertProduct(resp.data.product)
       resp

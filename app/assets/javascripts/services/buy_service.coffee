@@ -3,24 +3,24 @@ angular.module('kassa').service('BuyService',[
   '$routeParams'
   '$rootScope'
   ($http, $routeParams, $rootScope)->
-    isArray = angular.isArray
     findResource = (itemOrItems, id)->
-      if isArray(itemOrItems)
-        return item for item in itemOrItems when item.id == id
+      if _.isArray(itemOrItems)
+        _.find itemOrItems, (item)-> item.id == id
       else if itemOrItems.id == id
         return itemOrItems
 
     convertBuy = (buy, buyers, products)->
       buy.price = parseFloat(buy.price)
       buy.buyer = findResource(buyers, buy.buyerId)
-      entry.product = findResource(products, entry.productId) for entry in buy.consistsOfProducts
+      _.forEach buy.consistsOfProducts, (entry)->
+        entry.product = findResource(products, entry.productId)
       buy
 
     convert = (resp)->
       data = resp.data
       buys = data.buys
-      if isArray(buys)
-        convertBuy(buy, data.buyers, data.products) for buy in buys
+      if _.isArray(buys)
+        _.forEach buys, (buy)-> convertBuy(buy, data.buyers, data.products)
       else
         convertBuy(data.buy, data.buyer, data.products)
       resp
@@ -46,7 +46,7 @@ angular.module('kassa').service('BuyService',[
       $http.get("/products/#{product.id}/buys", {params}).then(convert).then(getFromResponse)
 
     create = (buyer, entries)->
-      products = entries.map (entry)-> amount: entry.amount, product_id: entry.product.id
+      products = _.map entries, (entry)-> amount: entry.amount, product_id: entry.product.id
       $http.post('/buys', buy: {buyer_id: buyer.id, products}).then(convert).then(getFromResponse).then(broadcastNewBuy)
 
     {

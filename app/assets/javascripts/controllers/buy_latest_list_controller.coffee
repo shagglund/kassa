@@ -13,7 +13,7 @@ angular.module('kassa').controller 'BuyLatestListController', [
     loadMore = (buys)->
       Buy.latest(offset: buys.length, limit: LIMIT).then (loadedBuys)->
         moreAvailable = loadedBuys.length == LIMIT
-        buys.push buy for buy in loadedBuys
+        buys.push loadedBuys...
 
     moreAvailable = -> moreAvailable
 

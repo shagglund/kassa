@@ -14,7 +14,7 @@ angular.module('kassa').controller('ProductLatestBuysCtrl', [
     loadMore = (buys)->
       Buy.latestForProduct($scope.product, offset: buys.length, limit: LIMIT).then (loadedBuys)->
         moreAvailable = loadedBuys.length == LIMIT
-        buys.push buy for buy in loadedBuys
+        buys.push loadedBuys...
 
     moreAvailable = -> moreAvailable
 
