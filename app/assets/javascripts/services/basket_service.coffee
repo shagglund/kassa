@@ -29,8 +29,8 @@ angular.module('kassa').service('BasketService', [
         .value()
       $location.search(searchObj).replace()
 
-    entryAmountReducer = (sum, entry)-> sum+entry.amount
-    productCount = -> products.reduce entryAmountReducer, 0
+    entryAmountReducer = (sum, entry)-> sum + entry.amount
+    productCount = -> _.reduce products, entryAmountReducer, 0
 
     entryPrice = (entry)-> (entry.amount * entry.product.price)
     entryPriceReducer = (sum, entry)-> sum + entryPrice(entry)
@@ -38,7 +38,7 @@ angular.module('kassa').service('BasketService', [
       if entry?
         entryPrice(entry)
       else
-        products.reduce(entryPriceReducer, 0.0)
+        _.reduce(products, entryPriceReducer, 0.0)
 
     isBuyable = -> hasProducts() && buyer
 
