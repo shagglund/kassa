@@ -8,21 +8,25 @@ angular.module('kassa').service('BasketService', [
     products = []
     buyer = null
 
+    INTEGER_REGEXP = /^\d+$/m
+    isProductSearchValue = (value)-> INTEGER_REGEXP.test(value)
+    isNotProductSearchValue = (value)-> !isProductSearchValue(value)
+    isBuyerSearchValue = (value, key)-> key == 'buyer'
+    isNotBuyerSearchValue = (value, key)-> !isBuyerSearchValue
+
     changeAmount = (entry, amount)->
       name = entry.product.name
-      currentAmount = parseInt($location.search()[name])
+      currentAmount = _.parseInt($location.search()[name])
       unless currentAmount + amount < 1
         newAmount = currentAmount + amount
         $location.search(name, newAmount).replace()
 
     emptyBasketAndRemoveBuyer = (showBasket=true)->
-      searchObj = $location.search()
-      delete searchObj.buyer
-
-      delete searchObj[entry.product.name] for entry in products
-      products.splice(0, products.length)
-
-      searchObj.basket = showBasket
+      searchObj = _.chain($location.search())
+        .pick isNotProductSearchValue
+        .pick isNotBuyerSearchValue
+        .assign basket: (if showBasket then "true" else "false")
+        .value()
       $location.search(searchObj).replace()
 
     entryAmountReducer = (sum, entry)-> sum+entry.amount
@@ -57,8 +61,6 @@ angular.module('kassa').service('BasketService', [
       $location.search(search)
 
     ##### Update basket state based on route changes #####
-
-    INTEGER_REGEXP = /^\d+$/m
     resolveProducts = ->
       productMapper = (newProducts, amount, name)->
         amount = _.parseInt(amount)
@@ -72,7 +74,7 @@ angular.module('kassa').service('BasketService', [
         newProducts.push entry
 
       products = _.chain($location.search())
-        .pick (value)-> INTEGER_REGEXP.test(value)
+        .pick(isProductSearchValue)
         .transform(productMapper, [])
         .value()
 
