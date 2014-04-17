@@ -41,6 +41,10 @@ en:
       failed: Muutoksien tallennus epäonnistui
       balance_saved: Saldon muutokset tallennettu
       balance_failed: Saldon muutoksien tallennus epäonnistui
+    basic_info: Piikin perustiedot
+    balance: Saldo
+    latest_balance_changes: Viimeisimmät saldon muutokset
+    no_balance_changes: Ei tallennettuja muutoksia
   products:
     title: Tuotteet
     filter_list: Hae tuotteen nimellä
@@ -111,3 +115,10 @@ en:
         time_of_last_buy: Viimeksi ostettu
         created_at: Luotu
         updated_at: Päivitetty
+      change:
+        created_at: Tehty
+        change_note: Viesti
+        doer: Tekijä
+      balance_change:
+        new_balance: Vanha
+        old_balance: Uusi

@@ -62,6 +62,10 @@ en:
       failed: Changes could not be saved
       balance_saved: Balance changes saved successfully
       balance_failed: Balance changes could not be saved
+    basic_info: Basic info
+    balance: Balance
+    latest_balance_changes: Latest balance changes
+    no_balance_changes: No recorded changes
   products:
     title: Products
     filter_list: Filter by name
@@ -132,3 +136,10 @@ en:
         time_of_last_buy: Time of last buy
         created_at: Created at
         updated_at: Updated at
+      change:
+        created_at: Created at
+        change_note: Change note
+        doer: Doer
+      balance_change:
+        new_balance: New balance
+        old_balance: Old balance

@@ -92,6 +92,31 @@
                 =t('users.state.balance_failed')
                 button.close(type="button" ng-click="balanceState=DEFAULT")
                   i.fa.fa-times.fa-fw
+      .panel-body(ng-show="session.isAdmin()" ng-controller="BalanceChangeLatestListCtrl")
+        form
+          legend=t('users.latest_balance_changes')
+        table.table(ng-show="balanceChanges.length > 0")
+          thead
+            tr
+              th=t('doer', scope: 'activerecord.attributes.change')
+              th=t('old_balance', scope: 'activerecord.attributes.balance_change')
+              th=t('new_balance', scope: 'activerecord.attributes.balance_change')
+              th=t('change_note', scope: 'activerecord.attributes.change')
+              th=t('created_at', scope: 'activerecord.attributes.change')
+          tbody
+            tr(ng-repeat="change in balanceChanges")
+              td
+                a(ng-href="users/{{change.doer.id}}")
+                  | {{change.doer.username}}
+              td
+                | {{change.oldBalance|currency}}
+              td
+                | {{change.newBalance|currency}}
+              td
+                | {{change.changeNote}}
+              td
+                | {{change.createdAt|date:'shortDate'}}
+        p.h4.text-center(ng-hide="balanceChanges.length > 0")=t('users.no_balance_changes')
       .panel-body(ng-hide="session.isAdmin()")
         form.form-horizontal
           .form-group
