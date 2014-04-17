@@ -47,6 +47,7 @@ angular.module('kassa').service('BasketService', [
     setFromBuy = (buy)->
       entryToProductNameHash = (result, entry)->
         result[entry.product.name] = entry.amount
+        result
 
       search = _.chain($location.search())
         .assign buyer: buy.buyer.username, basket: true
