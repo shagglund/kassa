@@ -12,30 +12,30 @@
         thead
           tr
             th
-              btn.btn-link(kassa-order-state="usf" kassa-value="username")
+              a.btn-block.btn-link(kassa-order-state="usf" kassa-value="username")
                 =t('username', scope: 'activerecord.attributes.user')
             th.text-center
-              btn.btn-link(kassa-order-state="usf" kassa-value="admin")
+              a.btn-block.btn-link(kassa-order-state="usf" kassa-value="admin")
                 =t('admin', scope: 'activerecord.attributes.user')
             th.text-center
-              btn.btn-link(kassa-order-state="usf" kassa-value="balance")
+              a.btn-block.btn-link(kassa-order-state="usf" kassa-value="balance")
                 =t('balance', scope: 'activerecord.attributes.user')
             th.text-center
-              btn.btn-link(kassa-order-state="usf" kassa-value="buyCount")
+              a.btn-block.btn-link(kassa-order-state="usf" kassa-value="buyCount")
                 =t('buy_count', scope: 'activerecord.attributes.user')
             th
-              btn.btn-link(kassa-order-state="usf" kassa-value="createdAt")
+              a.btn-block.btn-link(kassa-order-state="usf" kassa-value="createdAt")
                 =t('created_at', scope: 'activerecord.attributes.user')
             th
-              btn.btn-link(kassa-order-state="usf" kassa-value="updatedAt")
+              a.btn-block.btn-link(kassa-order-state="usf" kassa-value="updatedAt")
                 =t('updated_at', scope: 'activerecord.attributes.user')
             th
-              btn.btn-link(kassa-order-state="usf" kassa-value="timeOfLastBuy")
+              a.btn-block.btn-link(kassa-order-state="usf" kassa-value="timeOfLastBuy")
                 =t('time_of_last_buy', scope: 'activerecord.attributes.user')
         tbody
           tr(ng-repeat="user in users|orderByState:'usf' track by user.id")
             td.vertical-center
-              a(ng-href="/app/users/{{user.id}}")
+              a.btn-block.btn-link(ng-href="/app/users/{{user.id}}")
                 | {{user.username}}
             td.text-center.vertical-center
               i.fa.fa-check.fa-fw.text-success(ng-if="user.admin")
