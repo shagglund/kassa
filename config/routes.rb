@@ -8,6 +8,7 @@ Kassa::Application.routes.draw do
     get :me, on: :collection
     put :update_balance, on: :member
     resources :buys, only: :index
+    resources :balance_changes, only: :index
   end
 
   devise_for :user

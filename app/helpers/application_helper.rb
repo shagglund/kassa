@@ -13,6 +13,10 @@ module ApplicationHelper
     ['buys', buys.length, md5_array_digest(buys), max_created_at(buys)]
   end
 
+  def cache_key_for_balance_changes(balance_changes)
+    ['balance_changes', balance_changes.length, md5_array_digest(balance_changes), max_created_at(balance_changes)]
+  end
+
   protected
   def max_updated_at(col); col.map(&:updated_at).max.try(:utc); end
   def max_created_at(col); col.map(&:created_at).max.try(:utc); end
