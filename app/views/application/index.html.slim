@@ -2,7 +2,7 @@
   nav.row.navbar.navbar-default.navbar-inverse(ng-controller="NavigationCtrl")
     .col-xs-12
       ul.nav.navbar-nav
-        li(ng-repeat="route in routes" ng-class='{active: isCurrent(route)}')
+        li(ng-repeat="route in routes" ng-class='{active: isCurrent(route.href)}')
           a(ng-href="{{route.href}}")
             .fa-stack.fa-lg
               i.fa.fa-square-o.fa-stack-2x

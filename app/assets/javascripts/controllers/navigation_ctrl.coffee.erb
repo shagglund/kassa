@@ -9,9 +9,13 @@ angular.module('kassa').controller('NavigationCtrl', [
           when 'products' then 'fa-beer'
           when 'users' then 'fa-group'
           end
-        {href: "/app/#{r}", name: I18n.t("navigation.title.#{r}"), iconClass: icon_class}
+        {href: r, name: I18n.t("navigation.title.#{r}"), iconClass: icon_class}
       end.to_json
     %>
 
-    $scope.isCurrent = (route)-> route == $location.path()
+    _ensureRootSlash = (route)->
+      if route.charAt(0) == '/' then route else ('/' + route)
+
+    $scope.isCurrent = (route)->
+      _ensureRootSlash(route) == $location.path()
 ])
