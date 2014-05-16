@@ -2,8 +2,17 @@
   .col-xs-12.col-md-7(ng-controller="BuyUsersListController" ng-hide="basket.hasBuyer()")
     .panel.panel-default
       .panel-heading
-        h3
-          =t('buys.select_buyer_from_list')
+        .row
+          .col-xs-12.col-sm-6
+            h3
+              =t('buys.select_buyer_from_list')
+          .col-xs-12.col-sm-6
+            form.form-horizontal.pull-right
+              .input-group
+                input.form-control(type='text' ng-model="userFilterString" ng-list="," placeholder="#{t('users.filter_input_text')}")
+                .input-group-btn
+                  button.btn.btn-danger(ng-click="userFilterString=''" type="button")
+                    i.fa.fa-eraser.fa-fw
       table.table.table-striped
         thead
           tr
@@ -15,7 +24,7 @@
             th.text-center.vertical-center
               a.btn-block.btn-link(kassa-order-state="usf" kassa-value="balance")= t('users.sort.balance')
         tbody
-          tr(ng-repeat="user in users|active|orderByState:'usf' track by user.id")
+          tr(ng-repeat="user in users|active|fuzzyMatch:userFilterString:'username'|orderByState:'usf' track by user.id")
             td
               img.img-thumbnail(gravatar="user.email")
             td.vertical-center

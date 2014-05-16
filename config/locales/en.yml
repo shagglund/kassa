@@ -66,6 +66,7 @@ en:
     balance: Balance
     latest_balance_changes: Latest balance changes
     no_balance_changes: No recorded changes
+    filter_input_text: Filter users by username
   products:
     title: Products
     filter_list: Filter by name

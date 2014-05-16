@@ -45,6 +45,7 @@ fi:
     balance: Saldo
     latest_balance_changes: Viimeisimmät saldon muutokset
     no_balance_changes: Ei tallennettuja muutoksia
+    filter_input_text: Hae piikkejä piikin nimellä
   products:
     title: Tuotteet
     filter_list: Hae tuotteen nimellä
