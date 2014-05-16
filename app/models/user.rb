@@ -5,6 +5,8 @@ class User < ActiveRecord::Base
   MAX_BUY_COUNT = 100000
   AT_LEAST_ONE_NON_DIGIT_AND_NO_SLASHES = /\A\d*[^\d\\\/]+\d*\z/
 
+  FLAG_USER_ACTIVE = 0x01
+
   devise :recoverable, :rememberable, :validatable, :trackable, :database_authenticatable
 
   has_many :buys, foreign_key: 'buyer_id'
@@ -28,5 +30,18 @@ class User < ActiveRecord::Base
       end
     end
     false
+  end
+
+  def active
+    bit_flags & FLAG_USER_ACTIVE == FLAG_USER_ACTIVE
+  end
+  alias_method :active?, :active
+
+  def active=(active)
+    if active
+      self.bit_flags |= FLAG_USER_ACTIVE
+    else
+      self.bit_flags &= ~FLAG_USER_ACTIVE
+    end
   end
 end

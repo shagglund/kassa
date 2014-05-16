@@ -15,38 +15,44 @@
               a.btn-block.btn-link(kassa-order-state="usf" kassa-value="username")
                 =t('username', scope: 'activerecord.attributes.user')
             th.text-center
-              a.btn-block.btn-link(kassa-order-state="usf" kassa-value="admin")
-                =t('admin', scope: 'activerecord.attributes.user')
-            th.text-center
               a.btn-block.btn-link(kassa-order-state="usf" kassa-value="balance")
                 =t('balance', scope: 'activerecord.attributes.user')
             th.text-center
               a.btn-block.btn-link(kassa-order-state="usf" kassa-value="buyCount")
                 =t('buy_count', scope: 'activerecord.attributes.user')
+            th.text-center
+              a.btn-block.btn-link(kassa-order-state="usf" kassa-value="active")
+                =t('active', scope: 'activerecord.attributes.user')
+            th
+              a.btn-block.btn-link(kassa-order-state="usf" kassa-value="timeOfLastBuy")
+                =t('time_of_last_buy', scope: 'activerecord.attributes.user')
             th
               a.btn-block.btn-link(kassa-order-state="usf" kassa-value="createdAt")
                 =t('created_at', scope: 'activerecord.attributes.user')
             th
               a.btn-block.btn-link(kassa-order-state="usf" kassa-value="updatedAt")
                 =t('updated_at', scope: 'activerecord.attributes.user')
-            th
-              a.btn-block.btn-link(kassa-order-state="usf" kassa-value="timeOfLastBuy")
-                =t('time_of_last_buy', scope: 'activerecord.attributes.user')
+            th.text-center
+              a.btn-block.btn-link(kassa-order-state="usf" kassa-value="admin")
+                =t('admin', scope: 'activerecord.attributes.user')
         tbody
           tr(ng-repeat="user in users|orderByState:'usf' track by user.id")
             td.vertical-center
               a.btn-block.btn-link(ng-href="/app/users/{{user.id}}")
                 | {{user.username}}
-            td.text-center.vertical-center
-              i.fa.fa-check.fa-fw.text-success(ng-if="user.admin")
-              i.fa.fa-times.fa-fw.text-danger(ng-if="!user.admin")
             td.text-center.vertical-center(ng-class="{'text-success': user.balance > 20, 'text-danger': user.balance < 0}")
               | {{user.balance|currency}}
             td.text-center.vertical-center
               | {{user.buyCount|number}}
+            td.text-center.vertical-center
+              i.fa.fa-check.fa-fw.text-success(ng-if="user.active")
+              i.fa.fa-times.fa-fw.text-danger(ng-if="!user.active")
+            td.vertical-center
+              | {{user.timeOfLastBuy|date:'longDate'}}
             td.vertical-center
               | {{user.createdAt|date:'longDate'}}
             td.vertical-center
               | {{user.updatedAt|date:'longDate'}}
-            td.vertical-center
-              | {{user.timeOfLastBuy|date:'longDate'}}
+            td.text-center.vertical-center
+              i.fa.fa-check.fa-fw.text-success(ng-if="user.admin")
+              i.fa.fa-times.fa-fw.text-danger(ng-if="!user.admin")

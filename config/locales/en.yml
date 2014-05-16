@@ -140,6 +140,7 @@ en:
         time_of_last_buy: Time of last buy
         created_at: Created at
         updated_at: Updated at
+        active: Active
       change:
         created_at: Created at
         change_note: Change note

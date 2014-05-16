@@ -20,6 +20,11 @@
             label.control-label.col-xs-4=t('email', scope: 'activerecord.attributes.user')
             .col-xs-8
               input.form-control(ng-model="user.email" type="email")
+          .form-group
+            label.control-label.col-xs-4=t('active', scope: 'activerecord.attributes.user')
+            .btn-group.col-xs-8
+              button.btn(ng-click="user.active=true" ng-class="{'btn-success active': user.active, 'btn-default': !user.active}")=t('choice.option_yes')
+              button.btn(ng-click="user.active=false" ng-class="{'btn-danger active': !user.active, 'btn-default': user.active}")=t('choice.option_no')
           .form-group(ng-show="!session.isCurrentUser(user)")
             label.control-label.col-xs-4=t('admin', scope: 'activerecord.attributes.user')
             .btn-group.col-xs-8

@@ -15,7 +15,7 @@
             th.text-center.vertical-center
               a.btn-block.btn-link(kassa-order-state="usf" kassa-value="balance")= t('users.sort.balance')
         tbody
-          tr(ng-repeat="user in users|orderByState:'usf' track by user.id")
+          tr(ng-repeat="user in users|active|orderByState:'usf' track by user.id")
             td
               img.img-thumbnail(gravatar="user.email")
             td.vertical-center

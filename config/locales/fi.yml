@@ -119,6 +119,7 @@ en:
         time_of_last_buy: Viimeksi ostettu
         created_at: Luotu
         updated_at: Päivitetty
+        active: Käytössä
       change:
         created_at: Tehty
         change_note: Viesti

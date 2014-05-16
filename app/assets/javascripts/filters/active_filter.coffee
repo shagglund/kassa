@@ -1,6 +1,6 @@
 angular.module('kassa')
-.filter('available', ->
+.filter('active', ->
   (array)->
     return array unless array?.length > 0
-    _.filter(array, 'available')
+    _.filter(array, 'active')
 )

@@ -35,15 +35,15 @@ class UsersController < ApplicationController
   end
 
   def user_create_params
-    params.require(:user).permit(:password, :password_confirmation, :username, :email, :admin, :balance)
+    params.require(:user).permit(:password, :password_confirmation, :username, :email, :admin, :balance, :active)
   end
 
   def user_update_params
     req = params.require(:user)
     if current_user.admin?
-      req.permit(:username, :email, :admin)
+      req.permit(:username, :email, :admin, :active)
     else
-      req.permit(:username, :email)
+      req.permit(:username, :email, :active)
     end
   end
 
