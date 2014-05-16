@@ -125,5 +125,5 @@ fi:
         change_note: Viesti
         doer: Tekijä
       balance_change:
-        new_balance: Vanha
-        old_balance: Uusi
+        new_balance: Uusi
+        old_balance: Vanha
