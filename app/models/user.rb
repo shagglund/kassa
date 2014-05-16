@@ -19,10 +19,9 @@ class User < ActiveRecord::Base
   scope :with_id_or_username, ->(id){id.to_s =~ /\A\d+\z/ ? where(id: id) : where(username: id)}
 
   def change_balance(new_balance, change_note, doer)
-    return if balance == new_balance
     transaction(requires_new: true) do
-      balance_change = balance_changes.create(doer: doer, change: {from: balance, to: new_balance}, change_note: change_note)
-      if balance_change.new_record?
+      balance_change = balance_changes.create(doer: doer, old_balance: self.balance, new_balance: new_balance, change_note: change_note)
+      if balance_change.invalid?
         self.errors.add :balance, balance_change.errors
       else
         self.balance = new_balance

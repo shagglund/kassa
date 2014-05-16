@@ -25,7 +25,7 @@ describe User do
   describe "#change_balance" do
     it "should not update the balance if old balance == new balance" do
       expect{
-        expect(user.change_balance(user.balance, change_note, doer)).to be_nil
+        expect(user.change_balance(user.balance, change_note, doer)).to be_false
       }.to_not change(BalanceChange, :count)
     end
 
