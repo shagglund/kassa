@@ -1,27 +1,4 @@
 .col-xs-12(ng-app="kassa")
-  nav.row.navbar.navbar-default.navbar-inverse(ng-controller="NavigationCtrl")
-    .col-xs-12
-      ul.nav.navbar-nav
-        li(ng-repeat="route in routes" ng-class='{active: isCurrent(route.href)}')
-          a(ng-href="{{route.href}}")
-            .fa-stack.fa-lg
-              i.fa.fa-square-o.fa-stack-2x
-              i.fa.fa-stack-1x(class="{{route.iconClass}}")
-            span
-              | {{route.name}}
-      ul.nav.navbar-nav.navbar-right
-        li
-          a(ng-href="/app/users/{{session.currentUser(false).id}}")
-            .fa-stack.fa-lg
-              i.fa.fa-stack-2x
-              img.img-rounded.center-block(gravatar="session.currentUser(false).email" gravatar-size="25")
-            span
-              | {{session.currentUser(false).username}}
-        li
-          a(href="" ng-click='session.signOut()')
-            span= t('navigation.title.sign_out')
-            .fa-stack.fa-lg
-              i.fa.fa-square-o.fa-stack-2x
-              i.fa.fa-sign-out.fa-stack-1x
+  =render 'navigation'
   .row
     .col-xs-12(ng-view)

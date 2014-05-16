@@ -1,0 +1,35 @@
+nav.row.navbar.navbar-default.navbar-inverse(ng-controller="NavigationCtrl")
+  .col-xs-12
+    ul.nav.navbar-nav
+      li(ng-class='{active: isCurrent("/buy")}')
+        a(ng-href="/app/buy?usf=username:false")
+          .fa-stack.fa-lg
+            i.fa.fa-square-o.fa-stack-2x
+            i.fa.fa-stack-1x.fa-shopping-cart
+          span=t("navigation.title.buy")
+      li(ng-class='{active: isCurrent("/products")}')
+        a(ng-href="/app/products?psf=name:false")
+          .fa-stack.fa-lg
+            i.fa.fa-square-o.fa-stack-2x
+            i.fa.fa-stack-1x.fa-group
+          span=t("navigation.title.products")
+      li(ng-class='{active: isCurrent("/users")}')
+        a(ng-href="/app/users?usf=name:false")
+          .fa-stack.fa-lg
+            i.fa.fa-square-o.fa-stack-2x
+            i.fa.fa-stack-1x.fa-group
+          span=t("navigation.title.users")
+    ul.nav.navbar-nav.navbar-right
+      li
+        a(ng-href="/app/users/{{session.currentUser(false).id}}")
+          .fa-stack.fa-lg
+            i.fa.fa-stack-2x
+            img.img-rounded.center-block(gravatar="session.currentUser(false).email" gravatar-size="25")
+          span
+            | {{session.currentUser(false).username}}
+      li
+        a(href="" ng-click='session.signOut()')
+          span= t('navigation.title.sign_out')
+          .fa-stack.fa-lg
+            i.fa.fa-square-o.fa-stack-2x
+            i.fa.fa-sign-out.fa-stack-1x
