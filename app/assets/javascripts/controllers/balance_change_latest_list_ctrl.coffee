@@ -4,6 +4,11 @@ angular.module('kassa').controller 'BalanceChangeLatestListCtrl', [
   'UserService'
   'BalanceChangeService'
   ($scope, $q, User, BalanceChange)->
-    balanceChanges = BalanceChange.all(User.currentByRoute()).then (loadedBalanceChanges)->
-      $scope.balanceChanges = balanceChanges = loadedBalanceChanges
+    loadBalanceChanges = ->
+      BalanceChange.all(User.currentByRoute()).then (loadedBalanceChanges)->
+        $scope.balanceChanges = loadedBalanceChanges
+
+    $scope.$on 'user:balanceChange', loadBalanceChanges
+
+    loadBalanceChanges()
 ]

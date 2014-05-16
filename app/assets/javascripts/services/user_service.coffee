@@ -26,6 +26,10 @@ angular.module('kassa').service('UserService',[
       $rootScope.$broadcast 'user:new', user
       user
 
+    _broadcastBalanceChange = (user)->
+      $rootScope.$broadcast 'user:balanceChange', user
+      user
+
     all = ->
       $http.get("/users").then(_convert).then(_getFromResponse).then (users)->
         #rewrite all loader function to use the now populated cache
@@ -44,7 +48,7 @@ angular.module('kassa').service('UserService',[
 
     updateBalance = (user, newBalance, changeNote)->
       data = balance: newBalance, description: changeNote
-      $http.put("/users/#{user.id}/update_balance", user: data).then(_convert).then(_getFromResponse)
+      $http.put("/users/#{user.id}/update_balance", user: data).then(_convert).then(_getFromResponse).then(_broadcastBalanceChange)
 
     create = (user)->
       $http.post("/users", {user}).then(_convert).then(_getFromResponse).then(_broadcastNewUser)
