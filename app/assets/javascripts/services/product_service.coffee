@@ -27,9 +27,10 @@ angular.module('kassa').service('ProductService',[
       product
 
     all = ->
-      Cache.getAllByPrefix(CACHE_PREFIX).then (products)->
-        return products if isArray(products)
-        $http.get('/products').then(_convert).then(_getFromResponse)
+      $http.get('/products').then(_convert).then(_getFromResponse).then (products)->
+        #rewrite all loader function to use the now fully populated cache
+        exports.all = all = -> Cache.getAllByPrefix(CACHE_PREFIX)
+        products
 
     find = (id)->
       Cache.get(id, CACHE_PREFIX).then (product)->
@@ -51,5 +52,5 @@ angular.module('kassa').service('ProductService',[
           else
             _convertAndCacheProduct(buyEntry.product)
 
-    {all, find, currentByRoute, update, create}
+    exports = {all, find, currentByRoute, update, create}
 ])
