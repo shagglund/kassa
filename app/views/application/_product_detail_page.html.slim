@@ -22,8 +22,8 @@
           .form-group
             label.control-label.col-xs-4=t('available', scope: 'activerecord.attributes.product')
             .btn-group.col-xs-8
-              button.btn(ng-click="product.available=true" ng-class="{'btn-success active': product.available, 'btn-default': !product.available}")=t('option.yes')
-              button.btn(ng-click="product.available=false" ng-class="{'btn-danger active': !product.available, 'btn-default': product.available}")=t('option.no')
+              button.btn(ng-click="product.available=true" ng-class="{'btn-success active': product.available, 'btn-default': !product.available}")=t('choice.option_yes')
+              button.btn(ng-click="product.available=false" ng-class="{'btn-danger active': !product.available, 'btn-default': product.available}")=t('choice.option_no')
           .form-group
             .col-xs-4
             .col-xs-8

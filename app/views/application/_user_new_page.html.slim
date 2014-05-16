@@ -42,8 +42,8 @@
           .form-group
             label.control-label.col-xs-4=t('admin', scope: 'activerecord.attributes.user')
             .btn-group.col-xs-8
-              button.btn(ng-click="user.admin=true" ng-class="{'btn-success active': user.admin, 'btn-default': !user.admin}")=t('option.yes')
-              button.btn(ng-click="user.admin=false" ng-class="{'btn-danger active': !user.admin, 'btn-default': user.admin}")=t('option.no')
+              button.btn(ng-click="user.admin=true" ng-class="{'btn-success active': user.admin, 'btn-default': !user.admin}")=t('choice.option_yes')
+              button.btn(ng-click="user.admin=false" ng-class="{'btn-danger active': !user.admin, 'btn-default': user.admin}")=t('choice.option_no')
           .form-group
             .col-xs-4
             .col-xs-8

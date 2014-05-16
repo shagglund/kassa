@@ -23,8 +23,8 @@
           .form-group(ng-show="!session.isCurrentUser(user)")
             label.control-label.col-xs-4=t('admin', scope: 'activerecord.attributes.user')
             .btn-group.col-xs-8
-              button.btn(ng-click="user.admin=true" ng-class="{'btn-success active': user.admin, 'btn-default': !user.admin}")=t('option.yes')
-              button.btn(ng-click="user.admin=false" ng-class="{'btn-danger active': !user.admin, 'btn-default': user.admin}")=t('option.no')
+              button.btn(ng-click="user.admin=true" ng-class="{'btn-success active': user.admin, 'btn-default': !user.admin}")=t('choice.option_yes')
+              button.btn(ng-click="user.admin=false" ng-class="{'btn-danger active': !user.admin, 'btn-default': user.admin}")=t('choice.option_no')
           .form-group
             .col-xs-4
             .col-xs-8
@@ -137,8 +137,8 @@
           .form-group
             label.control-label.col-xs-4=t('admin', scope: 'activerecord.attributes.user')
             .col-xs-8
-              p.text-success.form-control-static(ng-if="user.admin")=t('option.yes')
-              p.text-danger.form-control-static(ng-if="!user.admin")=t('option.no')
+              p.text-success.form-control-static(ng-if="user.admin")=t('choice.option_yes')
+              p.text-danger.form-control-static(ng-if="!user.admin")=t('choice.option_no')
   .col-xs-12.col-md-6
     .panel.panel-default(ng-controller="UserLatestBuysCtrl")
       .panel-heading

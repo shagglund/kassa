@@ -85,9 +85,9 @@ en:
     load_more: Lataa lisää
     create: Luo
     remove: Poista
-  option:
-    yes: Kyllä
-    no: Ei
+  choice:
+    option_yes: Kyllä
+    option_no: Ei
 
   gravatar:
     click_to_add: Lisää Gravatar
