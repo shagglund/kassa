@@ -90,6 +90,7 @@ en:
     select_products_from_list: Select products
     selected_buyer: Selected buyer
     change_buyer: Change
+    empty_and_return_to_buyer_list: Empty and return to buyer selection
   sort:
     order_asc_title: Show in ascending order
     order_desc_title: Show in descending order

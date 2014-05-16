@@ -28,7 +28,12 @@
   .col-xs-12.col-md-7(ng-controller="BuyProductsListController" ng-show="basket.hasBuyer()")
     .panel.panel-default
       .panel-heading
-        h3=t('buys.selected_buyer')
+        h3
+          =t('buys.selected_buyer')
+          small.pull-right
+            button.btn.btn-default.btn-sm(ng-click="basket.empty()")
+              i.fa.fa-trash-o.fa-fw
+              span=t('buys.empty_and_return_to_buyer_list')
       table.table
         tbody
           tr

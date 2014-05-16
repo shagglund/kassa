@@ -68,7 +68,8 @@ en:
     select_buyer_from_list: Valitse ostaja
     select_products_from_list: Valitse tuotteet
     selected_buyer: Valittu ostaja
-    change_buyer: Vaihda
+    change_buyer: Vaihda ostajaa
+    empty_and_return_to_buyer_list: Tyhjennä ja palaa piikin valintaan
   sort:
     order_asc_title: Näytä nousevassa järjestyksessä
     order_desc_title: Näytä laskevassa järjestyksessä
