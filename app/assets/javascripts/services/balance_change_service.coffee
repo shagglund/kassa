@@ -4,7 +4,6 @@ angular.module('kassa').service('BalanceChangeService',[
   ($http, $q)->
     #handle price as a float, not a string
     convertBalanceChange = (balanceChange, doers)->
-      console.log balanceChange, doers
       balanceChange.doer = _.find doers, (doer)-> doer.id == balanceChange.doerId
 
     convert = (resp)->
