@@ -88,6 +88,8 @@ en:
     no_more_loadable: No more buys available
     select_buyer_from_list: Select buyer
     select_products_from_list: Select products
+    selected_buyer: Selected buyer
+    change_buyer: Change
   sort:
     order_asc_title: Show in ascending order
     order_desc_title: Show in descending order
@@ -102,8 +104,9 @@ en:
     cancel: Cancel
     load_more: Load more
     create: Create
+    remove: Remove
   option:
-    yes: Yes
+    option_yes: Yes
     no: No
 
   gravatar:

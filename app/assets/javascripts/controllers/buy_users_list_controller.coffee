@@ -1,7 +1,8 @@
 angular.module('kassa').controller 'BuyUsersListController', [
   '$scope'
-  '$location'
   'UserService'
-  ($scope, $location, User)->
+  'BasketService'
+  ($scope, User, Basket)->
     User.all().then (users)-> $scope.users = users
+    $scope.basket = Basket
 ]

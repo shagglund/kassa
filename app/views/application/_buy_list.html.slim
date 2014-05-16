@@ -24,7 +24,7 @@ table.table.table-striped
           small
             | {{entry.amount}} {{entry.product.name}}
       td(ng-controller="BuyToBasketCtrl")
-        button.btn.btn-success(ng-click="setToBasket(buy)")
+        button.btn.btn-success(ng-click="setToBasket(buy)" ng-show="allProductsAvailable(buy)")
           i.fa.fa-shopping-cart.fa-fw
         button.btn.btn-danger(ng-click="delete(buy)" ng-if="canBeDeleted(buy)")
           i.fa.fa-trash.fa-fw

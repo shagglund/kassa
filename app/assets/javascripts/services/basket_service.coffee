@@ -4,106 +4,96 @@ angular.module('kassa').service('BasketService', [
   '$rootScope'
   'UserService'
   'ProductService'
-  ($http, $location, $rootScope, User, Product)->
+  'BuyService'
+  ($http, $location, $rootScope, User, Product, Buy)->
+    [isObject, isUndefined] = [angular.isObject, angular.isUndefined]
     products = []
     buyer = null
 
-    INTEGER_REGEXP = /^\d+$/m
-    isProductSearchValue = (value)-> INTEGER_REGEXP.test(value)
-    isNotProductSearchValue = (value)-> !isProductSearchValue(value)
-    isBuyerSearchValue = (value, key)-> key == 'buyer'
-    isNotBuyerSearchValue = (value, key)-> !isBuyerSearchValue
+    _productMatch = (product, entry)-> entry.product.id == product.id
 
-    changeAmount = (entry, amount)->
-      name = entry.product.name
-      currentAmount = _.parseInt($location.search()[name])
-      unless currentAmount + amount < 1
-        newAmount = currentAmount + amount
-        $location.search(name, newAmount).replace()
-
-    emptyBasketAndRemoveBuyer = (showBasket=true)->
-      searchObj = _.chain($location.search())
-        .pick isNotProductSearchValue
-        .pick isNotBuyerSearchValue
-        .assign basket: (if showBasket then "true" else "false")
-        .value()
-      $location.search(searchObj).replace()
-
-    entryAmountReducer = (sum, entry)-> sum + entry.amount
-    productCount = -> _.reduce products, entryAmountReducer, 0
-
-    entryPrice = (entry)-> (entry.amount * entry.product.price)
-    entryPriceReducer = (sum, entry)-> sum + entryPrice(entry)
-    price = (entry)->
-      if entry?
-        entryPrice(entry)
+    addProduct = (product)->
+      if _.findIndex(products, _.partial(_productMatch, product)) != -1
+        false
       else
-        _.reduce(products, entryPriceReducer, 0.0)
+        products.push {product, amount: 1}
+        true
 
-    isBuyable = -> hasProducts() && buyer
+    removeProduct = (product)->
+      index = _.findIndex(products, _.partial(_productMatch, product))
+      if index == -1
+        false
+      else
+        products.splice(index, 1)
+        true
+
+    setProducts = (newProducts)-> products = newProducts
 
     hasProducts = -> products.length > 0
 
-    setFromBuy = (buy)->
-      entryToProductNameHash = (result, entry)->
-        result[entry.product.name] = entry.amount
-        result
+    hasProduct = (product)-> _.findIndex(products, _.partial(_productMatch, product)) != -1
 
-      search = _.chain($location.search())
-        .assign buyer: buy.buyer.username, basket: true
-        .assign _.reduce(buy.consistsOfProducts, entryToProductNameHash, {})
-        .value()
+    changeAmount = (product, amount)->
+      entry = _.find(products, _.partial(_productMatch, product))
+      unless entry.amount + amount < 1
+        entry.amount += amount
 
-      if $location.path() == '/buy'
-        $location.search(search).replace()
+    _entryAmountReducer = (sum, entry)-> sum + entry.amount
+    productCount = (product)->
+      if isUndefined(product)
+        _.reduce products, _entryAmountReducer, 0
       else
-        $location.search(search).path('/buy')
+        entry = _.find(products, _.partial(_productMatch, product))
+        entry?.amount || 0
 
-    ##### Update basket state based on route changes #####
-    resolveProducts = ->
-      productMapper = (newProducts, amount, name)->
-        amount = _.parseInt(amount)
-        entry = _.find(products, (e)-> e.product.name == name)
-        if entry?
-          entry.amount = amount
-        else
-          #fake the id with name as both should be unique
-          entry = {product: {name: name, id: name}, amount}
-          Product.find(name).then (product)-> entry.product = product
-        newProducts.push entry
-
-      products = _.chain($location.search())
-        .pick(isProductSearchValue)
-        .transform(productMapper, [])
-        .value()
-
-    resolveBuyer = ->
-      username = $location.search().buyer
-      if buyer?.username == username
-        buyer
-      else if username?
-        buyer = User.find(username).then (user)-> buyer = user
+    _entryPrice = (entry)-> (entry.amount * entry.product.price)
+    _entryPriceReducer = (sum, entry)-> sum + _entryPrice(entry)
+    price = (entry)->
+      if isUndefined(entry)
+        _.reduce(products, _entryPriceReducer, 0.0)
       else
-        buyer = undefined
+        _entryPrice(entry)
 
-    updateStateFromSearch = ->
-      resolveProducts()
-      resolveBuyer()
+    setBuyer = (user)-> buyer = user
+    removeBuyer = -> setBuyer(null)
 
-    $rootScope.$on '$routeUpdate', updateStateFromSearch
-    $rootScope.$on '$routeChangeSuccess', updateStateFromSearch
-    updateStateFromSearch()
+    isBuyable = -> hasProducts() && buyer
+
+    setFromBuy = (buy, navigateToBuyPage=true)->
+      copyEntries = (buyEntry)-> {product: buyEntry.product, amount: buyEntry.amount}
+
+      setBuyer(buy.buyer)
+      newProducts = _.map(buy.consistsOfProducts, copyEntries)
+      setProducts(newProducts)
+
+      $location.path('/buy') if navigateToBuyPage
+
+    emptyBasketAndRemoveBuyer = ->
+      removeBuyer()
+      setProducts([])
+
+    buy = ->
+      Buy.create(buyer, products).then (resp)->
+        emptyBasketAndRemoveBuyer(false)
+        resp
 
     #return api-object with methods/objects accessible from outside
     {
+      addProduct
+      removeProduct
+      hasProducts
+      hasProduct
+      products: -> products
       changeAmount
       productCount
       price
+      setBuyer
+      removeBuyer
+      hasBuyer: -> isObject(buyer)
+      buyer: -> buyer
       isBuyable
-      hasProducts
       setFromBuy
       empty: emptyBasketAndRemoveBuyer
-      products: -> products
-      buyer: -> buyer
+      buy
     }
 ])
