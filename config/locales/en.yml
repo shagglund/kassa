@@ -148,3 +148,4 @@ en:
       balance_change:
         new_balance: New balance
         old_balance: Old balance
+        balance_change: Change

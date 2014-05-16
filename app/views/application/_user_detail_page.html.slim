@@ -105,7 +105,6 @@
             tr
               th=t('doer', scope: 'activerecord.attributes.change')
               th=t('old_balance', scope: 'activerecord.attributes.balance_change')
-              th=t('new_balance', scope: 'activerecord.attributes.balance_change')
               th=t('change_note', scope: 'activerecord.attributes.change')
               th=t('created_at', scope: 'activerecord.attributes.change')
           tbody
@@ -114,9 +113,7 @@
                 a(ng-href="users/{{change.doer.id}}")
                   | {{change.doer.username}}
               td
-                | {{change.oldBalance|currency}}
-              td
-                | {{change.newBalance|currency}}
+                | {{(change.change)|currency}}
               td
                 | {{change.changeNote}}
               td

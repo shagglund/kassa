@@ -127,3 +127,4 @@ fi:
       balance_change:
         new_balance: Uusi
         old_balance: Vanha
+        balance_change: Muutos
