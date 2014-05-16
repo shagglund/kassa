@@ -260,7 +260,7 @@ DEPENDENCIES
   newrelic_rpm
   pg
   puma
-  rails (~> 4.1.0.rc2)
+  rails
   rails_layout
   rb-fchange
   rb-fsevent
