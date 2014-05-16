@@ -2,34 +2,54 @@ angular.module('kassa').service('ProductService',[
   '$http'
   '$routeParams'
   '$rootScope'
-  ($http, $routeParams, $rootScope)->
-    #handle price as a float, not a string
-    convertProduct = (product)->
-      product.price = parseFloat(product.price)
+  'CacheService'
+  ($http, $routeParams, $rootScope, Cache)->
+    [isArray, isObject, isNumber, copy] = [angular.isArray, angular.isObject, angular.isNumber, angular.copy]
+    CACHE_PREFIX = 'product'
 
-    convert = (resp)->
+    #handle price as a float, not a string
+    _convertAndCacheProduct = (product)->
+      product.price = parseFloat(product.price)
+      Cache.set(product, CACHE_PREFIX)
+
+    _convert = (resp)->
       products = resp.data.products
       if products?
-        _.forEach products, convertProduct
+        _.forEach products, _convertAndCacheProduct
       else
-        convertProduct(resp.data.product)
+        _convertAndCacheProduct(resp.data.product)
       resp
 
-    getFromResponse = (resp)-> resp.data.product || resp.data.products
+    _getFromResponse = (resp)-> resp.data.product || resp.data.products
 
-    broadcastNewProduct = (product)->
+    _broadcastNewProduct = (product)->
       $rootScope.$broadcast 'product:new', product
       product
 
-    all = -> $http.get('/products').then(convert).then(getFromResponse)
+    all = ->
+      Cache.getAllByPrefix(CACHE_PREFIX).then (products)->
+        return products if isArray(products)
+        $http.get('/products').then(_convert).then(_getFromResponse)
 
-    find = (id)-> $http.get("/products/#{id}").then(convert).then(getFromResponse)
+    find = (id)->
+      Cache.get(id, CACHE_PREFIX).then (product)->
+        return product if isObject(product) && isNumber(product.id)
+        $http.get("/products/#{id}").then(_convert).then(_getFromResponse)
 
     currentByRoute = -> find($routeParams.id)
 
-    update = (product)-> $http.put("/products/#{product.id}", product: product).then(convert).then(getFromResponse)
+    update = (product)-> $http.put("/products/#{product.id}", product: product).then(_convert).then(_getFromResponse)
 
-    create = (product)-> $http.post('/products', {product}).then(convert).then(getFromResponse).then(broadcastNewProduct)
+    create = (product)-> $http.post('/products', {product}).then(_convert).then(_getFromResponse).then(_broadcastNewProduct)
+
+
+    $rootScope.$on 'buys:new', (event, buy)->
+      _.forEach buy.consistsOfProducts, (buyEntry)->
+        Cache.get(buyEntry.productId, CACHE_PREFIX).then (product)->
+          if isObject(product)
+            buyEntry.product = copy(buyEntry.product, product)
+          else
+            _convertAndCacheProduct(buyEntry.product)
 
     {all, find, currentByRoute, update, create}
 ])
