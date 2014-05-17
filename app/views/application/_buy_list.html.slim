@@ -20,7 +20,7 @@ table.table.table-striped
           small.h6.text-muted
             | {{buy.createdAt|date:'d.M.yyyy HH:mm'}}
       td
-        div(ng-repeat="entry in buy.consistsOfProducts")
+        div(ng-repeat="entry in buy.consistsOfProducts|orderBy:'product.name'")
           small
             | {{entry.amount}} {{entry.product.name}}
       td(ng-controller="BuyToBasketCtrl")
