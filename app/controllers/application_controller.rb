@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
 
     def integer_param_method(param_name, opts={})
       define_method(param_name) do
-        LimitedValuePicker.new(opts).get(params[param_name]).to_i
+        LimitedIntegerValuePicker.new(opts).get(params[param_name]).to_i
       end
     end
 
