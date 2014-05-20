@@ -9,6 +9,7 @@ angular.module('kassa').controller('UserLatestBuysCtrl', [
     User.currentByRoute().then (user)->
       $scope.user = user
       Buy.latestForUser(user, limit: LIMIT).then (buys)->
+        moreAvailable = buys.length == LIMIT
         $scope.buys = buys
 
     loadMore = (buys)->

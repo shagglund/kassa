@@ -28,9 +28,7 @@ table.table.table-striped
           i.fa.fa-shopping-cart.fa-fw
         button.btn.btn-danger(ng-click="delete(buy)" ng-if="canBeDeleted(buy)")
           i.fa.fa-trash.fa-fw
-    tr( ng-show="loadMore")
-      td.text-center(colspan=4 ng-show="moreAvailable()")
+    tr(ng-show="loadMore && moreAvailable()")
+      td.text-center(colspan=4)
         button.btn.btn-link(ng-click="loadMore(buys)")=t('action.load_more')
-      td.text-center(colspan=4 ng-hide="moreAvailable()")
-        p=t('buys.no_more_loadable')
 
