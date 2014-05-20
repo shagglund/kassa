@@ -5,7 +5,7 @@ class User < ActiveRecord::Base
   MAX_BUY_COUNT = 100000
   AT_LEAST_ONE_NON_DIGIT_AND_NO_SLASHES = /\A\d*[^\d\\\/]+\d*\z/
 
-  FLAG_USER_ACTIVE = 0x01
+  FLAG_ACTIVE = 0x01
 
   devise :recoverable, :rememberable, :validatable, :trackable, :database_authenticatable
 
@@ -32,15 +32,15 @@ class User < ActiveRecord::Base
   end
 
   def active
-    bit_flags & FLAG_USER_ACTIVE == FLAG_USER_ACTIVE
+    bit_flags & FLAG_ACTIVE == FLAG_ACTIVE
   end
   alias_method :active?, :active
 
   def active=(active)
     if active
-      self.bit_flags |= FLAG_USER_ACTIVE
+      self.bit_flags |= FLAG_ACTIVE
     else
-      self.bit_flags &= ~FLAG_USER_ACTIVE
+      self.bit_flags &= ~FLAG_ACTIVE
     end
   end
 end

@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe User do
+  subject{FactoryGirl.build(:user)}
+
   it {should validate_presence_of :username}
   it {should validate_uniqueness_of(:username)}
   it {should ensure_length_of(:username).is_at_least(2).is_at_most(16)}
@@ -91,6 +93,32 @@ describe User do
       it "should return false" do
         expect(user.change_balance invalid_balance, change_note, doer).to be_false
       end
+    end
+  end
+
+  describe "#active=" do
+    it "should set the active flag on true" do
+      subject.active = true
+      expect(subject.bit_flags & User::FLAG_ACTIVE).to eq(User::FLAG_ACTIVE)
+    end
+
+    it "should remove the active flag on false" do
+      subject.active = false
+      expect(subject.bit_flags & User::FLAG_ACTIVE).to eq(0)
+    end
+  end
+
+  describe "#active/active?" do
+    it "should return true if the user is set active" do
+      subject.bit_flags |= User::FLAG_ACTIVE
+      expect(subject.active).to be_true
+      expect(subject.active?).to be_true
+    end
+
+    it "should return false if the user is set inactive" do
+      subject.bit_flags &= User::FLAG_ACTIVE
+      expect(subject.active).to be_false
+      expect(subject.active?).to be_false
     end
   end
 end
