@@ -49,13 +49,5 @@ angular.module('kassa').factory('BuyService',[
       products = _.map entries, (entry)-> amount: entry.amount, product_id: entry.product.id
       $http.post('/buys', buy: {buyer_id: buyer.id, products}).then(convert).then(getFromResponse).then(broadcastNewBuy)
 
-    {
-      all: all
-      latest: latest
-      find: find
-      currentByRoute: currentByRoute
-      latestForUser: latestForUser
-      latestForProduct: latestForProduct
-      create: create
-    }
+    {all, latest, find, currentByRoute, latestForUser, latestForProduct, create}
 ])

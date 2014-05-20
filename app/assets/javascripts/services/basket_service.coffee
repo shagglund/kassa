@@ -10,17 +10,17 @@ angular.module('kassa').factory('BasketService', [
     products = []
     buyer = null
 
-    _productMatch = (product, entry)-> entry.product.id == product.id
+    productMatch = (product, entry)-> entry.product.id == product.id
 
     addProduct = (product)->
-      if _.findIndex(products, _.partial(_productMatch, product)) != -1
+      if _.findIndex(products, _.partial(productMatch, product)) != -1
         false
       else
         products.push {product, amount: 1}
         true
 
     removeProduct = (product)->
-      index = _.findIndex(products, _.partial(_productMatch, product))
+      index = _.findIndex(products, _.partial(productMatch, product))
       if index == -1
         false
       else
@@ -31,28 +31,28 @@ angular.module('kassa').factory('BasketService', [
 
     hasProducts = -> products.length > 0
 
-    hasProduct = (product)-> _.findIndex(products, _.partial(_productMatch, product)) != -1
+    hasProduct = (product)-> _.findIndex(products, _.partial(productMatch, product)) != -1
 
     changeAmount = (product, amount)->
-      entry = _.find(products, _.partial(_productMatch, product))
+      entry = _.find(products, _.partial(productMatch, product))
       unless entry.amount + amount < 1
         entry.amount += amount
 
-    _entryAmountReducer = (sum, entry)-> sum + entry.amount
+    entryAmountReducer = (sum, entry)-> sum + entry.amount
     productCount = (product)->
       if isUndefined(product)
-        _.reduce products, _entryAmountReducer, 0
+        _.reduce products, entryAmountReducer, 0
       else
-        entry = _.find(products, _.partial(_productMatch, product))
+        entry = _.find(products, _.partial(productMatch, product))
         entry?.amount || 0
 
-    _entryPrice = (entry)-> (entry.amount * entry.product.price)
-    _entryPriceReducer = (sum, entry)-> sum + _entryPrice(entry)
+    entryPrice = (entry)-> (entry.amount * entry.product.price)
+    entryPriceReducer = (sum, entry)-> sum + entryPrice(entry)
     price = (entry)->
       if isUndefined(entry)
-        _.reduce(products, _entryPriceReducer, 0.0)
+        _.reduce(products, entryPriceReducer, 0.0)
       else
-        _entryPrice(entry)
+        entryPrice(entry)
 
     setBuyer = (user)-> buyer = user
     removeBuyer = -> setBuyer(null)

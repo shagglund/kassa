@@ -8,26 +8,26 @@ angular.module('kassa').factory('ProductService',[
     CACHE_PREFIX = 'product'
 
     #handle price as a float, not a string
-    _convertAndCacheProduct = (product)->
+    convertAndCacheProduct = (product)->
       product.price = parseFloat(product.price)
       Cache.set(product, CACHE_PREFIX)
 
-    _convert = (resp)->
+    convert = (resp)->
       products = resp.data.products
       if products?
-        _.forEach products, _convertAndCacheProduct
+        _.forEach products, convertAndCacheProduct
       else
-        _convertAndCacheProduct(resp.data.product)
+        convertAndCacheProduct(resp.data.product)
       resp
 
-    _getFromResponse = (resp)-> resp.data.product || resp.data.products
+    getFromResponse = (resp)-> resp.data.product || resp.data.products
 
-    _broadcastNewProduct = (product)->
+    broadcastNewProduct = (product)->
       $rootScope.$broadcast 'product:new', product
       product
 
     all = ->
-      $http.get('/products').then(_convert).then(_getFromResponse).then (products)->
+      $http.get('/products').then(convert).then(getFromResponse).then (products)->
         #rewrite all loader function to use the now fully populated cache
         exports.all = all = -> Cache.getAllByPrefix(CACHE_PREFIX)
         products
@@ -35,13 +35,13 @@ angular.module('kassa').factory('ProductService',[
     find = (id)->
       Cache.get(id, CACHE_PREFIX).then (product)->
         return product if isObject(product) && isNumber(product.id)
-        $http.get("/products/#{id}").then(_convert).then(_getFromResponse)
+        $http.get("/products/#{id}").then(convert).then(getFromResponse)
 
     currentByRoute = -> find($routeParams.id)
 
-    update = (product)-> $http.put("/products/#{product.id}", product: product).then(_convert).then(_getFromResponse)
+    update = (product)-> $http.put("/products/#{product.id}", product: product).then(convert).then(getFromResponse)
 
-    create = (product)-> $http.post('/products', {product}).then(_convert).then(_getFromResponse).then(_broadcastNewProduct)
+    create = (product)-> $http.post('/products', {product}).then(convert).then(getFromResponse).then(broadcastNewProduct)
 
 
     $rootScope.$on 'buys:new', (event, buy)->
@@ -50,7 +50,7 @@ angular.module('kassa').factory('ProductService',[
           if isObject(product)
             buyEntry.product = copy(buyEntry.product, product)
           else
-            _convertAndCacheProduct(buyEntry.product)
+            convertAndCacheProduct(buyEntry.product)
 
     exports = {all, find, currentByRoute, update, create}
 ])

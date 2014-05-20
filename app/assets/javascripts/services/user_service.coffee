@@ -8,21 +8,21 @@ angular.module('kassa').factory('UserService',[
 
     CACHE_PREFIX = 'user'
 
-    _convertAndCacheUser = (user)->
+    convertAndCacheUser = (user)->
       user.balance = parseFloat(user.balance)
       Cache.set(user, CACHE_PREFIX)
 
-    _convert = (resp)->
+    convert = (resp)->
       users = resp.data.users
       if users?
-        _.forEach users, _convertAndCacheUser
+        _.forEach users, convertAndCacheUser
       else
-        _convertAndCacheUser(resp.data.user)
+        convertAndCacheUser(resp.data.user)
       resp
 
-    _getFromResponse = (resp)-> resp.data.user || resp.data.users
+    getFromResponse = (resp)-> resp.data.user || resp.data.users
 
-    _broadcastNewUser = (user)->
+    broadcastNewUser = (user)->
       $rootScope.$broadcast 'user:new', user
       user
 
@@ -31,7 +31,7 @@ angular.module('kassa').factory('UserService',[
       user
 
     all = ->
-      $http.get("/users").then(_convert).then(_getFromResponse).then (users)->
+      $http.get("/users").then(convert).then(getFromResponse).then (users)->
         #rewrite all loader function to use the now populated cache
         exports.all = all = -> Cache.getAllByPrefix(CACHE_PREFIX)
         users
@@ -39,19 +39,19 @@ angular.module('kassa').factory('UserService',[
     find = (id)->
       Cache.get(id, CACHE_PREFIX).then (user)->
         return user if isObject(user) && isNumber(user.id)
-        $http.get("/users/#{id}").then(_convert).then(_getFromResponse)
+        $http.get("/users/#{id}").then(convert).then(getFromResponse)
 
     currentByRoute = -> find($routeParams.id)
 
     update = (user)->
-      $http.put("/users/#{user.id}", {user}).then(_convert).then(_getFromResponse)
+      $http.put("/users/#{user.id}", {user}).then(convert).then(getFromResponse)
 
     updateBalance = (user, newBalance, changeNote)->
       data = balance: newBalance, description: changeNote
-      $http.put("/users/#{user.id}/update_balance", user: data).then(_convert).then(_getFromResponse).then(_broadcastBalanceChange)
+      $http.put("/users/#{user.id}/update_balance", user: data).then(convert).then(getFromResponse).then(_broadcastBalanceChange)
 
     create = (user)->
-      $http.post("/users", {user}).then(_convert).then(_getFromResponse).then(_broadcastNewUser)
+      $http.post("/users", {user}).then(convert).then(getFromResponse).then(broadcastNewUser)
 
 
     $rootScope.$on 'buys:new', (event, buy)->
@@ -59,7 +59,7 @@ angular.module('kassa').factory('UserService',[
         if isObject(user)
           buy.buyer = copy(buy.buyer, user)
         else
-          _convertAndCacheUser(buy.buyer)
+          convertAndCacheUser(buy.buyer)
 
     #exposed methods
     exports = {all, find, currentByRoute, update, updateBalance, create}
