@@ -1,14 +1,12 @@
 class ApplicationController < ActionController::Base
   class << self
     protected
+    def get_value_within_limits(min, max, value)
+    end
+
     def integer_param_method(param_name, opts={})
-      max, min, default = opts.values_at(:max, :min, :default)
       define_method(param_name) do
-        value = params.has_key?(param_name) ? params[param_name].to_i : default
-        return if value.nil?
-        return max if max && value > max
-        return min if min && value < min
-        value
+        LimitedValuePicker.new(opts).get(params[param_name]).to_i
       end
     end
 
@@ -28,12 +26,20 @@ class ApplicationController < ActionController::Base
   def authenticate_admin!
     authenticate_user! if current_user.nil?
     unless current_user.admin?
-      Rails.logger.warn("Unauthorized attempt by #{current_user.username} to #{params[:controller]}##{params[:action]}")
-      msg =I18n.t('errors.admin.not_authorized')
-      respond_to do |format|
-        format.html { render text: msg, status: :forbidden}
-        format.json {render json: msg, status: :forbidden}
-      end
+      log_admin_access_attempt
+      respond_with_not_an_admin
+    end
+  end
+
+  def log_admin_access_attempt
+    Rails.logger.warn("Unauthorized attempt by #{current_user.username} to #{params[:controller]}##{params[:action]}")
+  end
+
+  def respond_with_not_an_admin
+    msg =I18n.t('errors.admin.not_authorized')
+    respond_to do |format|
+      format.html { render text: msg, status: :forbidden}
+      format.json {render json: msg, status: :forbidden}
     end
   end
 end
