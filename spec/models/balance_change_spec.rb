@@ -13,9 +13,46 @@ describe BalanceChange do
       expect(subject.new_balance).to eq(new_balance)
     end
   end
+
+  describe '#new_balance=' do
+    it "changes the balance" do
+      subject.new_balance= new_balance + 1
+      expect(subject.new_balance).to eq(new_balance + 1)
+    end
+
+    it "marks the change-column as changed" do
+      subject.new_balance= new_balance + 1
+      expect(subject.change_changed?).to be_true
+    end
+
+    it "doesn't mark the change-column as changed if new value == old value" do
+      subject.send :reset_changes
+      subject.new_balance= new_balance
+      expect(subject.change_changed?).to be_false
+    end
+  end
+
   describe '#old_balance' do
     it "returns the new balance" do
       expect(subject.old_balance).to eq(old_balance)
+    end
+  end
+
+  describe '#old_balance=' do
+    it "changes the balance" do
+      subject.old_balance= old_balance + 1
+      expect(subject.old_balance).to eq(old_balance + 1)
+    end
+
+    it "marks the change-column as changed" do
+      subject.old_balance= old_balance + 1
+      expect(subject.change_changed?).to be_true
+    end
+
+    it "doesn't mark the change-column as changed if new value == old value" do
+      subject.send :reset_changes
+      subject.old_balance= old_balance
+      expect(subject.change_changed?).to be_false
     end
   end
 

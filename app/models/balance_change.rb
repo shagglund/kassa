@@ -3,21 +3,8 @@ class BalanceChange < Change
   validates :new_balance, numericality: true
   validate :old_balance_is_not_equal_to_new_balance
 
-  def old_balance; change['from']; end
-
-  def old_balance=(old_balance)
-    self.change ||= {}
-    self.change_will_change! unless self.change['from'] == old_balance
-    self.change['from'] = old_balance
-  end
-
-  def new_balance; change['to']; end
-
-  def new_balance=(new_balance)
-    self.change ||= {}
-    self.change_will_change! unless self.change['to'] == new_balance
-    self.change['to'] = new_balance
-  end
+  change_accessor :old_balance, 'from'
+  change_accessor :new_balance, 'to'
 
   def balance_change; new_balance.to_f - old_balance.to_f; end
 
