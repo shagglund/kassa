@@ -1,4 +1,4 @@
-angular.module('kassa').service('ProductService',[
+angular.module('kassa').factory('ProductService',[
   '$http'
   '$routeParams'
   '$rootScope'

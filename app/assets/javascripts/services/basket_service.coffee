@@ -1,4 +1,4 @@
-angular.module('kassa').service('BasketService', [
+angular.module('kassa').factory('BasketService', [
   '$http'
   '$location'
   '$rootScope'

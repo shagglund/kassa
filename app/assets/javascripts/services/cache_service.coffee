@@ -1,4 +1,4 @@
-angular.module('kassa').service('CacheService', [
+angular.module('kassa').factory('CacheService', [
   '$q'
   '$parse'
   ($q, $parse)->

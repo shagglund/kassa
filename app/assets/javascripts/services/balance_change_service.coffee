@@ -1,4 +1,4 @@
-angular.module('kassa').service('BalanceChangeService',[
+angular.module('kassa').factory('BalanceChangeService',[
   '$http'
   '$q'
   ($http, $q)->

@@ -1,4 +1,4 @@
-angular.module('kassa').service('SessionService',[
+angular.module('kassa').factory('SessionService',[
   '$http'
   '$q'
   '$window'
