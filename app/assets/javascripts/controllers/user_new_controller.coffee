@@ -7,8 +7,10 @@ angular.module('kassa').controller('UserNewCtrl', [
     STATE_SAVING = 1
     STATE_DEFAULT = 2
 
+    newUser = -> {active: true}
+
     cancel = ->
-      $scope.user = {}
+      $scope.user = newUser()
       $scope.newUserForm.$setPristine()
 
     save = (user)->
@@ -32,5 +34,5 @@ angular.module('kassa').controller('UserNewCtrl', [
     $scope.SAVING = STATE_SAVING
     $scope.DEFAULT = STATE_DEFAULT
 
-    $scope.user = {}
+    $scope.user = newUser()
 ])
