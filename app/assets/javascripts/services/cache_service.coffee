@@ -5,13 +5,6 @@ angular.module('kassa').factory('CacheService', [
     cache = {}
     [isUndefined, copy] = [angular.isUndefined, angular.copy]
 
-    _writeToCache = (cacheObj, obj, key)->
-      if isUndefined(cacheObj[key])
-        cacheObj[key] = obj
-      else
-        #copy to ensure object references for the cached object stay intact and views are actually updated
-        copy(obj, cacheObj[key])
-
     set = (obj, prefix, field='id')->
       $q.when(obj).then (obj)-> $parse("#{prefix}.#{obj[field]}").assign(cache, obj)
 
