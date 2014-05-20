@@ -9,6 +9,14 @@ describe Buy do
   it {should have_many :consists_of_products}
   it {should have_many(:products).through :consists_of_products }
 
+  describe "#product_count" do
+    it "should return the consists_of_products count" do
+      subject.stub_chain(:consists_of_products, :count)
+      expect(subject.consists_of_products).to receive(:count)
+      subject.product_count
+    end
+  end
+
   context "#consists_of_products" do
     it "should have at least a single product" do
       subject.consists_of_products = []

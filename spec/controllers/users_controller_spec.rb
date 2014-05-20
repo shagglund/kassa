@@ -36,19 +36,19 @@ describe UsersController do
       end
 
       describe "POST create" do
-        it "should return 403 Forbidden" do
+        it "should return 401 Unauthorized" do
           expect{
             post :create, format: :json, user: user_attribs
-            expect(response.status).to eq 403
+            expect(response.status).to eq 401
           }.to_not change(User, :count)
         end
       end
 
       describe "PUT update" do
-        it "should return 403 Forbidden unless updating current user" do
+        it "should return 401 Unauthorized unless updating current user" do
           expect{
             put :update, format: :json, id: user.id, user: user_attribs
-            expect(response.status).to eq 403
+            expect(response.status).to eq 401
           }.to_not change{user}
         end
 
@@ -67,10 +67,10 @@ describe UsersController do
       end
 
       describe "PUT update_balance" do
-        it "should return 403 Forbidden unless updating current user" do
+        it "should return 401 Unauthorized unless updating current user" do
           expect{
             put :update_balance, format: :json, id: user.id, user: user_balance_attribs
-            expect(response.status).to eq 403
+            expect(response.status).to eq 401
           }.to_not change{user}
         end
       end

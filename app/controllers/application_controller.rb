@@ -38,8 +38,8 @@ class ApplicationController < ActionController::Base
   def respond_with_not_an_admin
     msg =I18n.t('errors.admin.not_authorized')
     respond_to do |format|
-      format.html { render text: msg, status: :forbidden}
-      format.json {render json: msg, status: :forbidden}
+      format.html { render text: msg, status: :unauthorized}
+      format.json {render json: msg, status: :unauthorized}
     end
   end
 end

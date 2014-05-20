@@ -5,8 +5,7 @@ class LimitedIntegerValuePicker
   end
 
   def get(value)
-    value ||= default
-    return if value.nil?
+    return default if value.nil?
     value = value.to_i
     return max if max && value > max
     return min if min && value < min

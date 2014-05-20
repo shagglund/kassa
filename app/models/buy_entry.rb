@@ -7,10 +7,6 @@ class BuyEntry < ActiveRecord::Base
 
   after_create :update_product_buy_count_and_last_bought_at
 
-  def price
-    product.price * amount
-  end
-
   protected
   def update_product_buy_count_and_last_bought_at
     product.buy_count += amount

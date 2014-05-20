@@ -19,7 +19,7 @@ class Buy < ActiveRecord::Base
   scope :for_product, ->(product){includes(:consists_of_products).where(buy_entries: {product_id: product})}
 
   def product_count
-    consists_of_products.length
+    consists_of_products.count
   end
 
   protected
