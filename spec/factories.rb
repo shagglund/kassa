@@ -23,13 +23,6 @@ FactoryGirl.define do
     amount 2
     association :product, strategy: :build, available: true
     association :buy, strategy: :build
-
-    before(:create) do |entry, evaluator|
-      entry.product.save!
-      entry.product_id = entry.product.id
-      entry.buy.save!
-      entry.buy_id = entry.buy.id
-    end
   end
 
   factory :buy do
@@ -52,6 +45,18 @@ FactoryGirl.define do
         entry.product.save!
         entry.product_id = entry.product.id
       end
+    end
+  end
+
+  factory :balance_change do
+    new_balance {Random.rand(1..100)}
+    old_balance {Random.rand(1..100)}
+    change_note {Faker::Lorem.paragraph}
+    association :doer, factory: :user, strategy: :build
+    association :trackable, factory: :user, strategy: :build
+    before(:create) do |balance_change|
+      balance_change.doer.save!
+      balance_change.trackable.save!
     end
   end
 end

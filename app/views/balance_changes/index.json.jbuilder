@@ -2,6 +2,7 @@ json.balance_changes do
   json.cache! cache_key_for_balance_changes(@balance_changes) do
     json.array! @balance_changes do |balance_change|
       json.cache! ['balance_change', balance_change.id] do
+        json.id balance_change.id
         json.doer_id balance_change.doer_id
         json.change_note balance_change.change_note
         json.old_balance balance_change.old_balance
