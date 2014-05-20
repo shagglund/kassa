@@ -269,6 +269,7 @@ DEPENDENCIES
   sass-rails (~> 4.0.2)
   sendgrid
   shoulda-matchers
+  simplecov
   slim-rails
   uglifier
   yajl-ruby

@@ -62,5 +62,6 @@ group :test do
   gem 'shoulda-matchers'
   gem 'ffaker'
   gem "codeclimate-test-reporter", :require => nil
+  gem 'simplecov'
 end
 
