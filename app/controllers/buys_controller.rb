@@ -65,10 +65,14 @@ class BuysController < ApplicationController
 
   def products(buys)
     if product_id.nil?
-      Product.where(id: buys.map(&:consists_of_products).flatten.map(&:product_id).uniq).all
+      Product.where(id: pluck_unique_product_ids(buys)).all
     else
       Array(product)
     end
+  end
+
+  def pluck_unique_product_ids(buys)
+    buys.map(&:consists_of_products).flatten.map(&:product_id).uniq
   end
 
   def buyers(buys)
