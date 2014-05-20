@@ -12,6 +12,7 @@
         thead
           tr
             th
+            th
               a.btn-block.btn-link(kassa-order-state="usf" kassa-value="username")
                 =t('username', scope: 'activerecord.attributes.user')
             th.text-center
@@ -37,6 +38,8 @@
                 =t('admin', scope: 'activerecord.attributes.user')
         tbody
           tr(ng-repeat="user in users|orderByState:'usf' track by user.id")
+            td.vertical-center
+              img.img-thumbnail(gravatar="user.email")
             td.vertical-center
               a.btn-block.btn-link(ng-href="/app/users/{{user.id}}")
                 | {{user.username}}
