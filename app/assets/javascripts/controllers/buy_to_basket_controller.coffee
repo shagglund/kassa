@@ -2,10 +2,6 @@ angular.module('kassa').controller 'BuyToBasketCtrl', [
   '$scope'
   'BasketService'
   ($scope, Basket)->
-    undo = (buy)->
-
-    canBeDeleted = (buy)-> false
-
     _productsFromBuyEntries = (entry)-> entry.product
 
     _allProductsAvailable = (available, product)->
@@ -18,7 +14,5 @@ angular.module('kassa').controller 'BuyToBasketCtrl', [
       .value()
 
     $scope.setToBasket = Basket.setFromBuy
-    $scope.delete = undo
-    $scope.canBeDeleted = canBeDeleted
     $scope.allProductsAvailable = allProductsAvailable
 ]
