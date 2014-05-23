@@ -11,7 +11,7 @@ angular.module('kassa').controller('ProductDetailCtrl', [
 
     changed = (product)-> !equal(originalProduct, product)
 
-    cancel = ->
+    setProductDataFromOriginal = ->
       #copy to prevent any unsaved edits from leaking to server object state
       $scope.product = angular.copy(originalProduct)
       $scope.priceEuro = Math.floor(originalProduct.price)
@@ -25,7 +25,7 @@ angular.module('kassa').controller('ProductDetailCtrl', [
 
     setProduct = (product)->
       originalProduct = product
-      cancel() #sets to default state by copying originalProduct
+      setProductDataFromOriginal() #sets to default state by copying originalProduct
       product
 
     updatePrice = (product, euros, cents)->
@@ -33,7 +33,7 @@ angular.module('kassa').controller('ProductDetailCtrl', [
 
     Product.currentByRoute().then setProduct
     $scope.changed = changed
-    $scope.cancel = cancel
+    $scope.cancel = setProductDataFromOriginal
     $scope.save = save
     $scope.updatePrice = updatePrice
     $scope.SAVED = STATE_SAVED
