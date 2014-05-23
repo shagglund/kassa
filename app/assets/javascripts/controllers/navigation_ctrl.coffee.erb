@@ -1,10 +1,14 @@
 angular.module('kassa').controller('NavigationCtrl', [
   '$scope'
   '$location'
-  ($scope, $location)->
-    _ensureRootSlash = (route)->
+  'SessionService'
+  ($scope, $location, Session)->
+    ensureRootSlash = (route)->
       if route.charAt(0) == '/' then route else ('/' + route)
 
-    $scope.isCurrent = (route)->
-      _ensureRootSlash(route) == $location.path()
+    isCurrent = (route)->
+      ensureRootSlash(route) == $location.path()
+
+    $scope.session = Session
+    $scope.isCurrent = isCurrent
 ])

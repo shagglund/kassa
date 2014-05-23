@@ -1,7 +1,8 @@
 angular.module('kassa').controller('UserDetailCtrl', [
   '$scope'
   'UserService'
-  ($scope, User)->
+  'SessionService'
+  ($scope, User, Session)->
     STATE_FAILED = 0
     STATE_SAVED = 1
     STATE_SAVING = 2
@@ -42,6 +43,8 @@ angular.module('kassa').controller('UserDetailCtrl', [
       (euros != 0 || cents != 0) && changeNote.length != 0
 
     User.currentByRoute().then setUser
+    $scope.session = Session
+
     $scope.changed = changed
     $scope.cancel = cancel
     $scope.save = save
