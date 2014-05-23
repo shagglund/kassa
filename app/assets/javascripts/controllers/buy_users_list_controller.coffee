@@ -1,4 +1,4 @@
-angular.module('kassa').controller 'BuyUsersListController', [
+angular.module('kassa').controller 'BuyUsersListCtrl', [
   '$scope'
   'UserService'
   'BasketService'
