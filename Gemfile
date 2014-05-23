@@ -41,7 +41,6 @@ gem 'newrelic_rpm'
 group :development do
   gem 'better_errors'
   gem 'binding_of_caller', :platforms=>[:mri_19, :mri_20, :mri_21, :rbx]
-  gem 'guard-rspec'
   gem 'haml2slim'
   gem 'html2haml'
   gem 'rails_layout'
@@ -53,6 +52,10 @@ end
 group :development, :test do
   gem 'factory_girl_rails'
   gem 'rspec-rails'
+  gem 'teaspoon'
+  gem 'guard'
+  gem 'guard-teaspoon', :git => 'git://github.com/modeset/guard-teaspoon.git'
+  gem 'guard-rspec'
 end
 
 group :test do

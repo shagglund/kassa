@@ -13,3 +13,11 @@ guard :rspec do
   watch('app/controllers/application_controller.rb')  { "spec/controllers" }
 end
 
+
+guard :teaspoon do
+  # Implementation files
+  watch(%r{app/assets/javascripts/(.+)\.(js|coffee|js\.coffee)}) { |m| "#{m[1]}_spec" }
+
+  # Specs / Helpers
+  watch(%r{spec/javascripts/(.*)})
+end
