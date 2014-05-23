@@ -5,9 +5,7 @@ describe 'BuyUsersListCtrl', ->
   beforeEach inject ($controller, $q, $rootScope)->
     scope = $rootScope.$new()
     Basket = {}
-    deferred = $q.defer()
-    deferred.resolve(users)
-    User = {all: jasmine.createSpy().andReturn(deferred.promise)}
+    User = {all: jasmine.createSpy().andReturn($q.when(users))}
     $controller('BuyUsersListCtrl', {$scope: scope, BasketService: Basket, UserService: User})
 
   it 'should assign Basket to scope', ->

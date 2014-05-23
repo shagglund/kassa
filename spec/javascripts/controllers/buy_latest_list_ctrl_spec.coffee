@@ -17,9 +17,7 @@ describe 'BuyLatestListCtrl', ->
   beforeEach inject ($controller, $q, $rootScope)->
     setupFakeBuyArray()
     scope = $rootScope.$new()
-    deferred = $q.defer()
-    deferred.resolve(buys)
-    Buy = {latest: jasmine.createSpy('Buy.latest').andReturn(deferred.promise)}
+    Buy = {latest: jasmine.createSpy('Buy.latest').andReturn($q.when(buys))}
     $controller('BuyLatestListCtrl', {$scope: scope, BuyService: Buy})
 
   describe 'initialization', ->

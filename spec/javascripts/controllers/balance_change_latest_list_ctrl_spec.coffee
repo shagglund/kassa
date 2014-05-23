@@ -8,9 +8,7 @@ describe 'BalanceChangeLatestListCtrl', ->
   beforeEach inject ($controller, $q, $rootScope)->
     scope = $rootScope.$new()
     User = {currentByRoute: jasmine.createSpy().andReturn(user)}
-    deferred = $q.defer()
-    deferred.resolve(balanceChanges)
-    BalanceChange = {all: jasmine.createSpy().andReturn(deferred.promise)}
+    BalanceChange = {all: jasmine.createSpy().andReturn($q.when(balanceChanges))}
     $controller('BalanceChangeLatestListCtrl', {$scope: scope, UserService: User, BalanceChangeService: BalanceChange})
 
 
