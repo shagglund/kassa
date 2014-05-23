@@ -63,5 +63,6 @@ group :test do
   gem 'ffaker'
   gem "codeclimate-test-reporter", :require => nil
   gem 'simplecov'
+  gem 'coveralls', :require => false
 end
 
