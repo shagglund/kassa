@@ -34,7 +34,7 @@
               | {{user.buyCount|number}}
             td.text-center.vertical-center(ng-class="{'text-success': user.balance > 20, 'text-danger': user.balance < 0}")
               | {{user.balance|currency}}
-  .col-xs-12.col-md-7(ng-controller="BuyProductsListController" ng-show="basket.hasBuyer()")
+  .col-xs-12.col-md-7(ng-controller="BuyProductsListCtrl" ng-show="basket.hasBuyer()")
     .panel.panel-default
       .panel-heading
         h3
@@ -121,7 +121,7 @@
                 button.close(type="button" ng-click="state=DEFAULT")
                   i.fa.fa-times.fa-fw
 
-  .col-xs-12.col-md-5(ng-controller="BuyLatestListController")
+  .col-xs-12.col-md-5(ng-controller="BuyLatestListCtrl")
     .panel.panel-default
       .panel-heading
         h3

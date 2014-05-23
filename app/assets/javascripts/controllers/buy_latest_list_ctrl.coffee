@@ -1,4 +1,4 @@
-angular.module('kassa').controller 'BuyLatestListController', [
+angular.module('kassa').controller 'BuyLatestListCtrl', [
   '$scope'
   '$location'
   '$q'
