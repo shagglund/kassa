@@ -56,7 +56,6 @@ group :development, :test do
   gem 'guard'
   gem 'guard-teaspoon', :git => 'git://github.com/modeset/guard-teaspoon.git'
   gem 'guard-rspec'
-  gem 'coveralls', :require => false
 end
 
 group :test do

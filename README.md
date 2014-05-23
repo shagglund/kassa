@@ -2,7 +2,6 @@
 [![Dependency Status](https://gemnasium.com/flipflops/kassa.svg)](https://gemnasium.com/flipflops/kassa)
 [![Code Climate](https://codeclimate.com/github/flipflops/kassa.png)](https://codeclimate.com/github/flipflops/kassa)
 [![Build Status](https://travis-ci.org/flipflops/kassa.svg)](https://travis-ci.org/flipflops/kassa)
-[![Coverage Status](https://coveralls.io/repos/flipflops/kassa/badge.png)](https://coveralls.io/r/flipflops/kassa)
 
 ## License
 
