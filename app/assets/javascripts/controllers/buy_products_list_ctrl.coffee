@@ -11,12 +11,10 @@ angular.module('kassa').controller 'BuyProductsListCtrl', [
     STATE_DEFAULT = 3
 
     handleSuccess = (buy)->
-      console.log 'handling success'
       $scope.state = STATE_SUCCESS
       buy
 
     handleError = (resp)->
-      console.log 'handling error'
       $scope.state = STATE_ERROR
       $q.reject(resp)
 
