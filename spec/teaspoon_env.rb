@@ -121,7 +121,7 @@ Teaspoon.configure do |config|
   #config.server = nil
 
   # Specify a port to run on a specific port, otherwise Teaspoon will use a random available port.
-  #config.server_port = nil
+  config.server_port = 3333
 
   # Timeout for starting the server in seconds. If your server is slow to start you may have to bump this, or you may
   # want to lower this if you know it shouldn't take long to start.
