@@ -65,7 +65,7 @@ describe 'BuyLatestListCtrl', ->
       scope.loadMore(buys)
       expect(Buy.latest.mostRecentCall.args[0].offset).toEqual(buys.length)
 
-  describe 'event: buys:new', ->
+  describe 'reaction to event: buys:new', ->
     it "should add the new buy as first to the list", ->
       newBuy = id: 'new'
       expect(scope.buys[0]).toNotBe(newBuy)

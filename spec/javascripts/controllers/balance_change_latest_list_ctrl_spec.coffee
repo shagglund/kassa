@@ -17,13 +17,16 @@ describe 'BalanceChangeLatestListCtrl', ->
     expect(BalanceChange.all).toHaveBeenCalledWith(user)
     expect(scope.balanceChanges).toBe(balanceChanges)
 
-  it "should load balance changes on creation", ->
-    scope.$apply()
-    checkBalanceChangesLoaded()
+  describe 'initialization', ->
 
-  it "should reload all balance changes on event user:balanceChange", ->
-    scope.$apply()
-    User.currentByRoute.reset()
-    BalanceChange.all.reset()
-    scope.$broadcast 'user:balanceChange'
-    checkBalanceChangesLoaded()
+    it "should load all balance changes for a given user", ->
+      scope.$apply()
+      checkBalanceChangesLoaded()
+
+  describe 'reaction to event: user:balanceChange', ->
+    it "should reload all balance changes", ->
+      scope.$apply()
+      User.currentByRoute.reset()
+      BalanceChange.all.reset()
+      scope.$broadcast 'user:balanceChange'
+      checkBalanceChangesLoaded()
