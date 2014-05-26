@@ -29,7 +29,7 @@ angular.module('kassa').controller('ProductNewCtrl', [
 
     $scope.FAILED = STATE_FAILED
     $scope.SAVING = STATE_SAVING
-    $scope.DEFAULT = STATE_DEFAULT
+    $scope.DEFAULT = $scope.state = STATE_DEFAULT
 
     $scope.product = newProduct()
 ])
