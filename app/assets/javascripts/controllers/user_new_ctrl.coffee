@@ -2,10 +2,9 @@ angular.module('kassa').controller('UserNewCtrl', [
   '$scope'
   '$location'
   'UserService'
-  ($scope, $location, User)->
-    STATE_FAILED = 0
-    STATE_SAVING = 1
-    STATE_DEFAULT = 2
+  'StateService'
+  ($scope, $location, User, State)->
+    stateHandler = State.getHandler('UserNewCtrl:state')
 
     newUser = -> {active: true}
 
@@ -16,10 +15,7 @@ angular.module('kassa').controller('UserNewCtrl', [
     save = (user)->
       goToUserProfile = (user)->
         $location.path("/users/#{user.id}")
-      saveFailure = -> $scope.state = STATE_FAILED
-
-      $scope.state = STATE_SAVING
-      User.create(user).then(goToUserProfile, saveFailure)
+      stateHandler.handleStateChanges User.create(user).then(goToUserProfile)
 
     setBalance = (user, euros=0, cents=0)-> user.balance = euros + cents / 100
 
@@ -30,9 +26,6 @@ angular.module('kassa').controller('UserNewCtrl', [
     $scope.setBalance = setBalance
     $scope.passwordsMatch = passwordsMatch
 
-    $scope.FAILED = STATE_FAILED
-    $scope.SAVING = STATE_SAVING
-    $scope.DEFAULT = STATE_DEFAULT
-
+    $scope.state = stateHandler
     $scope.user = newUser()
 ])

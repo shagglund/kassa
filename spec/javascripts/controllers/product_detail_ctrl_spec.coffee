@@ -18,17 +18,8 @@ describe 'ProductDetailCtrl', ->
     $controller('ProductDetailCtrl', $scope: scope, ProductService: Product)
 
   describe 'initialization', ->
-    it "should assign STATE_SAVED to scope.SAVED", ->
-      expect(scope.SAVED).toEqual(STATE_SAVED)
-
-    it "should assign STATE_FAILED to scope.FAILED", ->
-      expect(scope.FAILED).toEqual(STATE_FAILED)
-
-    it "should assign STATE_SAVING to scope.SAVING", ->
-      expect(scope.SAVING).toEqual(STATE_SAVING)
-
-    it "should assign STATE_DEFAULT to scope.DEFAULT", ->
-      expect(scope.DEFAULT).toEqual(STATE_DEFAULT)
+    it "should assign scope.state to a StateHandler", ->
+      expect(scope.state.constructor.name).toEqual('StateHandler')
 
     it "should load the current product", ->
       scope.$apply()
@@ -94,20 +85,20 @@ describe 'ProductDetailCtrl', ->
       scope.$apply()
       expect(scope.changed(scope.product)).toBe(false)
 
-    it "should set scope.state to STATE_SAVING on call", ->
+    it "should set scope.state to changing", ->
       scope.save(scope.product)
-      expect(scope.state).toEqual(STATE_SAVING)
+      expect(scope.state.isChanging()).toBe(true)
 
-    it "should set scope.state to STATE_SAVED on success", ->
+    it "should set scope.state to success on success", ->
       scope.save(scope.product)
       scope.$apply()
-      expect(scope.state).toEqual(STATE_SAVED)
+      expect(scope.state.isSuccess()).toBe(true)
 
-    it "should set scope.state to STATE_FAILED on error", inject ($q)->
+    it "should set scope.state to error on failure", inject ($q)->
       Product.update.andReturn($q.reject({}))
       scope.save(scope.product)
       scope.$apply()
-      expect(scope.state).toEqual(STATE_FAILED)
+      expect(scope.state.isError()).toBe(true)
 
 
   describe 'scope.updatePrice', ->

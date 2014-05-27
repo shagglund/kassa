@@ -27,18 +27,18 @@
             .col-xs-4
             .col-xs-8
               .pull-right
-                button.btn.btn-danger(ng-click="cancel()" ng-disabled="state==SAVING || newProductForm.$pristine")
+                button.btn.btn-danger(ng-click="cancel()" ng-disabled="state.isChanging() || newProductForm.$pristine")
                   i.fa.fa-undo.fa-fw
                   span=t('action.cancel')
-                button.btn.btn-success(ng-click="save(product)" ng-disabled="state==SAVING || newProductForm.$pristine || !newProductForm.$valid")
-                  i.fa.fa-save.fa-fw(ng-if="state!=SAVING")
-                  i.fa.fa-spinner.fa-fw(ng-if="state==SAVING")
+                button.btn.btn-success(ng-click="save(product)" ng-disabled="state.isChanging() || newProductForm.$pristine || !newProductForm.$valid")
+                  i.fa.fa-save.fa-fw(ng-if="!state.isChanging()")
+                  i.fa.fa-spinner.fa-fw(ng-if="state.isChanging()")
                   span=t('action.save')
           .form-group
             .col-xs-4
             .col-xs-8
-              p.alert.alert-danger(ng-show="state==FAILED")
+              p.alert.alert-danger(ng-show="state.isError()")
                 =t('products.state.failed')
-                button.close(type="button" ng-click="state=DEFAULT")
+                button.close(type="button" ng-click="state.reset()")
                   i.fa.fa-times.fa-fw
 

@@ -2,10 +2,9 @@ angular.module('kassa').controller('ProductNewCtrl', [
   '$scope'
   '$location'
   'ProductService'
-  ($scope, $location, Product)->
-    STATE_FAILED = 0
-    STATE_SAVING = 1
-    STATE_DEFAULT = 2
+  'StateService'
+  ($scope, $location, Product, State)->
+    stateHandler = State.getHandler('ProductNewCtrl:state')
 
     newProduct = -> {available: true}
 
@@ -16,10 +15,7 @@ angular.module('kassa').controller('ProductNewCtrl', [
     save = (product)->
       goToProduct = (product)->
         $location.path("/products/#{product.id}")
-      saveFailure = -> $scope.state = STATE_FAILED
-
-      $scope.state = STATE_SAVING
-      Product.create(product).then(goToProduct, saveFailure)
+      stateHandler.handleStateChanges Product.create(product).then(goToProduct)
 
     setPrice = (product, euros=0, cents=0)-> product.price = euros + cents / 100
 
@@ -27,9 +23,7 @@ angular.module('kassa').controller('ProductNewCtrl', [
     $scope.save = save
     $scope.setPrice = setPrice
 
-    $scope.FAILED = STATE_FAILED
-    $scope.SAVING = STATE_SAVING
-    $scope.DEFAULT = $scope.state = STATE_DEFAULT
+    $scope.state = stateHandler
 
     $scope.product = newProduct()
 ])

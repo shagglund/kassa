@@ -1,11 +1,11 @@
 angular.module('kassa').controller('ProductDetailCtrl', [
   '$scope'
   'ProductService'
-  ($scope, Product)->
-    STATE_FAILED = 0
-    STATE_SAVED = 1
-    STATE_SAVING = 2
-    STATE_DEFAULT = 3
+  'StateService'
+  ($scope, Product, State)->
+    stateHandler = State.getHandler('ProductDetailCtrl:state')
+    handleStateChanges = stateHandler.handleStateChanges
+
     originalProduct = null
     equal = angular.equals
 
@@ -18,10 +18,7 @@ angular.module('kassa').controller('ProductDetailCtrl', [
       $scope.priceCent = (originalProduct.price % 1) * 100
 
     save = (product)->
-      saveSuccess = -> $scope.state = STATE_SAVED
-      saveFailure = -> $scope.state = STATE_FAILED
-      $scope.state = STATE_SAVING
-      Product.update(product).then(setProduct).then saveSuccess, saveFailure
+      handleStateChanges Product.update(product).then(setProduct)
 
     setProduct = (product)->
       originalProduct = product
@@ -36,8 +33,5 @@ angular.module('kassa').controller('ProductDetailCtrl', [
     $scope.cancel = setProductDataFromOriginal
     $scope.save = save
     $scope.updatePrice = updatePrice
-    $scope.SAVED = STATE_SAVED
-    $scope.FAILED = STATE_FAILED
-    $scope.SAVING = STATE_SAVING
-    $scope.DEFAULT = STATE_DEFAULT
+    $scope.state = stateHandler
 ])

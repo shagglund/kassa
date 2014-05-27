@@ -2,9 +2,6 @@ describe 'ProductNewCtrl', ->
   [scope, location, Product] = [null, null, null]
   isObject = angular.isObject
 
-  #states need to match the ones in ProductNewCtrl
-  [STATE_FAILED, STATE_SAVING, STATE_DEFAULT] = [0, 1, 2]
-
   product = {id: 1}
 
   beforeEach module 'kassa'
@@ -19,17 +16,8 @@ describe 'ProductNewCtrl', ->
       expect(isObject(scope.product)).toBe(true)
       expect(scope.product.available).toBe(true)
 
-    it "should assign STATE_FAILED to scope.FAILED", ->
-      expect(scope.FAILED).toEqual(STATE_FAILED)
-
-    it "should assign STATE_SAVING to scope.SAVING", ->
-      expect(scope.SAVING).toEqual(STATE_SAVING)
-
-    it "should assign STATE_DEFAULT to scope.DEFAULT", ->
-      expect(scope.DEFAULT).toEqual(STATE_DEFAULT)
-
-    it "should set the scope.state to STATE_DEFAULT", ->
-      expect(scope.state).toEqual(STATE_DEFAULT)
+    it "should set scope.state to a StateHandler", ->
+      expect(scope.state.constructor.name).toEqual('StateHandler')
 
   describe 'scope.cancel', ->
     beforeEach inject ($compile)->
@@ -62,15 +50,19 @@ describe 'ProductNewCtrl', ->
       saveProduct()
       expect(Product.create).toHaveBeenCalledWith(scope.product)
 
-    it "should set scope.state to STATE_SAVING", ->
-      saveProduct()
-      expect(scope.state).toEqual(STATE_SAVING)
-
     it "should redirect to the product details on success", ->
       saveProduct(true)
       expect(location.path).toHaveBeenCalledWith("/products/#{product.id}")
 
-    it "should set scope.state to STATE_FAILED on failure", inject ($q)->
+    it "should set scope.state to changing", ->
+      saveProduct()
+      expect(scope.state.isChanging()).toBe(true)
+
+    it "should set scope.state to success on success", ->
+      saveProduct(true)
+      expect(scope.state.isSuccess()).toBe(true)
+
+    it "should set scope.state to error on failure", inject ($q)->
       Product.create.andReturn($q.reject({}))
       saveProduct(true)
-      expect(scope.state).toEqual(STATE_FAILED)
+      expect(scope.state.isError()).toBe(true)

@@ -1,7 +1,4 @@
 describe 'BuyProductsListCtrl', ->
-  #These need to match exactly the states in BuyProductsListCtrl
-  [STATE_DEFAULT, STATE_SUCCESS, STATE_ERROR] = [3,2,1]
-
   [scope, Product, Basket] = [null, null, null]
 
   [products, buy] = [[], {}]
@@ -19,14 +16,8 @@ describe 'BuyProductsListCtrl', ->
     it "should assign Basket to scope", ->
       expect(scope.basket).toBe(Basket)
 
-    it "should set the scope.state to STATE_DEFAULT", ->
-      expect(scope.state).toEqual(STATE_DEFAULT)
-
-    it "should assign STATE_DEFAULT to scope.DEFAULT", ->
-      expect(scope.DEFAULT).toEqual(STATE_DEFAULT)
-
-    it "should assign STATE_ERROR to scope.ERROR", ->
-      expect(scope.ERROR).toEqual(STATE_ERROR)
+    it "should set the scope.state to a StateHandler", ->
+      expect(scope.state.constructor.name).toEqual('StateHandler')
 
     it "should load all products", ->
       scope.$apply()
@@ -34,24 +25,26 @@ describe 'BuyProductsListCtrl', ->
       expect(scope.products).toBe(products)
 
   describe 'scope.buy', ->
-    it "should not perform the buy if Basket is buyable", ->
+    doBuy = (apply=false)->
       scope.buy()
+      scope.$apply() if apply
+
+    it "should not perform the buy if Basket is buyable", ->
+      doBuy()
       expect(Basket.isBuyable).toHaveBeenCalled()
       expect(Basket.buy).toHaveBeenCalled()
 
     it "should not perform the buy if Basket is not buyable", ->
       Basket.isBuyable.andReturn(false)
-      scope.buy()
+      doBuy()
       expect(Basket.isBuyable).toHaveBeenCalled()
       expect(Basket.buy).not.toHaveBeenCalled()
 
-    it "should set the scope.state to STATE_SUCCESS on success", ->
-      scope.buy()
-      scope.$apply()
-      expect(scope.state).toEqual(STATE_SUCCESS)
+    it "should set the scope.state to success on success", ->
+      doBuy(true)
+      expect(scope.state.isSuccess()).toBe(true)
 
-    it "should set the scope.state to STATE_ERROR on failure", inject ($q)->
+    it "should set the scope.state to error on failure", inject ($q)->
       Basket.buy.andReturn($q.reject({}))
-      scope.buy()
-      scope.$apply()
-      expect(scope.state).toEqual(STATE_ERROR)
+      doBuy(true)
+      expect(scope.state.isError()).toBe(true)

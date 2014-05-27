@@ -114,11 +114,11 @@
                 span=t('basket.buy')
                 i.fa.fa-shopping-cart.fa-fw
                 i.fa.fa-arrow-right
-          tr(ng-show="state==ERROR")
+          tr(ng-show="state.isError()")
             td(colspan=4)
               p.alert.alert-danger.text-center
                 =t('basket.state.buy_failed')
-                button.close(type="button" ng-click="state=DEFAULT")
+                button.close(type="button" ng-click="state.reset()")
                   i.fa.fa-times.fa-fw
 
   .col-xs-12.col-md-5(ng-controller="BuyLatestListCtrl")
