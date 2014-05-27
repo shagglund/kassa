@@ -11,5 +11,4 @@
 // about supported directives.
 //
 //= require angular
-//= require angular-ui
 //= require kassa

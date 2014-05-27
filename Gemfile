@@ -13,9 +13,6 @@ gem 'puma'
 #Authentication
 gem 'devise'
 
-#Emails
-gem 'sendgrid'
-
 #Views
 gem 'slim-rails'
 
@@ -31,7 +28,6 @@ gem 'coffee-rails'
 gem 'bootstrap-sass'
 gem 'font-awesome-sass'
 gem 'angularjs-rails'
-gem 'angular-ui-rails'
 gem 'gravtastic'
 gem 'lodash-rails'
 
@@ -41,9 +37,6 @@ gem 'newrelic_rpm'
 group :development do
   gem 'better_errors'
   gem 'binding_of_caller', :platforms=>[:mri_19, :mri_20, :mri_21, :rbx]
-  gem 'haml2slim'
-  gem 'html2haml'
-  gem 'rails_layout'
   gem 'rb-fchange', :require=>false
   gem 'rb-fsevent', :require=>false
   gem 'rb-inotify', :require=>false
