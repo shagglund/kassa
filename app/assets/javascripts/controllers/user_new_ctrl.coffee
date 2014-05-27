@@ -5,7 +5,7 @@ angular.module('kassa').controller('UserNewCtrl', [
   'StateService'
   ($scope, $location, User, State)->
     stateHandler = State.getHandler('UserNewCtrl:state')
-
+    handleStateChanges = stateHandler.handleStateChanges
     newUser = -> {active: true}
 
     cancel = ->
@@ -15,7 +15,7 @@ angular.module('kassa').controller('UserNewCtrl', [
     save = (user)->
       goToUserProfile = (user)->
         $location.path("/users/#{user.id}")
-      stateHandler.handleStateChanges User.create(user).then(goToUserProfile)
+      handleStateChanges User.create(user).then(goToUserProfile)
 
     setBalance = (user, euros=0, cents=0)-> user.balance = euros + cents / 100
 
