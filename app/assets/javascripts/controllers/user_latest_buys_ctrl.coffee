@@ -4,21 +4,25 @@ angular.module('kassa').controller('UserLatestBuysCtrl', [
   'BuyService'
   ($scope, User, Buy)->
     LIMIT = 10
-    moreAvailable = null
+    _moreAvailable = true
 
-    User.currentByRoute().then (user)->
-      $scope.user = user
-      Buy.latestForUser(user, limit: LIMIT).then (buys)->
-        moreAvailable = buys.length == LIMIT
-        $scope.buys = buys
+    moreAvailable = -> _moreAvailable
 
-    loadMore = (buys)->
-      Buy.latestForUser($scope.user, offset: buys.length, limit: LIMIT).then (loadedBuys)->
-        moreAvailable = loadedBuys.length == LIMIT
+    load = (user, buys)->
+      return unless moreAvailable()
+      Buy.latestForUser(user, offset: buys.length, limit: LIMIT).then (loadedBuys)->
+        _moreAvailable = loadedBuys.length == LIMIT
         buys.push loadedBuys...
 
-    moreAvailable = -> moreAvailable
+    setUserAndLoadBuys = (user)->
+      $scope.user = user
+      load(user, $scope.buys)
 
+    loadMore = (buys)-> load($scope.user, buys)
+
+    User.currentByRoute().then setUserAndLoadBuys
+
+    $scope.buys = []
     $scope.loadMore = loadMore
     $scope.moreAvailable = moreAvailable
 ])
