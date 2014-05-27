@@ -2,58 +2,53 @@ angular.module('kassa').controller('UserDetailCtrl', [
   '$scope'
   'UserService'
   'SessionService'
-  ($scope, User, Session)->
-    STATE_FAILED = 0
-    STATE_SAVED = 1
-    STATE_SAVING = 2
-    STATE_DEFAULT = 3
+  'StateService'
+  ($scope, User, Session, State)->
+    updateStateHandler = State.getHandler('UserDetailCtrl:updateState')
+    balanceStateHandler = State.getHandler('UserDetailCtrl:balanceState')
     originalUser = null
     equal = angular.equals
 
     changed = (user)-> !equal(originalUser, user)
 
 
-    cancel = ->
+    copyUser = ->
       #copy to prevent any unsaved edits from leaking to server object state
       $scope.user = angular.copy(originalUser)
-      $scope.balance = {}
 
     save = (user)->
-      saveSuccess = -> $scope.state = STATE_SAVED
-      saveFailure = -> $scope.state = STATE_FAILED
-
-      $scope.state = STATE_SAVING
-      User.update(user).then(setUser).then saveSuccess, saveFailure
+      promise = User.update(user).then(setUser)
+      updateStateHandler.handleStateChanges(promise)
 
     setUser = (user)->
       originalUser = user
-      cancel() #sets to default state by copying originalUser
+      copyUser()
       user
 
     newBalance = (euros=0, cents=0)-> (originalUser?.balance || 0) + euros + cents / 100
 
-    saveBalance = (user, newBalance, changeNote)->
-      saveSuccess = -> $scope.balanceState = STATE_SAVED
-      saveFailure = -> $scope.balanceState = STATE_FAILED
+    clearBalanceChanges = ->
+      delete $scope.balanceEuro
+      delete $scope.balanceCent
+      delete $scope.balanceChangeNote
 
-      $scope.balanceState = STATE_SAVING
-      User.updateBalance(user, newBalance, changeNote).then(setUser).then saveSuccess, saveFailure
+    saveBalance = (user, newBalance, changeNote)->
+      promise = User.updateBalance(user, newBalance, changeNote).then(setUser).then(clearBalanceChanges)
+      balanceStateHandler.handleStateChanges(promise)
 
     balanceCanBeSaved = (euros=0, cents=0, changeNote='')->
-      (euros != 0 || cents != 0) && changeNote.length != 0
+      (euros != 0 || cents != 0) && !_.isEmpty(changeNote)
 
     User.currentByRoute().then setUser
     $scope.session = Session
 
     $scope.changed = changed
-    $scope.cancel = cancel
+    $scope.cancel = copyUser
     $scope.save = save
     $scope.newBalance = newBalance
     $scope.saveBalance = saveBalance
     $scope.balanceCanBeSaved = balanceCanBeSaved
 
-    $scope.SAVED = STATE_SAVED
-    $scope.FAILED = STATE_FAILED
-    $scope.SAVING = STATE_SAVING
-    $scope.DEFAULT = STATE_DEFAULT
+    $scope.state = updateStateHandler
+    $scope.balanceState = balanceStateHandler
 ])
