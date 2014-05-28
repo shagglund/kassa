@@ -31,3 +31,4 @@
 #= require application
 #= require angular-mocks
 #= require support/fake_kassa_templates
+#= require support/angular_test_helpers
