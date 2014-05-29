@@ -9,13 +9,10 @@ angular.module('kassa').factory('BalanceChangeService',[
     convert = (resp)->
       balanceChanges = resp.data.balanceChanges
       doers = resp.data.doers
-      if balanceChanges?
-        _.forEach balanceChanges, (balanceChange)-> convertBalanceChange(balanceChange, doers)
-      else
-        convertBalanceChange(resp.data.balanceChange, doers)
+      _.forEach balanceChanges, (balanceChange)-> convertBalanceChange(balanceChange, doers)
       resp
 
-    getFromResponse = (resp)-> resp.data.balanceChange || resp.data.balanceChanges
+    getFromResponse = (resp)-> resp.data.balanceChanges
 
     all = (user)->
       $q.when(user).then (resolvedUser)->
