@@ -35,7 +35,7 @@ The rails backend is tested using [rspec](https://github.com/rspec/rspec) for bo
 Execute `bundle exec rspec` to run backend specs (expects test database to be set and fully migrated).
 
 The client is tested using [Jasmine](http://jasmine.github.io/) and ran with [Teaspoon](https://github.com/modeset/teaspoon).
-Execute `bundle exec teaspoon` to client specs. (Currently WIP so not full coverage)
+Execute `bundle exec teaspoon` to run client tests. (Currently WIP so not full coverage)
 
 For continuously running tests on file changes when developing, a [Guard](https://github.com/guard/guard) setup is also provided.
 
