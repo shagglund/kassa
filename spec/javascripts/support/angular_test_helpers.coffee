@@ -4,6 +4,9 @@ angular.module('kassa').factory('TestHelper',
       $timeout(cb)
       $timeout.flush()
     {
+      resolvePromises: (cb)->
+        cb()
+        $timeout.flush()
       instantResolve: (deferred, value)-> flush(-> deferred.resolve(value))
       instantReject: (deferred, value)-> flush(-> deferred.reject(value))
     }

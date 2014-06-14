@@ -3,20 +3,39 @@ angular.module('kassa').factory('CacheService', [
   '$parse'
   ($q, $parse)->
     cache = {}
-    [isUndefined, copy] = [angular.isUndefined, angular.copy]
+    [isUndefined, isDefined, copy, isString, isNumber] = [angular.isUndefined, angular.isDefined, angular.copy, angular.isString, angular.isNumber]
 
-    set = (obj, prefix, field='id')->
-      $q.when(obj).then (obj)-> $parse("#{prefix}.#{obj[field]}").assign(cache, obj)
+    getCacheGetterSetter = (prefix, objectIdentity)->
+      if isString(prefix) && prefix.length > 0
+        $parse("#{prefix}.#{objectIdentity}")
+      else if isNumber(objectIdentity)
+        #with numeric keys the parser would just return a number, not a setter/getter
+        #which is what we need, workaround by prefixing with number.
+        #I.e. key 1 -> "number1" in cache collection identity keys
+        $parse("number#{objectIdentity}")
+      else
+        $parse(objectIdentity)
 
-    get = (key, prefix)->
-      $q.when $parse("#{prefix}.#{key}")(cache)
+    idBasedIdentity = (obj)-> obj.id
+
+    isCached = (obj, prefix, identity=idBasedIdentity)-> isDefined(getCacheGetterSetter(prefix, identity(obj))(cache))
+
+    set = (objToBeCached, prefix, identity=idBasedIdentity)->
+      $q.when(objToBeCached).then (obj)-> getCacheGetterSetter(prefix, identity(obj)).assign(cache, obj)
+
+    #convenience method to get with the default identity function
+    get = (obj, prefix, identity=idBasedIdentity)->
+      getByIdentity(identity(obj), prefix)
+
+    getByIdentity = (objectIdentity, prefix)->
+      $q.when(getCacheGetterSetter(prefix, objectIdentity)(cache))
 
     getAllByPrefix = (prefix)->
       cachedData = $parse("#{prefix}")(cache)
       if isUndefined(cachedData)
-        $q.when()
+        $q.when([])
       else
         $q.when(_.toArray(cachedData))
 
-    {set, get, getAllByPrefix}
+    {set, get, isCached, getAllByPrefix, getByIdentity}
 ])

@@ -37,7 +37,7 @@ angular.module('kassa').factory('UserService',[
         users
 
     find = (id)->
-      Cache.get(id, CACHE_PREFIX).then (user)->
+      Cache.getByIdentity(id, CACHE_PREFIX).then (user)->
         return user if isObject(user) && isNumber(user.id)
         $http.get("/users/#{id}").then(convert).then(getFromResponse)
 
@@ -55,7 +55,7 @@ angular.module('kassa').factory('UserService',[
 
 
     $rootScope.$on 'buys:new', (event, buy)->
-      Cache.get(buy.buyerId, CACHE_PREFIX).then (user)->
+      Cache.getByIdentity(buy.buyerId, CACHE_PREFIX).then (user)->
         if isObject(user)
           buy.buyer = copy(buy.buyer, user)
         else

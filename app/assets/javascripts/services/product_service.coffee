@@ -33,7 +33,7 @@ angular.module('kassa').factory('ProductService',[
         products
 
     find = (id)->
-      Cache.get(id, CACHE_PREFIX).then (product)->
+      Cache.getByIdentity(id, CACHE_PREFIX).then (product)->
         return product if isObject(product) && isNumber(product.id)
         $http.get("/products/#{id}").then(convert).then(getFromResponse)
 
@@ -46,7 +46,7 @@ angular.module('kassa').factory('ProductService',[
 
     $rootScope.$on 'buys:new', (event, buy)->
       _.forEach buy.consistsOfProducts, (buyEntry)->
-        Cache.get(buyEntry.productId, CACHE_PREFIX).then (product)->
+        Cache.getByIdentity(buyEntry.productId, CACHE_PREFIX).then (product)->
           if isObject(product)
             buyEntry.product = copy(buyEntry.product, product)
           else
