@@ -21,7 +21,14 @@ angular.module('kassa').factory('CacheService', [
     isCached = (obj, prefix, identity=idBasedIdentity)-> isDefined(getCacheGetterSetter(prefix, identity(obj))(cache))
 
     set = (objToBeCached, prefix, identity=idBasedIdentity)->
-      $q.when(objToBeCached).then (obj)-> getCacheGetterSetter(prefix, identity(obj)).assign(cache, obj)
+      $q.when(objToBeCached).then (obj)->
+        getter = getCacheGetterSetter(prefix, identity(obj))
+        #if the object is already in cache, override data to preserve object references
+        #only works on top level objects (which for my purposes is sufficient enough)
+        if isCached(obj, prefix, identity)
+          copy(obj, getter(cache))
+        else
+          getter.assign(cache, obj)
 
     #convenience method to get with the default identity function
     get = (obj, prefix, identity=idBasedIdentity)->
