@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 ruby '2.1.0'
-gem 'rails'
+gem 'rails', '4.1.4'
 
 #Database
 gem 'pg'
@@ -45,6 +45,7 @@ end
 group :development, :test do
   gem 'factory_girl_rails'
   gem 'rspec-rails'
+  gem 'rspec-collection_matchers'
   gem 'teaspoon'
   gem 'guard'
   gem 'guard-teaspoon', :git => 'git://github.com/modeset/guard-teaspoon.git'

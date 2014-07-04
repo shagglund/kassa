@@ -27,7 +27,7 @@ describe User do
   describe "#change_balance" do
     it "should not update the balance if old balance == new balance" do
       expect{
-        expect(user.change_balance(user.balance, change_note, doer)).to be_false
+        expect(user.change_balance(user.balance, change_note, doer)).to be false
       }.to_not change(BalanceChange, :count)
     end
 
@@ -57,7 +57,7 @@ describe User do
         user.change_balance new_balance, change_note, doer
       end
       it "should return false" do
-        expect(user.change_balance new_balance, change_note, doer).to be_true
+        expect(user.change_balance new_balance, change_note, doer).to be true
       end
     end
 
@@ -72,7 +72,7 @@ describe User do
         user.change_balance new_balance, nil, doer
       end
       it "should return false" do
-        expect(user.change_balance new_balance, nil, doer).to be_false
+        expect(user.change_balance new_balance, nil, doer).to be false
       end
     end
 
@@ -91,7 +91,7 @@ describe User do
         expect(user.balance_change).to eq([old_balance, invalid_balance])
       end
       it "should return false" do
-        expect(user.change_balance invalid_balance, change_note, doer).to be_false
+        expect(user.change_balance invalid_balance, change_note, doer).to be false
       end
     end
   end
@@ -111,14 +111,14 @@ describe User do
   describe "#active/active?" do
     it "should return true if the user is set active" do
       subject.bit_flags |= User::FLAG_ACTIVE
-      expect(subject.active).to be_true
-      expect(subject.active?).to be_true
+      expect(subject.active).to be true
+      expect(subject.active?).to be true
     end
 
     it "should return false if the user is set inactive" do
       subject.bit_flags &= User::FLAG_ACTIVE
-      expect(subject.active).to be_false
-      expect(subject.active?).to be_false
+      expect(subject.active).to be false
+      expect(subject.active?).to be false
     end
   end
 end

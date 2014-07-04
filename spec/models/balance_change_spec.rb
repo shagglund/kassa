@@ -22,13 +22,13 @@ describe BalanceChange do
 
     it "marks the change-column as changed" do
       subject.new_balance= new_balance + 1
-      expect(subject.change_changed?).to be_true
+      expect(subject.change_changed?).to be true
     end
 
     it "doesn't mark the change-column as changed if new value == old value" do
       subject.send :reset_changes
       subject.new_balance= new_balance
-      expect(subject.change_changed?).to be_false
+      expect(subject.change_changed?).to be false
     end
   end
 
@@ -46,13 +46,13 @@ describe BalanceChange do
 
     it "marks the change-column as changed" do
       subject.old_balance= old_balance + 1
-      expect(subject.change_changed?).to be_true
+      expect(subject.change_changed?).to be true
     end
 
     it "doesn't mark the change-column as changed if new value == old value" do
       subject.send :reset_changes
       subject.old_balance= old_balance
-      expect(subject.change_changed?).to be_false
+      expect(subject.change_changed?).to be false
     end
   end
 

@@ -17,7 +17,10 @@ Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 
 # Checks for pending migrations before tests are run.
 # If you are not using ActiveRecord, you can remove this line.
-ActiveRecord::Migration.check_pending! if defined?(ActiveRecord::Migration)
+if defined?(ActiveRecord::Migration)
+  ActiveRecord::Migration.check_pending!
+  ActiveRecord::Migration.maintain_test_schema!
+end
 
 RSpec.configure do |config|
   # ## Mock Framework
@@ -40,6 +43,7 @@ RSpec.configure do |config|
   # automatically. This will be the default behavior in future versions of
   # rspec-rails.
   config.infer_base_class_for_anonymous_controllers = false
+  config.infer_spec_type_from_file_location!
 
   # Run specs in random order to surface order dependencies. If you find an
   # order dependency and want to debug it, you can fix the order by providing

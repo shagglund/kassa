@@ -92,8 +92,8 @@ describe UsersController do
             expect(new_user.email).to eq(user_attribs[:email])
             expect(new_user.balance).to eq(user_attribs[:balance])
             expect(new_user.admin).to eq(user_attribs[:admin])
-            expect(new_user.valid_password?(user_attribs[:password])).to be_true
-            expect(new_user.valid_password?(user_attribs[:password] + '123')).to be_false
+            expect(new_user.valid_password?(user_attribs[:password])).to be true
+            expect(new_user.valid_password?(user_attribs[:password] + '123')).to be false
           }.to change(User, :count).by(1)
         end
       end
