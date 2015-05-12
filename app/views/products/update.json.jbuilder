@@ -1,1 +1,0 @@
-json.partial! 'products/product_with_root', product: @product
